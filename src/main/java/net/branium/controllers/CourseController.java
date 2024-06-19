@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin(value = "http://localhost:4200")
+@CrossOrigin(value = {"*"})
 @RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
