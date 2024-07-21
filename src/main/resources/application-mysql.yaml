@@ -1,21 +1,23 @@
 server:
-  port: ${PORT:8080}
+  port: ${PORT:9999}
   servlet:
     context-path: /branium-academy
+
 spring:
   application:
     name: be-branium-academy
+
   datasource:
-    url: jdbc:oracle:thin:@//localhost:1521/orclpdb
-    username: han_branium_academy
-    password: Sohappy212
+    url: jdbc:mysql://localhost:3306/branium_academy
+    username: root
+    password: Sohappy212@
+
   jpa:
-    database: oracle
+    database: mysql
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         show_sql: true
         format_sql: true
-        dialect: org.hibernate.dialect.OracleDialect
-
+        dialect: org.hibernate.dialect.MySQLDialect

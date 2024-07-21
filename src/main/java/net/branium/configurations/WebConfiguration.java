@@ -1,6 +1,6 @@
 package net.branium.configurations;
 
-import net.branium.utils.Constants;
+import net.branium.constants.AppConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -15,6 +15,6 @@ public class WebConfiguration {
         final ExchangeStrategies strategies = ExchangeStrategies.builder()
                 .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(size))
                 .build();
-        return WebClient.builder().exchangeStrategies(strategies).baseUrl(Constants.BA_WP_BASE_URL).build();
+        return WebClient.builder().exchangeStrategies(strategies).baseUrl(AppConstants.BA_WP_BASE_URL).build();
     }
 }

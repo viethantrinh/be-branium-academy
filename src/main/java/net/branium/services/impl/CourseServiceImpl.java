@@ -1,4 +1,4 @@
-package net.branium.services;
+package net.branium.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.course.response.CourseBA;
@@ -10,7 +10,7 @@ import reactor.core.publisher.Flux;
 
 @Service
 @RequiredArgsConstructor
-public class CourseService {
+public class CourseServiceImpl {
     private final WebClient webClient;
     private final CourseMapper courseMapper;
 
@@ -23,10 +23,5 @@ public class CourseService {
                 .bodyToFlux(CourseBA.class)
                 .map(courseBA -> courseMapper.toCourseItemResponse(courseBA));
         return courseItemResponseFlux;
-    }
-
-    public Flux<CourseBA> getCourseBAs() {
-        String uri = "/wp-json/learnpress/v1/courses";
-        return webClient.get().uri(uri).retrieve().bodyToFlux(CourseBA.class);
     }
 }
