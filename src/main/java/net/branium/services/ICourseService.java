@@ -1,4 +1,4 @@
-package net.branium.services.impl;
+package net.branium.services;
 
 public interface ICourseService {
 

@@ -1,7 +1,7 @@
 server:
   port: ${PORT:8080}
   servlet:
-    context-path: /branium-academy
+    context-path: /branium-academy/api/v1
 spring:
   application:
     name: be-branium-academy
@@ -12,10 +12,12 @@ spring:
   jpa:
     database: oracle
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         dialect: org.hibernate.dialect.OracleDialect
-
+logging:
+  level:
+   org.springframework.security: trace

@@ -1,4 +1,4 @@
-package net.branium.securities.services;
+package net.branium.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import net.branium.domains.User;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BraniumAcademyUserDetailsService implements UserDetailsService {
+public class BAUserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepo;
 
