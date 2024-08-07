@@ -57,7 +57,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .subject(email)
                 .issuer("Branium Academy")
                 .issueTime(new Date())
-                .expirationTime(new Date(Instant.now().plus(3, ChronoUnit.MINUTES).toEpochMilli()))
+                .expirationTime(new Date(Instant.now().plus(1, ChronoUnit.MINUTES).toEpochMilli()))
                 .claim("scope", "custom")
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
