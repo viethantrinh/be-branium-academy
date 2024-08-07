@@ -12,7 +12,7 @@ spring:
   jpa:
     database: oracle
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -21,3 +21,5 @@ spring:
 logging:
   level:
    org.springframework.security: trace
+jwt:
+  secret-key: 78040db429b610814e9f299ef8590b28be75aeacd9ff1f3e53bc8b72f4c0c88c

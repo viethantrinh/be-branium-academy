@@ -1,4 +1,4 @@
-package net.branium.dtos.lecture.response;
+package net.branium.dtos.lecture;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

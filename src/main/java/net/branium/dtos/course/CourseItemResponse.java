@@ -1,4 +1,4 @@
-package net.branium.dtos.course.response;
+package net.branium.dtos.course;
 
 import lombok.Data;
 import net.branium.domains.Category;

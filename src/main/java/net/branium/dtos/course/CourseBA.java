@@ -1,10 +1,9 @@
-package net.branium.dtos.course.response;
+package net.branium.dtos.course;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import net.branium.dtos.category.response.CategoryBA;
-import net.branium.dtos.section.response.SectionBA;
-import net.branium.dtos.user.response.InstructorBA;
+import net.branium.dtos.category.CategoryBA;
+import net.branium.dtos.section.SectionBA;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,9 +46,6 @@ public class CourseBA {
 
     @JsonProperty(value = "categories")
     private List<CategoryBA> categories = new ArrayList<>(); // categories
-
-    @JsonProperty(value = "instructor")
-    private InstructorBA instructor = new InstructorBA();    // instructor
 
     @JsonProperty(value = "sections")
     private List<SectionBA> sections = new ArrayList<>();   // sections

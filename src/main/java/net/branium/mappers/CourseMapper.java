@@ -1,8 +1,8 @@
 package net.branium.mappers;
 
-import net.branium.dtos.course.response.CourseBA;
-import net.branium.dtos.course.response.CourseItemResponse;
-import net.branium.dtos.section.response.SectionBA;
+import net.branium.dtos.course.CourseBA;
+import net.branium.dtos.course.CourseItemResponse;
+import net.branium.dtos.section.SectionBA;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

@@ -1,8 +1,8 @@
 package net.branium.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import net.branium.dtos.course.response.CourseBA;
-import net.branium.dtos.course.response.CourseItemResponse;
+import net.branium.dtos.course.CourseBA;
+import net.branium.dtos.course.CourseItemResponse;
 import net.branium.mappers.CourseMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;

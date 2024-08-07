@@ -1,8 +1,11 @@
 package net.branium.constants;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
 public class ApplicationConstants {
     public static final String BA_WP_BASE_URL = "https://braniumacademy.net";
-    public static final String BASE_URL = "http://localhost:9999/branium-academy";
-    public static final String JWT_SECRET = "JWT_SECRET";
-    public static final String JWT_SECRET_DEFAULT_VALUE = "d70595893dade4b0f07d0707cee6b52bfe74e75d841bb25302a46b693eeb09f6";
+    public static final String BASE_URL = "http://localhost:9999/branium-academy/api/v1";
+    public static final String SIGN_KEY = "78040db429b610814e9f299ef8590b28be75aeacd9ff1f3e53bc8b72f4c0c88c";
+    public static String secretKey;
 }
+

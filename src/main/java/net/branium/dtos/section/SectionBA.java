@@ -1,8 +1,8 @@
-package net.branium.dtos.section.response;
+package net.branium.dtos.section;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import net.branium.dtos.lecture.response.LectureBA;
+import net.branium.dtos.lecture.LectureBA;
 
 import java.util.ArrayList;
 import java.util.List;
