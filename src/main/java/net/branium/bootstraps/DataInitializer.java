@@ -2,9 +2,9 @@ package net.branium.bootstraps;
 
 import lombok.RequiredArgsConstructor;
 import net.branium.constants.AuthorityConstants;
-import net.branium.domains.Authority;
+import net.branium.domains.Role;
 import net.branium.domains.User;
-import net.branium.repositories.AuthorityRepository;
+import net.branium.repositories.RoleRepository;
 import net.branium.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,43 +23,43 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepo;
-    private final AuthorityRepository authorityRepo;
+    private final RoleRepository roleRepo;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
-        if (authorityRepo.count() == 0L) {
-            initialAuthority(authorityRepo);
+        if (roleRepo.count() == 0L) {
+            initialRole(roleRepo);
         }
 
         if (userRepo.count() == 0L) {
-            initialUser(userRepo, authorityRepo, passwordEncoder);
+            initialUser(userRepo, roleRepo, passwordEncoder);
         }
     }
 
-    private void initialAuthority(AuthorityRepository authorityRepo) {
-        Authority admin = Authority.builder()
+    private void initialRole(RoleRepository roleRepo) {
+        Role admin = Role.builder()
                 .name(AuthorityConstants.ROLE_ADMIN)
                 .build();
 
-        Authority instructor = Authority.builder()
+        Role instructor = Role.builder()
                 .name(AuthorityConstants.ROLE_INSTRUCTOR)
                 .build();
 
-        Authority student = Authority.builder()
+        Role student = Role.builder()
                 .name(AuthorityConstants.ROLE_STUDENT)
                 .build();
 
-        Authority customer = Authority.builder()
+        Role customer = Role.builder()
                 .name(AuthorityConstants.ROLE_CUSTOMER)
                 .build();
 
-        authorityRepo.saveAll(List.of(admin, customer, instructor, student));
+        roleRepo.saveAll(List.of(admin, customer, instructor, student));
     }
 
 
-    private void initialUser(UserRepository userRepo, AuthorityRepository authorityRepo, PasswordEncoder passwordEncoder) throws IOException {
-        Set<Authority> authorities = new HashSet<>(authorityRepo.findAll());
+    private void initialUser(UserRepository userRepo, RoleRepository roleRepo, PasswordEncoder passwordEncoder) throws IOException {
+        Set<Role> roles = new HashSet<>(roleRepo.findAll());
 
         InputStream inputStream = getClass().getResourceAsStream("/static/images/viethantrinh.jpg");
         byte[] byteArrayAvatar = null;
@@ -81,8 +81,8 @@ public class DataInitializer implements CommandLineRunner {
                 .avatar(byteArrayAvatar)
                 .vipLevel(9999)
                 .phoneNumber("0768701056")
-                .authorities(authorities.stream().filter((authority) ->
-                        authority.getName().equals(AuthorityConstants.ROLE_ADMIN)).collect(Collectors.toSet()))
+                .roles(roles.stream().filter((role) ->
+                        role.getName().equals(AuthorityConstants.ROLE_ADMIN)).collect(Collectors.toSet()))
                 .build();
 
         User user2 = User
@@ -98,8 +98,8 @@ public class DataInitializer implements CommandLineRunner {
                 .avatar(byteArrayAvatar)
                 .vipLevel(1)
                 .phoneNumber("0978936103")
-                .authorities(authorities.stream().filter((authority) ->
-                        authority.getName().equals(AuthorityConstants.ROLE_CUSTOMER)).collect(Collectors.toSet()))
+                .roles(roles.stream().filter((role) ->
+                        role.getName().equals(AuthorityConstants.ROLE_CUSTOMER)).collect(Collectors.toSet()))
                 .build();
 
         userRepo.saveAll(List.of(user1, user2));

@@ -10,6 +10,7 @@ import java.util.List;
 public interface IUserService {
     UserResponse create(UserCreateRequest request);
     UserResponse getById(String id);
+    UserResponse getByEmail(String email);
     List<UserResponse> list();
     UserResponse update(String id, UserUpdateRequest request);
     void delete(String id);

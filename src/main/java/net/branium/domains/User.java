@@ -73,9 +73,9 @@ public class User {
             fetch = FetchType.EAGER
     )
     @JoinTable(
-            name = "users_authorities",
+            name = "users_roles",
             joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "authorities_id", referencedColumnName = "id")
+            inverseJoinColumns = @JoinColumn(name = "roles_name", referencedColumnName = "name")
     )
-    private Set<Authority> authorities = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 }

@@ -1,6 +1,9 @@
 package net.branium.domains;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
 @Getter
@@ -10,15 +13,14 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "authorities", schema = "han_branium_academy")
-public class Authority {
+@Table(name = "permissions", schema = "han_branium_academy")
+public class Permission {
 
     @EqualsAndHashCode.Include
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
-    private Long id;
-
     @Column(name = "name", unique = true, nullable = false, length = 128)
     private String name;
+
+    @Column(name = "description")
+    private String description;
 }

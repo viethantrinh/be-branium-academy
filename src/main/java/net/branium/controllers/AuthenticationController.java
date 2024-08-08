@@ -6,6 +6,7 @@ import net.branium.dtos.auth.AuthenticationResponse;
 import net.branium.dtos.auth.IntrospectRequest;
 import net.branium.dtos.auth.IntrospectResponse;
 import net.branium.services.IAuthenticationService;
+import net.branium.services.IJWTService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthenticationController {
     private final IAuthenticationService authenticationService;
+    private final IJWTService jwtService;
 
     @PostMapping(path = "/sign-in")
     public ResponseEntity<?> signIn(@RequestBody AuthenticationRequest request) {
@@ -27,7 +29,7 @@ public class AuthenticationController {
 
     @PostMapping(path = "/introspect")
     public ResponseEntity<?> introspectToken(@RequestBody IntrospectRequest request) {
-        IntrospectResponse response = authenticationService.introspectToken(request);
+        IntrospectResponse response = jwtService.introspectToken(request);
         return ResponseEntity.ok(response);
     }
 

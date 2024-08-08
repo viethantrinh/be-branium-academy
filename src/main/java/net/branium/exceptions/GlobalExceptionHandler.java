@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +17,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> handleGlobalException(HttpServletRequest request, Exception ex) {
+    public ResponseEntity<ErrorResponse> handleGlobalException(HttpServletRequest request,
+                                                               Exception ex) {
         ErrorResponse response = ErrorResponse.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .timeStamp(LocalDateTime.now())
@@ -31,7 +31,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ApplicationException.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> handleApplicationException(HttpServletRequest request, ApplicationException ex) {
+    public ResponseEntity<ErrorResponse> handleApplicationException(HttpServletRequest request,
+                                                                    ApplicationException ex) {
         ErrorResponse response = ErrorResponse.builder()
                 .status(ex.getError().getStatus().value())
                 .timeStamp(LocalDateTime.now())
