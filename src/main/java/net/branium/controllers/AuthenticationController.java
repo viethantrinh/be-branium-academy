@@ -1,10 +1,8 @@
 package net.branium.controllers;
 
+import com.nimbusds.jose.JOSEException;
 import lombok.RequiredArgsConstructor;
-import net.branium.dtos.auth.AuthenticationRequest;
-import net.branium.dtos.auth.AuthenticationResponse;
-import net.branium.dtos.auth.IntrospectRequest;
-import net.branium.dtos.auth.IntrospectResponse;
+import net.branium.dtos.auth.*;
 import net.branium.services.IAuthenticationService;
 import net.branium.services.IJWTService;
 import org.springframework.http.HttpStatus;
@@ -13,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.text.ParseException;
 
 @RestController
 @RequestMapping(path = "/auth")
@@ -28,9 +28,16 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "/introspect")
-    public ResponseEntity<?> introspectToken(@RequestBody IntrospectRequest request) {
+    public ResponseEntity<?> introspectToken(@RequestBody IntrospectRequest request)
+            throws ParseException, JOSEException {
         IntrospectResponse response = jwtService.introspectToken(request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(path = "/sign-out")
+    public ResponseEntity<Void> signOut(@RequestBody SignOutRequest request) {
+        authenticationService.signOut(request);
+        return ResponseEntity.accepted().build();
     }
 
 

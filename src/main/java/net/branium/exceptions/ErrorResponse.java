@@ -18,16 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 @JsonPropertyOrder({"status", "time_stamp", "path", "errors"})
 public class ErrorResponse {
-    @JsonProperty(value = "status")
     private int status;
 
-    @JsonProperty(value = "time_stamp")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timeStamp;
-
-    @JsonProperty(value = "path")
     private String path;
-
-    @JsonProperty(value = "errors")
     private List<String> errors = new ArrayList<>();
 }

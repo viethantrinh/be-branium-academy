@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IntrospectResponse {
-    @JsonProperty(value = "valid")
     private boolean valid;
 }

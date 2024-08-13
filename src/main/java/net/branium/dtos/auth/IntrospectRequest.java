@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IntrospectRequest {
-    @JsonProperty(value = "access_token")
     private String accessToken;
 }

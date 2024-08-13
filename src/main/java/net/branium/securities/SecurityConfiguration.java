@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,14 +28,14 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.time.Duration;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    @Value("${jwt.secret-key}")
-    private String secretKey;
+    private final CustomJWTDecoder jwtDecoder;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -50,7 +51,7 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2Config -> oauth2Config
                         .jwt((jwtConfigurer) -> jwtConfigurer
-                                .decoder(jwtDecoder())
+                                .decoder(jwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                         .authenticationEntryPoint(new JWTAuthenticationEntryPoint())
                         .accessDeniedHandler(new JWTAccessDeniedHandler()));
@@ -69,14 +70,14 @@ public class SecurityConfiguration {
     }
 
 
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        SecretKey secretKeySpec = new SecretKeySpec(secretKey.getBytes(), JWSAlgorithm.HS512.getName());
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    }
+//    @Bean
+//    public JwtDecoder jwtDecoder() {
+//        SecretKey secretKeySpec = new SecretKeySpec(secretKey.getBytes(), JWSAlgorithm.HS512.getName());
+//        return NimbusJwtDecoder
+//                .withSecretKey(secretKeySpec)
+//                .macAlgorithm(MacAlgorithm.HS512)
+//                .build();
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

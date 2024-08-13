@@ -1,5 +1,6 @@
 package net.branium.dtos.auth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponse {
-    private String accessToken;
-
-    private boolean authenticated;
+public class RoleResponse {
+    private String name;
+    private String description;
 }

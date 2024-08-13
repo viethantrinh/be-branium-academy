@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponse {
-    private String accessToken;
-
-    private boolean authenticated;
+public class SignOutRequest {
+    private String token;
 }
