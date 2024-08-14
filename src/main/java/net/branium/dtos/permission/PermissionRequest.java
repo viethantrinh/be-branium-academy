@@ -1,4 +1,4 @@
-package net.branium.dtos.auth;
+package net.branium.dtos.permission;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class IntrospectResponse {
-    private boolean valid;
+public class PermissionRequest {
+    String name;
+    String description;
 }

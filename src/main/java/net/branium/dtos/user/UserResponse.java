@@ -1,12 +1,10 @@
 package net.branium.dtos.user;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.branium.domains.Role;
-import net.branium.dtos.auth.RoleResponse;
+import net.branium.dtos.role.RoleResponse;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -22,9 +20,10 @@ public class UserResponse {
     private String email;
     private String firstName;
     private String lastName;
-    private Boolean gender;
+    private boolean gender;
+    private boolean enabled;
     private LocalDate birthDate;
-    private Integer vipLevel;
+    private int vipLevel;
     private String phoneNumber;
     private Set<RoleResponse> roles = new HashSet<>();
 }

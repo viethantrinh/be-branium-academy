@@ -2,8 +2,10 @@ package net.branium.bootstraps;
 
 import lombok.RequiredArgsConstructor;
 import net.branium.constants.AuthorityConstants;
+import net.branium.domains.Permission;
 import net.branium.domains.Role;
 import net.branium.domains.User;
+import net.branium.repositories.PermissionRepository;
 import net.branium.repositories.RoleRepository;
 import net.branium.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -14,9 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,10 +24,15 @@ import java.util.stream.Collectors;
 public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepo;
     private final RoleRepository roleRepo;
+    private final PermissionRepository permissionRepo;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
+        if (permissionRepo.count() == 0L) {
+            initialPermission(permissionRepo);
+        }
+
         if (roleRepo.count() == 0L) {
             initialRole(roleRepo);
         }
@@ -37,21 +42,74 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
+    private void initialPermission(PermissionRepository permissionRepo) {
+        Permission createUser = Permission.builder()
+                .name(AuthorityConstants.PERMISSION_CREATE_USER)
+                .description("Permission to create user in system")
+                .build();
+
+
+        Permission deleteUser = Permission.builder()
+                .name(AuthorityConstants.PERMISSION_DELETE_USER)
+                .description("Permission to delete user in system")
+                .build();
+
+        Permission getUser = Permission.builder()
+                .name(AuthorityConstants.PERMISSION_GET_USER_INFORMATION)
+                .description("Permission to get user information in system")
+                .build();
+
+        Permission getUsers = Permission.builder()
+                .name(AuthorityConstants.PERMISSION_GET_USERS_INFORMATION)
+                .description("Permission to get all users information in system")
+                .build();
+
+        Permission updateUser = Permission.builder()
+                .name(AuthorityConstants.PERMISSION_UPDATE_USER)
+                .description("Permission to get update user information in system")
+                .build();
+
+        permissionRepo.saveAll(List.of(createUser, deleteUser, getUser, getUsers, updateUser));
+    }
+
     private void initialRole(RoleRepository roleRepo) {
+        Set<Permission> permissions = new HashSet<>(permissionRepo.findAll());
+        Map<String, Permission> permissionMap = new HashMap<>();
+        permissions.forEach((p) -> permissionMap.put(p.getName(), p));
+
         Role admin = Role.builder()
                 .name(AuthorityConstants.ROLE_ADMIN)
+                .description("admin role")
+                .permissions(Set.of(
+                        permissionMap.get(AuthorityConstants.PERMISSION_CREATE_USER),
+                        permissionMap.get(AuthorityConstants.PERMISSION_GET_USERS_INFORMATION),
+                        permissionMap.get(AuthorityConstants.PERMISSION_GET_USER_INFORMATION),
+                        permissionMap.get(AuthorityConstants.PERMISSION_UPDATE_USER),
+                        permissionMap.get(AuthorityConstants.PERMISSION_DELETE_USER)
+                ))
                 .build();
 
         Role instructor = Role.builder()
                 .name(AuthorityConstants.ROLE_INSTRUCTOR)
+                .description("instructor role")
                 .build();
 
         Role student = Role.builder()
                 .name(AuthorityConstants.ROLE_STUDENT)
+                .description("student role")
                 .build();
 
         Role customer = Role.builder()
                 .name(AuthorityConstants.ROLE_CUSTOMER)
+                .description("customer role")
+                .permissions(Set.of(
+                        permissionMap.get(AuthorityConstants.PERMISSION_CREATE_USER),
+                        permissionMap.get(AuthorityConstants.PERMISSION_GET_USERS_INFORMATION),
+                        permissionMap.get(AuthorityConstants.PERMISSION_GET_USER_INFORMATION),
+
+                        permissionMap.get(AuthorityConstants.PERMISSION_UPDATE_USER),
+                        permissionMap.get(AuthorityConstants.PERMISSION_DELETE_USER)
+                ))
                 .build();
 
         roleRepo.saveAll(List.of(admin, customer, instructor, student));
@@ -89,7 +147,7 @@ public class DataInitializer implements CommandLineRunner {
                 .builder()
                 .username("maianhdo")
                 .email("hntrnn195@gmail.com")
-                .password(passwordEncoder.encode("Sohappy212</>"))
+                .password(passwordEncoder.encode("Sohappy212@"))
                 .firstName("Mai Anh")
                 .lastName("Do")
                 .enabled(true)

@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class IntrospectResponse {
-    private boolean valid;
+public class SignUpRequest {
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
 }

@@ -21,7 +21,7 @@ class RoleRepositoryTests {
     @Test
     void testGetRoleByNameSuccessful() {
         String roleName = AuthorityConstants.ROLE_CUSTOMER;
-        Role role = roleRepo.findByName(roleName)
+        Role role = roleRepo.findById(roleName)
                 .orElseThrow(() -> new ApplicationException(Error.ROLE_NON_EXISTED));
         assertDoesNotThrow(() -> new ApplicationException(Error.ROLE_NON_EXISTED));
         assertNotNull(role);

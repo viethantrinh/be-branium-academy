@@ -1,6 +1,5 @@
 package net.branium.dtos.user;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,3 +20,4 @@ public class UserUpdateRequest {
     private LocalDate birthDate;
     private String phoneNumber;
 }
+

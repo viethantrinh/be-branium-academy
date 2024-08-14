@@ -1,4 +1,4 @@
-package net.branium.dtos.auth;
+package net.branium.dtos.permission;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationRequest {
-    private String email;
-    private String password;
+public class PermissionResponse {
+    String name;
+    String description;
 }

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -20,8 +19,8 @@ import java.util.Date;
 public class InvalidatedToken {
     @EqualsAndHashCode.Include
     @Id
-    @Column(name = "token")
-    private String JWTID;
+    @Column(name = "jwtid")
+    private String jwtid;
 
     @Column(name = "expiration_time")
     private Date expirationTime;

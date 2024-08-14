@@ -1,13 +1,12 @@
 package net.branium.services;
 
 import com.nimbusds.jose.JOSEException;
-import net.branium.dtos.auth.AuthenticationRequest;
-import net.branium.dtos.auth.AuthenticationResponse;
-import net.branium.dtos.auth.SignOutRequest;
+import net.branium.dtos.auth.*;
 
 import java.text.ParseException;
 
 public interface IAuthenticationService {
-    AuthenticationResponse authenticate(AuthenticationRequest request);
+    SignInResponse signIn(SignInRequest request);
+    SignUpResponse signUp(SignUpRequest request);
     void signOut(SignOutRequest request) throws ParseException, JOSEException;
 }
