@@ -13,7 +13,8 @@ public enum Error {
     UNAUTHENTICATED(HttpStatus.UNAUTHORIZED, "User not authenticated"),
     UNAUTHORIZED(HttpStatus.FORBIDDEN, "User not have access"),
     ROLE_NON_EXISTED(HttpStatus.NOT_FOUND, "Role not existed"),
-    PERMISSION_NON_EXISTED(HttpStatus.NOT_FOUND, "Permission not existed");
+    PERMISSION_NON_EXISTED(HttpStatus.NOT_FOUND, "Permission not existed"),
+    INVALID_TOKEN(HttpStatus.BAD_REQUEST, "Token is invalid!");
 
     private final HttpStatus status;
     private final String message;

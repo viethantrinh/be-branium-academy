@@ -43,10 +43,10 @@ public class User {
     private String lastName;
 
     @Column(name = "enabled", nullable = false)
-    private Boolean enabled;
+    private boolean enabled;
 
     @Column(name = "gender")
-    private Boolean gender;
+    private boolean gender;
 
     @Column(name = "birth_date")
     private LocalDate birthDate;
@@ -56,7 +56,7 @@ public class User {
     private byte[] avatar;
 
     @Column(name = "vip_level")
-    private Integer vipLevel;
+    private int vipLevel;
 
     @Column(name = "phone_number", length = 30)
     private String phoneNumber;

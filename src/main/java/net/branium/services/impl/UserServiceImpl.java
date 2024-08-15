@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.branium.domains.User;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.Error;
-import net.branium.mappers.UserMapper;
 import net.branium.repositories.UserRepository;
 import net.branium.services.IUserService;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,13 +23,14 @@ public class UserServiceImpl implements IUserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public User create(User user) {
         User savedUser = userRepo.save(user);
         return savedUser;
     }
 
     @Override
-    public User signUp(User user) {
+    public User createCustomer(User user) {
         User registeredUser = userRepo.save(user);
         return registeredUser;
     }

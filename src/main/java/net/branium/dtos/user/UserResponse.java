@@ -20,8 +20,8 @@ public class UserResponse {
     private String email;
     private String firstName;
     private String lastName;
-    private boolean gender;
     private boolean enabled;
+    private boolean gender;
     private LocalDate birthDate;
     private int vipLevel;
     private String phoneNumber;

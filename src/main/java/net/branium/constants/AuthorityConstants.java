@@ -6,6 +6,7 @@ public class AuthorityConstants {
     public final static String ROLE_STUDENT = "STUDENT";
     public final static String ROLE_CUSTOMER = "CUSTOMER";
 
-    public final static String PERMISSION_MANAGE_COURSE = "MANAGE_COURSE";
-    public final static String PERMISSION_MANAGE_USER = "MANAGE_USER";
+    public final static String PERMISSION_CREATE_COURSE = "CREATE_COURSE";
+    public final static String PERMISSION_UPDATE_COURSE = "UPDATE_COURSE";
+    public final static String PERMISSION_READ_COURSE = "READ_COURSE";
 }

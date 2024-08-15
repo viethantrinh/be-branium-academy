@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface IUserService {
     User create(User user);
-    User signUp(User user);
+
+    User createCustomer(User user);
 
     User getById(String id);
 

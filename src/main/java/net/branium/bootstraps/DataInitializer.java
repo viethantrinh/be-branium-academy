@@ -43,33 +43,23 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void initialPermission(PermissionRepository permissionRepo) {
-        Permission createUser = Permission.builder()
-                .name(AuthorityConstants.PERMISSION_CREATE_USER)
-                .description("Permission to create user in system")
+        Permission createCourse = Permission.builder()
+                .name(AuthorityConstants.PERMISSION_CREATE_COURSE)
+                .description("Permission to create new course in system")
                 .build();
 
 
-        Permission deleteUser = Permission.builder()
-                .name(AuthorityConstants.PERMISSION_DELETE_USER)
-                .description("Permission to delete user in system")
+        Permission updateCourse = Permission.builder()
+                .name(AuthorityConstants.PERMISSION_UPDATE_COURSE)
+                .description("Permission to update course content in system")
                 .build();
 
-        Permission getUser = Permission.builder()
-                .name(AuthorityConstants.PERMISSION_GET_USER_INFORMATION)
-                .description("Permission to get user information in system")
+        Permission getCourse = Permission.builder()
+                .name(AuthorityConstants.PERMISSION_READ_COURSE)
+                .description("Permission to get the course information in system")
                 .build();
 
-        Permission getUsers = Permission.builder()
-                .name(AuthorityConstants.PERMISSION_GET_USERS_INFORMATION)
-                .description("Permission to get all users information in system")
-                .build();
-
-        Permission updateUser = Permission.builder()
-                .name(AuthorityConstants.PERMISSION_UPDATE_USER)
-                .description("Permission to get update user information in system")
-                .build();
-
-        permissionRepo.saveAll(List.of(createUser, deleteUser, getUser, getUsers, updateUser));
+        permissionRepo.saveAll(List.of(createCourse, updateCourse, getCourse));
     }
 
     private void initialRole(RoleRepository roleRepo) {
@@ -81,11 +71,9 @@ public class DataInitializer implements CommandLineRunner {
                 .name(AuthorityConstants.ROLE_ADMIN)
                 .description("admin role")
                 .permissions(Set.of(
-                        permissionMap.get(AuthorityConstants.PERMISSION_CREATE_USER),
-                        permissionMap.get(AuthorityConstants.PERMISSION_GET_USERS_INFORMATION),
-                        permissionMap.get(AuthorityConstants.PERMISSION_GET_USER_INFORMATION),
-                        permissionMap.get(AuthorityConstants.PERMISSION_UPDATE_USER),
-                        permissionMap.get(AuthorityConstants.PERMISSION_DELETE_USER)
+                        permissionMap.get(AuthorityConstants.PERMISSION_CREATE_COURSE),
+                        permissionMap.get(AuthorityConstants.PERMISSION_UPDATE_COURSE),
+                        permissionMap.get(AuthorityConstants.PERMISSION_READ_COURSE)
                 ))
                 .build();
 
@@ -103,12 +91,7 @@ public class DataInitializer implements CommandLineRunner {
                 .name(AuthorityConstants.ROLE_CUSTOMER)
                 .description("customer role")
                 .permissions(Set.of(
-                        permissionMap.get(AuthorityConstants.PERMISSION_CREATE_USER),
-                        permissionMap.get(AuthorityConstants.PERMISSION_GET_USERS_INFORMATION),
-                        permissionMap.get(AuthorityConstants.PERMISSION_GET_USER_INFORMATION),
-
-                        permissionMap.get(AuthorityConstants.PERMISSION_UPDATE_USER),
-                        permissionMap.get(AuthorityConstants.PERMISSION_DELETE_USER)
+                        permissionMap.get(AuthorityConstants.PERMISSION_READ_COURSE)
                 ))
                 .build();
 
@@ -154,7 +137,7 @@ public class DataInitializer implements CommandLineRunner {
                 .gender(false)
                 .birthDate(LocalDate.of(2001, Month.OCTOBER, 6))
                 .avatar(byteArrayAvatar)
-                .vipLevel(1)
+                .vipLevel(0)
                 .phoneNumber("0978936103")
                 .roles(roles.stream().filter((role) ->
                         role.getName().equals(AuthorityConstants.ROLE_CUSTOMER)).collect(Collectors.toSet()))

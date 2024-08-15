@@ -2,8 +2,6 @@ package net.branium.securities;
 
 
 import lombok.RequiredArgsConstructor;
-import net.branium.securities.jwt.JWTAccessDeniedHandler;
-import net.branium.securities.jwt.JWTAuthenticationConverter;
 import net.branium.securities.jwt.JWTAuthenticationEntryPoint;
 import net.branium.securities.jwt.JWTDecoder;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -26,8 +26,6 @@ import java.util.List;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-
-    private final JWTAuthenticationConverter jwtAuthenticationConverter;
     private final JWTDecoder jwtDecoder;
 
     @Bean
@@ -37,19 +35,28 @@ public class SecurityConfiguration {
                 .sessionManagement(sessionConfig -> sessionConfig
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/users/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(o2sConfig -> o2sConfig
                         .jwt((jwtConfig) -> jwtConfig
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter)
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
                                 .decoder(jwtDecoder)
                         )
                         .authenticationEntryPoint(new JWTAuthenticationEntryPoint())
-                        .accessDeniedHandler(new JWTAccessDeniedHandler())
                 );
         return http.build();
     }
 
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
+        JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+        jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+        return jwtAuthenticationConverter;
+    }
 
     @Bean
     public CorsFilter corsFilter() {

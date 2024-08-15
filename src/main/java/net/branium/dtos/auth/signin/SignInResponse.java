@@ -1,4 +1,4 @@
-package net.branium.dtos.auth;
+package net.branium.dtos.auth.signin;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class IntrospectResponse {
-    private boolean valid;
+public class SignInResponse {
+    private String accessToken;
+    private boolean authenticated;
 }

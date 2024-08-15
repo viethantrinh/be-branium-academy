@@ -1,4 +1,4 @@
-package net.branium.dtos.auth;
+package net.branium.dtos.auth.signout;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignOutRequest {
-    private String token;
+    private String accessToken;
 }

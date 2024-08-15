@@ -1,10 +1,10 @@
-package net.branium.dtos.user;
+package net.branium.dtos.auth.signup;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.branium.dtos.role.RoleRequest;
+import net.branium.dtos.role.RoleResponse;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -14,10 +14,10 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreateRequest {
+public class SignUpResponse {
+    private String id;
     private String username;
     private String email;
-    private String password;
     private String firstName;
     private String lastName;
     private boolean enabled;
@@ -25,5 +25,5 @@ public class UserCreateRequest {
     private LocalDate birthDate;
     private int vipLevel;
     private String phoneNumber;
-    private Set<RoleRequest> roles = new HashSet<>();
+    private Set<RoleResponse> roles = new HashSet<>();
 }

@@ -18,4 +18,10 @@ public class InvalidatedServiceImpl implements IInvalidatedService {
         return invalidatedTokenRepo.findById(id)
                 .orElseThrow(() -> new ApplicationException(Error.UNAUTHENTICATED));
     }
+
+    @Override
+    public InvalidatedToken create(InvalidatedToken invalidatedToken) {
+        InvalidatedToken savedToken = invalidatedTokenRepo.save(invalidatedToken);
+        return savedToken;
+    }
 }

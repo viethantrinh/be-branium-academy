@@ -12,10 +12,13 @@ import org.mapstruct.Mappings;
 public interface UserMapper {
 
     @Mappings({
-            @Mapping(target = "enabled", expression = "java(true)"),
-            @Mapping(target = "vipLevel", expression = "java(0)"),
+            @Mapping(target = "id", ignore = true),
+            @Mapping(target = "createdAt", ignore = true),
+            @Mapping(target = "updatedAt", ignore = true)
     })
     User toUser(UserCreateRequest userCreateRequest);
+
     User toUser(UserUpdateRequest userUpdateRequest);
+
     UserResponse toUserResponse(User user);
 }

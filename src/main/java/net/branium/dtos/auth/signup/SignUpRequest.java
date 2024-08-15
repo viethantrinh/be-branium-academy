@@ -1,4 +1,4 @@
-package net.branium.dtos.auth;
+package net.branium.dtos.auth.signup;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
