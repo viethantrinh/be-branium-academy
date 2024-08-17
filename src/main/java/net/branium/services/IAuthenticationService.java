@@ -9,5 +9,5 @@ import net.branium.dtos.auth.signup.SignUpResponse;
 public interface IAuthenticationService {
     SignInResponse signIn(SignInRequest request);
     SignUpResponse signUp(SignUpRequest request);
-    void signOut(SignOutRequest request);
+    boolean signOut(SignOutRequest request);
 }

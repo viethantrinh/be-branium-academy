@@ -50,6 +50,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public List<User> list() {
         List<User> users = userRepo.findAll();
         return users;

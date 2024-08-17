@@ -39,8 +39,8 @@ public class AuthenticationController {
 
     @PostMapping(path = "/sign-out")
     public ResponseEntity<Void> signOut(@RequestBody SignOutRequest request) {
-        authenticationService.signOut(request);
-        return ResponseEntity.accepted().build();
+        boolean signOutSucceed = authenticationService.signOut(request);
+        return signOutSucceed ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
     }
 
 

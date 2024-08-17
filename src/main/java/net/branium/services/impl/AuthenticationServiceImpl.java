@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 public class AuthenticationServiceImpl implements IAuthenticationService {
     private final IUserService userService;
     private final IRoleService roleService;
-    private final InvalidatedServiceImpl invalidatedService;
+    private final InvalidatedTokenServiceImpl invalidatedTokenService;
     private final IJWTService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final RoleMapper roleMapper;
@@ -111,11 +111,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
      * @param request request contain user access token
      */
     @Override
-    public void signOut(SignOutRequest request) {
+    public boolean signOut(SignOutRequest request) {
         String token = request.getAccessToken();
 
-        if (!jwtService.verifyToken(token)) {
-            throw new ApplicationException(Error.INVALID_TOKEN);
+        if (!(jwtService.verifyToken(token))) {
+            return false;
         }
 
         try {
@@ -126,10 +126,13 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                     .jwtid(jwtid)
                     .expirationTime(expirationTime)
                     .build();
-            invalidatedService.create(invalidatedToken);
+            InvalidatedToken savedInvalidatedToken = invalidatedTokenService.create(invalidatedToken);
+            return savedInvalidatedToken != null;
         } catch (ParseException e) {
-            throw new ApplicationException(Error.INVALID_TOKEN);
+            log.error(e.getMessage(), e);
         }
+
+        return false;
     }
 
 
