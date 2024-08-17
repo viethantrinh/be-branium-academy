@@ -2,8 +2,6 @@ package net.branium.securities.jwt;
 
 import com.nimbusds.jose.JWSAlgorithm;
 import lombok.RequiredArgsConstructor;
-import net.branium.exceptions.ApplicationException;
-import net.branium.exceptions.Error;
 import net.branium.services.IJWTService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;

@@ -8,8 +8,6 @@ import java.util.List;
 public interface IUserService {
     User create(User user);
 
-    User createCustomer(User user);
-
     User getById(String id);
 
     User getByEmail(String email);
@@ -22,4 +20,9 @@ public interface IUserService {
 
     boolean existsByEmail(String email);
 
+    User createCustomer(User user);
+
+    User getCustomerInfo();
+
+    User updateCustomer(String id, User user);
 }

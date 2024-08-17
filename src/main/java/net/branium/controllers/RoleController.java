@@ -50,5 +50,4 @@ public class RoleController {
         roleService.deleteByName(name);
         return ResponseEntity.noContent().build();
     }
-
 }

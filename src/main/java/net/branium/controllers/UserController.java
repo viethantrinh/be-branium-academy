@@ -3,6 +3,7 @@ package net.branium.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.domains.User;
+import net.branium.dtos.user.CustomerUpdateRequest;
 import net.branium.dtos.user.UserCreateRequest;
 import net.branium.dtos.user.UserResponse;
 import net.branium.dtos.user.UserUpdateRequest;
@@ -10,7 +11,6 @@ import net.branium.mappers.UserMapper;
 import net.branium.services.IUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,5 +64,19 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping(path = "/customer-info")
+    public ResponseEntity<?> getCustomerInfo() {
+        User user = userService.getCustomerInfo();
+        UserResponse response = userMapper.toUserResponse(user);
+        return ResponseEntity.ok(response);
+    }
 
+    @PutMapping(path = "/customer-info/{id}")
+    public ResponseEntity<?> updateCustomerInfo(@PathVariable(value = "id") String id,
+                                        @RequestBody CustomerUpdateRequest request) {
+        User userUpdateRequest = userMapper.toUser(request);
+        User updatedUser = userService.updateCustomer(id, userUpdateRequest);
+        UserResponse userResponse = userMapper.toUserResponse(updatedUser);
+        return ResponseEntity.ok(userResponse);
+    }
 }

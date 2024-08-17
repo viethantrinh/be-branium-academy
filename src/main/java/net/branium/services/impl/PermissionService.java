@@ -2,6 +2,7 @@ package net.branium.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import net.branium.domains.Permission;
+import net.branium.domains.Role;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.Error;
 import net.branium.repositories.PermissionRepository;
@@ -40,5 +41,11 @@ public class PermissionService implements IPermissionService {
         Permission permission = permissionRepo.findById(name)
                 .orElseThrow(() -> new ApplicationException(Error.PERMISSION_NON_EXISTED));
         permissionRepo.delete(permission);
+    }
+
+    @Override
+    public List<Permission> listByRole(Role role) {
+        List<Permission> permissions = permissionRepo.findAllByRoleName(role.getName());
+        return permissions;
     }
 }
