@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class CustomerUpdateRequest {
     private String username;
-//    private String password; // TODO: implement reset password later
+    //    private String password; // TODO: implement reset password later
     private String firstName;
     private String lastName;
     private boolean gender;

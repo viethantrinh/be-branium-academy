@@ -10,17 +10,11 @@ public interface IUserService {
 
     User getById(String id);
 
-    User getByEmail(String email);
-
     List<User> list();
 
     User update(String id, User user);
 
     void delete(String id);
-
-    boolean existsByEmail(String email);
-
-    User createCustomer(User user);
 
     User getCustomerInfo();
 

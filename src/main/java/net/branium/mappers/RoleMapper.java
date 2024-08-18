@@ -11,7 +11,9 @@ import org.mapstruct.MappingConstants;
 public interface RoleMapper {
 
     Role toRole(RoleResponse roleResponse);
+
     Role toRole(RoleRequest roleRequest);
+
     RoleResponse toRoleResponse(Role role);
 
 }

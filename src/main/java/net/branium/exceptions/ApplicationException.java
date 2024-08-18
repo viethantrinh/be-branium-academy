@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class ApplicationException extends RuntimeException {
-    private Error error;
+    private final Error error;
 
     public ApplicationException(Error error) {
         super(error.getMessage());

@@ -18,14 +18,14 @@ import javax.crypto.spec.SecretKeySpec;
 @RequiredArgsConstructor
 public class JWTDecoder implements JwtDecoder {
 
+    private final IJWTService jwtService;
     @Value("${jwt.secret-key}")
     private String secretKey;
-    private final IJWTService jwtService;
 
     @Override
     public Jwt decode(String token) throws JwtException {
 
-        if (!(jwtService.verifyToken(token))) {
+        if (!(jwtService.verifyToken(token, false))) {
             throw new InvalidBearerTokenException("Invalid Token");
         }
 

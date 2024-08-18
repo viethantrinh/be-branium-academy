@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .timeStamp(LocalDateTime.now())
                 .path(request.getServletPath())
-                .errors(List.of(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase()))
+                .errors(List.of(Error.UNCATEGORIZED_ERROR.getMessage()))
                 .build();
         log.error(ex.getMessage(), ex);
         return ResponseEntity.internalServerError().body(response);

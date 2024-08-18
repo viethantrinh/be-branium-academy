@@ -3,6 +3,8 @@ package net.branium.controllers;
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.auth.introspect.IntrospectRequest;
 import net.branium.dtos.auth.introspect.IntrospectResponse;
+import net.branium.dtos.auth.refreshtoken.RefreshTokenRequest;
+import net.branium.dtos.auth.refreshtoken.RefreshTokenResponse;
 import net.branium.dtos.auth.signin.SignInRequest;
 import net.branium.dtos.auth.signin.SignInResponse;
 import net.branium.dtos.auth.signout.SignOutRequest;
@@ -46,9 +48,19 @@ public class AuthenticationController {
 
     @PostMapping(path = "/introspect-token")
     public ResponseEntity<?> introspectToken(@RequestBody IntrospectRequest request) {
-        boolean isValid = jwtService.verifyToken(request.getAccessToken());
+        boolean isValid = jwtService.verifyToken(request.getAccessToken(), false);
         IntrospectResponse response = IntrospectResponse.builder()
                 .valid(isValid)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(path = "/refresh-token")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+        String refreshedToken = jwtService.refreshToken(request.getAccessToken());
+        RefreshTokenResponse response = RefreshTokenResponse.builder()
+                .refreshToken(refreshedToken)
+                .authenticated(true)
                 .build();
         return ResponseEntity.ok(response);
     }

@@ -7,8 +7,8 @@ import net.branium.domains.User;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.Error;
 import net.branium.mappers.UserMapperImpl;
+import net.branium.repositories.PermissionRepository;
 import net.branium.repositories.UserRepository;
-import net.branium.services.IPermissionService;
 import net.branium.services.IUserService;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +26,7 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepo;
-    private final IPermissionService permissionService;
+    private final PermissionRepository permissionRepo;
     private final PasswordEncoder passwordEncoder;
     private final UserMapperImpl userMapper;
 
@@ -35,25 +35,17 @@ public class UserServiceImpl implements IUserService {
     public User create(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().forEach(role -> {
-            List<Permission> permissions = permissionService.listByRole(role);
+            List<Permission> permissions = permissionRepo.findAllByRoleName(role.getName());
             role.setPermissions(new HashSet<>(permissions));
         });
         User savedUser = userRepo.save(user);
         return savedUser;
     }
 
-
-    @PostAuthorize("(returnObject.email == authentication.name) || hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public User getById(String id) {
         User user = userRepo.findById(id)
-                .orElseThrow(() -> new ApplicationException(Error.USER_NON_EXISTED));
-        return user;
-    }
-
-    @Override
-    public User getByEmail(String email) {
-        User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new ApplicationException(Error.USER_NON_EXISTED));
         return user;
     }
@@ -73,13 +65,12 @@ public class UserServiceImpl implements IUserService {
         userMapper.updateUser(updateUser, user);
         updateUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
         updateUser.getRoles().forEach((role) -> {
-            List<Permission> permissions = permissionService.listByRole(role);
+            List<Permission> permissions = permissionRepo.findAllByRoleName(role.getName());
             role.setPermissions(new HashSet<>(permissions));
         });
         User updatedUser = userRepo.save(updateUser);
         return updatedUser;
     }
-
 
     @PreAuthorize("hasRole('ADMIN')")
     @Override
@@ -87,17 +78,6 @@ public class UserServiceImpl implements IUserService {
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new ApplicationException(Error.USER_NON_EXISTED));
         userRepo.delete(user);
-    }
-
-    @Override
-    public boolean existsByEmail(String email) {
-        return userRepo.existsByEmail(email);
-    }
-
-    @Override
-    public User createCustomer(User user) {
-        User registeredUser = userRepo.save(user);
-        return registeredUser;
     }
 
     @Override

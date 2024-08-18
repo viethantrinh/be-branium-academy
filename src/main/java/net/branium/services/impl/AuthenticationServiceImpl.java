@@ -15,10 +15,11 @@ import net.branium.dtos.auth.signup.SignUpResponse;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.Error;
 import net.branium.mappers.RoleMapper;
+import net.branium.repositories.InvalidatedTokenRepository;
+import net.branium.repositories.RoleRepository;
+import net.branium.repositories.UserRepository;
 import net.branium.services.IAuthenticationService;
 import net.branium.services.IJWTService;
-import net.branium.services.IRoleService;
-import net.branium.services.IUserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +32,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements IAuthenticationService {
-    private final IUserService userService;
-    private final IRoleService roleService;
-    private final InvalidatedTokenServiceImpl invalidatedTokenService;
+    private final UserRepository userRepo;
+    private final RoleRepository roleRepo;
+    private final InvalidatedTokenRepository invalidatedTokenRepo;
     private final IJWTService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final RoleMapper roleMapper;
@@ -49,7 +50,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         String email = request.getEmail();
         String password = request.getPassword();
 
-        User signInUser = userService.getByEmail(email);
+        User signInUser = userRepo.findByEmail(email)
+                .orElseThrow(() -> new ApplicationException(Error.UNAUTHENTICATED));
 
         if (!passwordEncoder.matches(password, signInUser.getPassword())) {
             throw new ApplicationException(Error.UNAUTHENTICATED);
@@ -71,12 +73,14 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
      */
     @Override
     public SignUpResponse signUp(SignUpRequest request) {
-        if (userService.existsByEmail(request.getEmail())) {
+        if (userRepo.existsByEmail(request.getEmail())) {
             throw new ApplicationException(Error.USER_EXISTED);
         }
 
         // TODO: Implement email verification here...
-        Role customerRole = roleService.getByName(AuthorityConstants.ROLE_CUSTOMER);
+        Role customerRole = roleRepo.findById(AuthorityConstants.ROLE_CUSTOMER)
+                .orElseThrow(() -> new ApplicationException(Error.ROLE_NON_EXISTED));
+
         User user = User.builder()
                 .email(request.getEmail())
                 .firstName(request.getFirstName())
@@ -87,7 +91,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .roles(Set.of(customerRole))
                 .build();
 
-        User signUpUser = userService.createCustomer(user);
+        User signUpUser = userRepo.save(user);
+
         return SignUpResponse.builder()
                 .id(signUpUser.getId())
                 .username(signUpUser.getUsername())
@@ -114,7 +119,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     public boolean signOut(SignOutRequest request) {
         String token = request.getAccessToken();
 
-        if (!(jwtService.verifyToken(token))) {
+        if (!(jwtService.verifyToken(token, false))) {
             return false;
         }
 
@@ -126,8 +131,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                     .jwtid(jwtid)
                     .expirationTime(expirationTime)
                     .build();
-            InvalidatedToken savedInvalidatedToken = invalidatedTokenService.create(invalidatedToken);
-            return savedInvalidatedToken != null;
+            invalidatedTokenRepo.save(invalidatedToken);
+            return true;
         } catch (ParseException e) {
             log.error(e.getMessage(), e);
         }

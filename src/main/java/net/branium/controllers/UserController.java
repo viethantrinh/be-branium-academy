@@ -73,7 +73,7 @@ public class UserController {
 
     @PutMapping(path = "/customer-info/{id}")
     public ResponseEntity<?> updateCustomerInfo(@PathVariable(value = "id") String id,
-                                        @RequestBody CustomerUpdateRequest request) {
+                                                @RequestBody CustomerUpdateRequest request) {
         User userUpdateRequest = userMapper.toUser(request);
         User updatedUser = userService.updateCustomer(id, userUpdateRequest);
         UserResponse userResponse = userMapper.toUserResponse(updatedUser);

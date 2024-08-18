@@ -9,6 +9,7 @@ import net.branium.repositories.PermissionRepository;
 import net.branium.repositories.RoleRepository;
 import net.branium.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
