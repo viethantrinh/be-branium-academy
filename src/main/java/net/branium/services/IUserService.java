@@ -19,4 +19,5 @@ public interface IUserService {
     User getCustomerInfo();
 
     User updateCustomer(String id, User user);
+
 }

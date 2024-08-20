@@ -92,6 +92,7 @@ public class UserServiceImpl implements IUserService {
         return user;
     }
 
+
     @Override
     @PostAuthorize("returnObject.email == authentication.name")
     public User updateCustomer(String id, User customer) {

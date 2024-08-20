@@ -23,6 +23,6 @@ logging:
    org.springframework.security: trace
 jwt:
   secret-key: 78040db429b610814e9f299ef8590b28be75aeacd9ff1f3e53bc8b72f4c0c88c
-  valid-access-token-time: 30
-  valid-refresh-token-time: 100
+  valid-access-token-time: 3600
+  valid-refresh-token-time: 7200
 

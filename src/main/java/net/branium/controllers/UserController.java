@@ -3,16 +3,17 @@ package net.branium.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.domains.User;
-import net.branium.dtos.user.CustomerUpdateRequest;
-import net.branium.dtos.user.UserCreateRequest;
-import net.branium.dtos.user.UserResponse;
-import net.branium.dtos.user.UserUpdateRequest;
+import net.branium.dtos.user.*;
 import net.branium.mappers.UserMapper;
 import net.branium.services.IUserService;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -68,6 +69,13 @@ public class UserController {
     public ResponseEntity<?> getCustomerInfo() {
         User user = userService.getCustomerInfo();
         UserResponse response = userMapper.toUserResponse(user);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(path = "/customer-info/avatar")
+    public ResponseEntity<?> getCustomerAvatar() {
+        User user = userService.getCustomerInfo();
+        UserAvatar response = UserAvatar.builder().email(user.getEmail()).avatar(user.getAvatar()).build();
         return ResponseEntity.ok(response);
     }
 
