@@ -50,6 +50,13 @@ public class UserController {
                 : ResponseEntity.noContent().build();
     }
 
+    @GetMapping(path = "/{id}/avatar")
+    public ResponseEntity<?> getUserAvatar(@PathVariable(value = "id") String id) {
+        User user = userService.getById(id);
+        UserAvatar response = UserAvatar.builder().email(user.getEmail()).avatar(user.getAvatar()).build();
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateUser(@PathVariable(value = "id") String id,
                                         @RequestBody UserUpdateRequest request) {
