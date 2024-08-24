@@ -4,6 +4,7 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.constants.AuthorityConstants;
+import net.branium.constants.RoleEnum;
 import net.branium.domains.InvalidatedToken;
 import net.branium.domains.Role;
 import net.branium.domains.User;
@@ -78,7 +79,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         }
 
         // TODO: Implement email verification here...
-        Role customerRole = roleRepo.findById(AuthorityConstants.ROLE_CUSTOMER)
+        Role customerRole = roleRepo.findById(RoleEnum.ROLE_CUSTOMER.getName())
                 .orElseThrow(() -> new ApplicationException(Error.ROLE_NON_EXISTED));
 
         User user = User.builder()

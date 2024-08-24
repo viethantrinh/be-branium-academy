@@ -16,7 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -70,6 +72,21 @@ public class UserServiceImpl implements IUserService {
         });
         User updatedUser = userRepo.save(updateUser);
         return updatedUser;
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Override
+    public void updateUserAvatar(String id, MultipartFile avatar) {
+        byte[] avatarFile = null;
+        try {
+            avatarFile = avatar.getBytes();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ApplicationException(Error.USER_NON_EXISTED));
+        user.setAvatar(avatarFile);
+        userRepo.save(user);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

@@ -1,6 +1,7 @@
 package net.branium.repositories;
 
 import net.branium.constants.AuthorityConstants;
+import net.branium.constants.RoleEnum;
 import net.branium.domains.Role;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.Error;
@@ -20,7 +21,7 @@ class RoleRepositoryTests {
 
     @Test
     void testGetRoleByNameSuccessful() {
-        String roleName = AuthorityConstants.ROLE_CUSTOMER;
+        String roleName = RoleEnum.ROLE_CUSTOMER.getName();
         Role role = roleRepo.findById(roleName)
                 .orElseThrow(() -> new ApplicationException(Error.ROLE_NON_EXISTED));
         assertDoesNotThrow(() -> new ApplicationException(Error.ROLE_NON_EXISTED));

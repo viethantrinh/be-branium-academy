@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +26,12 @@ public class UserController {
     private final IUserService userService;
     private final UserMapper userMapper;
 
+    /**
+     * Create user api, only admin can use this to create user
+     *
+     * @param request the request body which contain the user's data
+     * @return the user data if created successful
+     */
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserCreateRequest request) {
         User userCreateRequest = userMapper.toUser(request);
@@ -65,6 +73,14 @@ public class UserController {
         UserResponse userResponse = userMapper.toUserResponse(updatedUser);
         return ResponseEntity.ok(userResponse);
     }
+
+    @PutMapping(path = "/{id}/avatar")
+    public ResponseEntity<?> updateUserAvatar(@PathVariable(value = "id") String id,
+                                              @RequestParam(value = "avatar") MultipartFile avatarFile) {
+        userService.updateUserAvatar(id, avatarFile);
+        return ResponseEntity.ok().build();
+    }
+
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable(value = "id") String id) {

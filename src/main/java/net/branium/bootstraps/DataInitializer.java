@@ -2,6 +2,7 @@ package net.branium.bootstraps;
 
 import lombok.RequiredArgsConstructor;
 import net.branium.constants.AuthorityConstants;
+import net.branium.constants.RoleEnum;
 import net.branium.domains.Permission;
 import net.branium.domains.Role;
 import net.branium.domains.User;
@@ -69,7 +70,7 @@ public class DataInitializer implements CommandLineRunner {
         permissions.forEach((p) -> permissionMap.put(p.getName(), p));
 
         Role admin = Role.builder()
-                .name(AuthorityConstants.ROLE_ADMIN)
+                .name(RoleEnum.ROLE_ADMIN.getName())
                 .description("admin role")
                 .permissions(Set.of(
                         permissionMap.get(AuthorityConstants.PERMISSION_CREATE_COURSE),
@@ -79,17 +80,17 @@ public class DataInitializer implements CommandLineRunner {
                 .build();
 
         Role instructor = Role.builder()
-                .name(AuthorityConstants.ROLE_INSTRUCTOR)
+                .name(RoleEnum.ROLE_INSTRUCTOR.getName())
                 .description("instructor role")
                 .build();
 
         Role student = Role.builder()
-                .name(AuthorityConstants.ROLE_STUDENT)
+                .name(RoleEnum.ROLE_STUDENT.getName())
                 .description("student role")
                 .build();
 
         Role customer = Role.builder()
-                .name(AuthorityConstants.ROLE_CUSTOMER)
+                .name(RoleEnum.ROLE_CUSTOMER.getName())
                 .description("customer role")
                 .permissions(Set.of(
                         permissionMap.get(AuthorityConstants.PERMISSION_READ_COURSE)
@@ -124,7 +125,7 @@ public class DataInitializer implements CommandLineRunner {
                 .vipLevel(9999)
                 .phoneNumber("0768701056")
                 .roles(roles.stream().filter((role) ->
-                        role.getName().equals(AuthorityConstants.ROLE_ADMIN)).collect(Collectors.toSet()))
+                        role.getName().equals(RoleEnum.ROLE_ADMIN.getName())).collect(Collectors.toSet()))
                 .build();
 
         User user2 = User
@@ -141,7 +142,7 @@ public class DataInitializer implements CommandLineRunner {
                 .vipLevel(0)
                 .phoneNumber("0978936103")
                 .roles(roles.stream().filter((role) ->
-                        role.getName().equals(AuthorityConstants.ROLE_CUSTOMER)).collect(Collectors.toSet()))
+                        role.getName().equals(RoleEnum.ROLE_CUSTOMER.getName())).collect(Collectors.toSet()))
                 .build();
 
         userRepo.saveAll(List.of(user1, user2));

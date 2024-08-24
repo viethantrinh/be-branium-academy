@@ -1,6 +1,7 @@
 package net.branium.repositories;
 
 import net.branium.constants.AuthorityConstants;
+import net.branium.constants.RoleEnum;
 import net.branium.domains.Permission;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ class PermissionRepositoryTests {
 
     @Test
     void testGetAllPermissionsByRoleNameAssociatedSuccessful() {
-        List<Permission> permissions = permissionRepo.findAllByRoleName(AuthorityConstants.ROLE_ADMIN);
+        List<Permission> permissions = permissionRepo.findAllByRoleName(RoleEnum.ROLE_ADMIN.getName());
         permissions.forEach(p -> System.out.println(p));
     }
 }
