@@ -6,7 +6,7 @@ import net.branium.domains.Role;
 import net.branium.dtos.role.RoleRequest;
 import net.branium.dtos.role.RoleResponse;
 import net.branium.mappers.RoleMapper;
-import net.branium.services.IRoleService;
+import net.branium.services.RoleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RoleController {
     private final RoleMapper roleMapper;
-    private final IRoleService roleService;
+    private final RoleService roleService;
 
     @PostMapping
     public ResponseEntity<?> createRole(@RequestBody RoleRequest request) {

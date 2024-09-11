@@ -3,19 +3,15 @@ package net.branium.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.domains.User;
-import net.branium.dtos.user.*;
+import net.branium.dtos.user.UserCreateRequest;
+import net.branium.dtos.user.UserResponse;
+import net.branium.dtos.user.UserUpdateRequest;
 import net.branium.mappers.UserMapper;
-import net.branium.services.IUserService;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
+import net.branium.services.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -23,7 +19,7 @@ import java.util.List;
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final IUserService userService;
+    private final UserService userService;
     private final UserMapper userMapper;
 
     /**
@@ -74,40 +70,4 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(path = "/{id}/avatar")
-    public ResponseEntity<?> getUserAvatar(@PathVariable(value = "id") String id) {
-        User user = userService.getById(id);
-        UserAvatar response = UserAvatar.builder().email(user.getEmail()).avatar(user.getAvatar()).build();
-        return ResponseEntity.ok(response);
-    }
-
-    @PutMapping(path = "/{id}/avatar")
-    public ResponseEntity<?> updateUserAvatar(@PathVariable(value = "id") String id,
-                                              @RequestParam(value = "avatar") MultipartFile avatarFile) {
-        userService.updateUserAvatar(id, avatarFile);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping(path = "/customer-info")
-    public ResponseEntity<?> getCustomerInfo() {
-        User user = userService.getCustomerInfo();
-        UserResponse response = userMapper.toUserResponse(user);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping(path = "/customer-info/avatar")
-    public ResponseEntity<?> getCustomerAvatar() {
-        User user = userService.getCustomerInfo();
-        UserAvatar response = UserAvatar.builder().email(user.getEmail()).avatar(user.getAvatar()).build();
-        return ResponseEntity.ok(response);
-    }
-
-    @PutMapping(path = "/customer-info/{id}")
-    public ResponseEntity<?> updateCustomerInfo(@PathVariable(value = "id") String id,
-                                                @RequestBody CustomerUpdateRequest request) {
-        User userUpdateRequest = userMapper.toUser(request);
-        User updatedUser = userService.updateCustomer(id, userUpdateRequest);
-        UserResponse userResponse = userMapper.toUserResponse(updatedUser);
-        return ResponseEntity.ok(userResponse);
-    }
 }

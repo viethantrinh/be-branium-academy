@@ -1,12 +1,11 @@
 package net.branium.services;
 
 import net.branium.domains.User;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 
-public interface IUserService {
+public interface UserService {
     User create(User user);
 
     User getById(String id);
@@ -15,12 +14,6 @@ public interface IUserService {
 
     User update(String id, User user);
 
-    void updateUserAvatar(String id, MultipartFile avatar);
-
     void delete(String id);
-
-    User getCustomerInfo();
-
-    User updateCustomer(String id, User user);
 
 }

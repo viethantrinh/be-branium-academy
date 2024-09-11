@@ -2,7 +2,7 @@ package net.branium.services;
 
 import net.branium.domains.InvalidatedToken;
 
-public interface IInvalidatedTokenService {
+public interface InvalidatedTokenService {
     InvalidatedToken create(InvalidatedToken invalidatedToken);
     void delete();
 }

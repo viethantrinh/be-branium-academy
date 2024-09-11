@@ -1,7 +1,6 @@
 package net.branium.bootstraps;
 
 import lombok.RequiredArgsConstructor;
-import net.branium.constants.AuthorityConstants;
 import net.branium.constants.RoleEnum;
 import net.branium.domains.Role;
 import net.branium.domains.User;
@@ -12,10 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -38,16 +38,10 @@ public class DataInitializer implements CommandLineRunner {
     }
 
 
-
     private void initialRole(RoleRepository roleRepo) {
         Role admin = Role.builder()
                 .name(RoleEnum.ROLE_ADMIN.getName())
                 .description("admin role")
-                .build();
-
-        Role instructor = Role.builder()
-                .name(RoleEnum.ROLE_INSTRUCTOR.getName())
-                .description("instructor role")
                 .build();
 
         Role student = Role.builder()
@@ -55,24 +49,12 @@ public class DataInitializer implements CommandLineRunner {
                 .description("student role")
                 .build();
 
-        Role customer = Role.builder()
-                .name(RoleEnum.ROLE_CUSTOMER.getName())
-                .description("customer role")
-                .build();
-
-        roleRepo.saveAll(List.of(admin, customer, instructor, student));
+        roleRepo.saveAll(List.of(admin, student));
     }
 
 
     private void initialUser(UserRepository userRepo, RoleRepository roleRepo, PasswordEncoder passwordEncoder) throws IOException {
         Set<Role> roles = new HashSet<>(roleRepo.findAll());
-
-        InputStream inputStream = getClass().getResourceAsStream("/static/images/viethantrinh.jpg");
-        byte[] byteArrayAvatar = null;
-        if (inputStream != null) {
-            byteArrayAvatar = inputStream.readAllBytes();
-            inputStream.close();
-        }
 
         User user1 = User
                 .builder()
@@ -84,7 +66,6 @@ public class DataInitializer implements CommandLineRunner {
                 .enabled(true)
                 .gender(true)
                 .birthDate(LocalDate.of(2003, Month.DECEMBER, 2))
-                .avatar(byteArrayAvatar)
                 .vipLevel(9999)
                 .phoneNumber("0768701056")
                 .roles(roles.stream().filter((role) ->
@@ -101,11 +82,10 @@ public class DataInitializer implements CommandLineRunner {
                 .enabled(true)
                 .gender(false)
                 .birthDate(LocalDate.of(2001, Month.OCTOBER, 6))
-                .avatar(byteArrayAvatar)
                 .vipLevel(0)
                 .phoneNumber("0978936103")
                 .roles(roles.stream().filter((role) ->
-                        role.getName().equals(RoleEnum.ROLE_CUSTOMER.getName())).collect(Collectors.toSet()))
+                        role.getName().equals(RoleEnum.ROLE_STUDENT.getName())).collect(Collectors.toSet()))
                 .build();
 
         userRepo.saveAll(List.of(user1, user2));

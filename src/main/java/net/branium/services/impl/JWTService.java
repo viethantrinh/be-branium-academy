@@ -11,26 +11,24 @@ import net.branium.domains.InvalidatedToken;
 import net.branium.domains.Role;
 import net.branium.domains.User;
 import net.branium.exceptions.ApplicationException;
-import net.branium.exceptions.Error;
+import net.branium.exceptions.ErrorCode;
 import net.branium.repositories.InvalidatedTokenRepository;
 import net.branium.repositories.UserRepository;
-import net.branium.services.IJWTService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.StringJoiner;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class JWTServiceImpl implements IJWTService {
+public class JWTService implements net.branium.services.JWTService {
 
     private final InvalidatedTokenRepository invalidatedTokenRepo;
     private final UserRepository userRepo;
@@ -51,22 +49,35 @@ public class JWTServiceImpl implements IJWTService {
      */
     @Override
     public String generateToken(User user) {
+        String subject = user.getEmail();
+        String issuer = "Branium Academy";
+        String scope = extractUserRoles(user);
+
+        // build a header of JWT
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
+
+        // build a payload of JWT
         JWTClaimsSet claims = new JWTClaimsSet.Builder()
-                .subject(user.getEmail())
-                .issuer("Branium Academy")
+                .subject(subject)
+                .issuer(issuer)
                 .issueTime(new Date())
-                .expirationTime(new Date(Instant.now().plus(validAccessTokenTime, ChronoUnit.SECONDS).toEpochMilli()))
+                .expirationTime(new Date(Instant.now().plus(validAccessTokenTime, ChronoUnit.SECONDS)
+                        .toEpochMilli()))
                 .jwtID(UUID.randomUUID().toString())
-                .claim("scope", extractUserAuthority(user))
+                .claim("scope", scope)
                 .build();
+
         Payload payload = new Payload(claims.toJSONObject());
         JWSObject jwsObject = new JWSObject(header, payload);
+
+        // sign the JWT with a signer
         try {
             jwsObject.sign(new MACSigner(secretKey.getBytes()));
         } catch (JOSEException e) {
             throw new RuntimeException(e.getMessage());
         }
+
+        // return the string form of token
         return jwsObject.serialize();
     }
 
@@ -76,17 +87,11 @@ public class JWTServiceImpl implements IJWTService {
      * @param user user which signed in
      * @return authorities list split by one space " "
      */
-    private String extractUserAuthority(User user) {
-        List<String> authorities = new ArrayList<>();
-
-        String roles = authorities.stream()
-                .filter((a) -> a.contains("ROLE_"))
-                .collect(Collectors.joining(" "));
-        String permissions = authorities.stream()
-                .filter((a) -> !a.contains("ROLE_"))
-                .collect(Collectors.joining(" "));
-
-        return roles;
+    private String extractUserRoles(User user) {
+        StringJoiner sj = new StringJoiner(" ");
+        Set<Role> roles = user.getRoles();
+        roles.forEach((role) -> sj.add(role.getName()));
+        return sj.toString();
     }
 
     /**
@@ -117,7 +122,7 @@ public class JWTServiceImpl implements IJWTService {
             jwtid = signedJWTToken.getJWTClaimsSet().getJWTID();
         } catch (JOSEException | ParseException e) {
             log.error(e.getMessage(), e);
-            throw new ApplicationException(Error.UNAUTHENTICATED);
+            throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
         }
 
         if (jwtid != null) {
@@ -131,7 +136,7 @@ public class JWTServiceImpl implements IJWTService {
     @Override
     public String refreshToken(String token) {
         if (!verifyToken(token, true)) {
-            throw new ApplicationException(Error.UNAUTHENTICATED);
+            throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
         }
 
         SignedJWT signedJWT = null;
@@ -151,7 +156,7 @@ public class JWTServiceImpl implements IJWTService {
         String refreshToken = null;
         try {
             String userEmail = signedJWT.getJWTClaimsSet().getSubject();
-            User user = userRepo.findByEmail(userEmail).orElseThrow(() -> new ApplicationException(Error.UNAUTHENTICATED));
+            User user = userRepo.findByEmail(userEmail).orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));
             refreshToken = generateToken(user);
         } catch (ParseException e) {
             throw new RuntimeException(e.getMessage());

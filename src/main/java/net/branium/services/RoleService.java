@@ -4,7 +4,7 @@ import net.branium.domains.Role;
 
 import java.util.List;
 
-public interface IRoleService {
+public interface RoleService {
     Role create(Role role);
 
     Role getByName(String name);

@@ -3,83 +3,80 @@ package net.branium.services.impl;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.branium.constants.AuthorityConstants;
 import net.branium.constants.RoleEnum;
 import net.branium.domains.InvalidatedToken;
 import net.branium.domains.Role;
 import net.branium.domains.User;
 import net.branium.dtos.auth.signin.SignInRequest;
-import net.branium.dtos.auth.signin.SignInResponse;
 import net.branium.dtos.auth.signout.SignOutRequest;
 import net.branium.dtos.auth.signup.SignUpRequest;
-import net.branium.dtos.auth.signup.SignUpResponse;
 import net.branium.exceptions.ApplicationException;
-import net.branium.exceptions.Error;
+import net.branium.exceptions.ErrorCode;
 import net.branium.mappers.RoleMapper;
 import net.branium.repositories.InvalidatedTokenRepository;
 import net.branium.repositories.RoleRepository;
 import net.branium.repositories.UserRepository;
-import net.branium.services.IAuthenticationService;
-import net.branium.services.IJWTService;
+import net.branium.services.JWTService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl implements IAuthenticationService {
+public class AuthenticationService implements net.branium.services.AuthenticationService {
     private final UserRepository userRepo;
     private final RoleRepository roleRepo;
     private final InvalidatedTokenRepository invalidatedTokenRepo;
-    private final IJWTService jwtService;
+    private final JWTService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final RoleMapper roleMapper;
 
     /**
-     * Check user's authentication
+     * Check if user is authenticated
      *
      * @param request the sign in request
-     * @return response if authenticated
+     * @return response a string token if authenticated
      */
     @Override
-    public SignInResponse signIn(SignInRequest request) {
+    public String signIn(SignInRequest request) {
+        // extract the email and password from request
         String email = request.getEmail();
         String password = request.getPassword();
 
-        User signInUser = userRepo.findByEmail(email)
-                .orElseThrow(() -> new ApplicationException(Error.UNAUTHENTICATED));
+        // find the user by email, if user not existed => throw exception => unauthenticated
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));
 
-        if (!passwordEncoder.matches(password, signInUser.getPassword())) {
-            throw new ApplicationException(Error.UNAUTHENTICATED);
+        // if the user existed => check the password if matches, otherwise throw exception => unauthenticated
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
         }
 
-        String accessToken = jwtService.generateToken(signInUser);
+        // if all above is oke => generate the access token for user
+        String token = jwtService.generateToken(user);
 
-        return SignInResponse.builder()
-                .token(accessToken)
-                .build();
+        return token;
     }
 
     /**
      * Sign up user to system
      *
-     * @param request User information
-     * @return response if register successful
+     * @param request Sign up information
+     * @return true if register successful
      */
     @Override
-    public SignUpResponse signUp(SignUpRequest request) {
+    public void signUp(SignUpRequest request) {
         if (userRepo.existsByEmail(request.getEmail())) {
-            throw new ApplicationException(Error.USER_EXISTED);
+            throw new ApplicationException(ErrorCode.USER_EXISTED);
         }
 
         // TODO: Implement email verification here...
-        Role customerRole = roleRepo.findById(RoleEnum.ROLE_CUSTOMER.getName())
-                .orElseThrow(() -> new ApplicationException(Error.ROLE_NON_EXISTED));
+        Role studentRole = roleRepo.findById(RoleEnum.ROLE_STUDENT.getName())
+                .orElseThrow(() -> new ApplicationException(ErrorCode.ROLE_NON_EXISTED));
 
         User user = User.builder()
                 .email(request.getEmail())
@@ -88,26 +85,9 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .vipLevel(0)
                 .enabled(false) // TODO: email verification to enable user
-                .roles(Set.of(customerRole))
+                .roles(Set.of(studentRole))
                 .build();
-
-        User signUpUser = userRepo.save(user);
-
-        return SignUpResponse.builder()
-                .id(signUpUser.getId())
-                .username(signUpUser.getUsername())
-                .email(signUpUser.getEmail())
-                .firstName(signUpUser.getFirstName())
-                .lastName(signUpUser.getLastName())
-                .enabled(signUpUser.isEnabled())
-                .gender(signUpUser.isGender())
-                .birthDate(signUpUser.getBirthDate())
-                .vipLevel(signUpUser.getVipLevel())
-                .phoneNumber(signUpUser.getPhoneNumber())
-                .roles(signUpUser.getRoles().stream()
-                        .map(roleMapper::toRoleResponse)
-                        .collect(Collectors.toSet()))
-                .build();
+        userRepo.save(user);
     }
 
     /**
@@ -116,11 +96,11 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
      * @param request request contain user access token
      */
     @Override
-    public boolean signOut(SignOutRequest request) {
+    public void signOut(SignOutRequest request) {
         String token = request.getToken();
 
         if (!(jwtService.verifyToken(token, false))) {
-            return false;
+            return;
         }
 
         try {
@@ -132,13 +112,8 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
                     .expirationTime(expirationTime)
                     .build();
             invalidatedTokenRepo.save(invalidatedToken);
-            return true;
         } catch (ParseException e) {
             log.error(e.getMessage(), e);
         }
-
-        return false;
     }
-
-
 }

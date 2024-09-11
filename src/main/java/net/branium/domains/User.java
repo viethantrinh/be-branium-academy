@@ -13,15 +13,13 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "users", schema = "han_branium_academy")
+@Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
 public class User {
-    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", unique = true, nullable = false)
@@ -51,9 +49,8 @@ public class User {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @Lob
-    @Column(name = "avatar")
-    private byte[] avatar;
+    @Column(name = "avatar", unique = true, length = 200)
+    private String avatar;
 
     @Column(name = "vip_level")
     private int vipLevel;
@@ -78,4 +75,20 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "roles_name", referencedColumnName = "name")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+        return id.equals(user.id) && email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + email.hashCode();
+        return result;
+    }
 }

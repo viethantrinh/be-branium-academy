@@ -2,7 +2,7 @@ package net.branium.securities.jwt;
 
 import com.nimbusds.jose.JWSAlgorithm;
 import lombok.RequiredArgsConstructor;
-import net.branium.services.IJWTService;
+import net.branium.services.JWTService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -18,7 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
 @RequiredArgsConstructor
 public class JWTDecoder implements JwtDecoder {
 
-    private final IJWTService jwtService;
+    private final JWTService jwtService;
     @Value("${jwt.secret-key}")
     private String secretKey;
 

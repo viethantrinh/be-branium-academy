@@ -2,7 +2,7 @@ package net.branium.services;
 
 import net.branium.domains.User;
 
-public interface IJWTService {
+public interface JWTService {
 
     String generateToken(User user);
 

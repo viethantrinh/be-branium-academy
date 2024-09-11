@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import net.branium.exceptions.Error;
+import net.branium.exceptions.ErrorCode;
 import net.branium.exceptions.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,10 +22,11 @@ public class JWTAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.UNAUTHORIZED.value())
+                .code(ErrorCode.UNAUTHENTICATED.getCode())
+                .message(ErrorCode.UNAUTHENTICATED.getMessage())
                 .path(request.getServletPath())
                 .timeStamp(LocalDateTime.now())
-                .errors(List.of(Error.UNAUTHENTICATED.getMessage()))
+                .errors(List.of(ErrorCode.UNAUTHENTICATED.getMessage()))
                 .build();
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
