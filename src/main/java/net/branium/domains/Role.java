@@ -22,10 +22,4 @@ public class Role {
 
     @Column(name = "description")
     private String description;
-
-    @ManyToMany
-    @JoinTable(name = "roles_permissions",
-            joinColumns = @JoinColumn(name = "roles_name", referencedColumnName = "name"),
-            inverseJoinColumns = @JoinColumn(name = "permissions_name", referencedColumnName = "name"))
-    private Set<Permission> permissions = new HashSet<>();
 }

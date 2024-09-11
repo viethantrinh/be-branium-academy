@@ -61,8 +61,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         String accessToken = jwtService.generateToken(signInUser);
 
         return SignInResponse.builder()
-                .accessToken(accessToken)
-                .authenticated(true)
+                .token(accessToken)
                 .build();
     }
 
@@ -118,7 +117,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
      */
     @Override
     public boolean signOut(SignOutRequest request) {
-        String token = request.getAccessToken();
+        String token = request.getToken();
 
         if (!(jwtService.verifyToken(token, false))) {
             return false;

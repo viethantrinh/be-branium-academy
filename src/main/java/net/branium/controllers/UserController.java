@@ -58,12 +58,6 @@ public class UserController {
                 : ResponseEntity.noContent().build();
     }
 
-    @GetMapping(path = "/{id}/avatar")
-    public ResponseEntity<?> getUserAvatar(@PathVariable(value = "id") String id) {
-        User user = userService.getById(id);
-        UserAvatar response = UserAvatar.builder().email(user.getEmail()).avatar(user.getAvatar()).build();
-        return ResponseEntity.ok(response);
-    }
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateUser(@PathVariable(value = "id") String id,
@@ -74,18 +68,24 @@ public class UserController {
         return ResponseEntity.ok(userResponse);
     }
 
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable(value = "id") String id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(path = "/{id}/avatar")
+    public ResponseEntity<?> getUserAvatar(@PathVariable(value = "id") String id) {
+        User user = userService.getById(id);
+        UserAvatar response = UserAvatar.builder().email(user.getEmail()).avatar(user.getAvatar()).build();
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping(path = "/{id}/avatar")
     public ResponseEntity<?> updateUserAvatar(@PathVariable(value = "id") String id,
                                               @RequestParam(value = "avatar") MultipartFile avatarFile) {
         userService.updateUserAvatar(id, avatarFile);
         return ResponseEntity.ok().build();
-    }
-
-
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable(value = "id") String id) {
-        userService.delete(id);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping(path = "/customer-info")

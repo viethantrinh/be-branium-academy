@@ -4,10 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.branium.dtos.permission.PermissionRequest;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Builder
@@ -16,5 +12,4 @@ import java.util.Set;
 public class RoleRequest {
     private String name;
     private String description;
-    private Set<PermissionRequest> permissions = new HashSet<>();
 }

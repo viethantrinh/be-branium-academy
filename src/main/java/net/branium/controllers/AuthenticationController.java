@@ -48,7 +48,7 @@ public class AuthenticationController {
 
     @PostMapping(path = "/introspect-token")
     public ResponseEntity<?> introspectToken(@RequestBody IntrospectRequest request) {
-        boolean isValid = jwtService.verifyToken(request.getAccessToken(), false);
+        boolean isValid = jwtService.verifyToken(request.getToken(), false);
         IntrospectResponse response = IntrospectResponse.builder()
                 .valid(isValid)
                 .build();
@@ -57,10 +57,9 @@ public class AuthenticationController {
 
     @PostMapping(path = "/refresh-token")
     public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
-        String refreshedToken = jwtService.refreshToken(request.getAccessToken());
+        String refreshedToken = jwtService.refreshToken(request.getToken());
         RefreshTokenResponse response = RefreshTokenResponse.builder()
-                .refreshToken(refreshedToken)
-                .authenticated(true)
+                .token(refreshedToken)
                 .build();
         return ResponseEntity.ok(response);
     }

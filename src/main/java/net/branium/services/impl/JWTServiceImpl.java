@@ -8,7 +8,6 @@ import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.domains.InvalidatedToken;
-import net.branium.domains.Permission;
 import net.branium.domains.Role;
 import net.branium.domains.User;
 import net.branium.exceptions.ApplicationException;
@@ -72,20 +71,13 @@ public class JWTServiceImpl implements IJWTService {
     }
 
     /**
-     * Extract the user's authorities (roles and permissions)
+     * Extract the user's authorities (roles)
      *
      * @param user user which signed in
      * @return authorities list split by one space " "
      */
     private String extractUserAuthority(User user) {
         List<String> authorities = new ArrayList<>();
-
-        for (Role role : user.getRoles()) {
-            authorities.add("ROLE_" + role.getName());
-            for (Permission permission : role.getPermissions()) {
-                authorities.add(permission.getName());
-            }
-        }
 
         String roles = authorities.stream()
                 .filter((a) -> a.contains("ROLE_"))
@@ -94,7 +86,7 @@ public class JWTServiceImpl implements IJWTService {
                 .filter((a) -> !a.contains("ROLE_"))
                 .collect(Collectors.joining(" "));
 
-        return roles + " " + permissions;
+        return roles;
     }
 
     /**

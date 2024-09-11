@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RefreshTokenResponse {
-    private String refreshToken;
-    private boolean authenticated;
+    private String token;
 }

@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignInResponse {
-    private String accessToken;
-    private boolean authenticated;
+    private String token;
 }

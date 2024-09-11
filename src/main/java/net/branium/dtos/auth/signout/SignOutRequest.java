@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignOutRequest {
-    private String accessToken;
+    private String token;
 }

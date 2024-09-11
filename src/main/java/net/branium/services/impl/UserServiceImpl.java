@@ -2,12 +2,10 @@ package net.branium.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.branium.domains.Permission;
 import net.branium.domains.User;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.Error;
 import net.branium.mappers.UserMapperImpl;
-import net.branium.repositories.PermissionRepository;
 import net.branium.repositories.UserRepository;
 import net.branium.services.IUserService;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -28,7 +26,6 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepo;
-    private final PermissionRepository permissionRepo;
     private final PasswordEncoder passwordEncoder;
     private final UserMapperImpl userMapper;
 
@@ -36,10 +33,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User create(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().forEach(role -> {
-            List<Permission> permissions = permissionRepo.findAllByRoleName(role.getName());
-            role.setPermissions(new HashSet<>(permissions));
-        });
+
         User savedUser = userRepo.save(user);
         return savedUser;
     }
@@ -66,10 +60,6 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(() -> new ApplicationException(Error.USER_NON_EXISTED));
         userMapper.updateUser(updateUser, user);
         updateUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
-        updateUser.getRoles().forEach((role) -> {
-            List<Permission> permissions = permissionRepo.findAllByRoleName(role.getName());
-            role.setPermissions(new HashSet<>(permissions));
-        });
         User updatedUser = userRepo.save(updateUser);
         return updatedUser;
     }

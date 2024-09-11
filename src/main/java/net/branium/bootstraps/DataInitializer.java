@@ -3,14 +3,11 @@ package net.branium.bootstraps;
 import lombok.RequiredArgsConstructor;
 import net.branium.constants.AuthorityConstants;
 import net.branium.constants.RoleEnum;
-import net.branium.domains.Permission;
 import net.branium.domains.Role;
 import net.branium.domains.User;
-import net.branium.repositories.PermissionRepository;
 import net.branium.repositories.RoleRepository;
 import net.branium.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -26,14 +23,10 @@ import java.util.stream.Collectors;
 public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepo;
     private final RoleRepository roleRepo;
-    private final PermissionRepository permissionRepo;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
-        if (permissionRepo.count() == 0L) {
-            initialPermission(permissionRepo);
-        }
 
         if (roleRepo.count() == 0L) {
             initialRole(roleRepo);
@@ -44,39 +37,12 @@ public class DataInitializer implements CommandLineRunner {
         }
     }
 
-    private void initialPermission(PermissionRepository permissionRepo) {
-        Permission createCourse = Permission.builder()
-                .name(AuthorityConstants.PERMISSION_CREATE_COURSE)
-                .description("Permission to create new course in system")
-                .build();
 
-
-        Permission updateCourse = Permission.builder()
-                .name(AuthorityConstants.PERMISSION_UPDATE_COURSE)
-                .description("Permission to update course content in system")
-                .build();
-
-        Permission getCourse = Permission.builder()
-                .name(AuthorityConstants.PERMISSION_READ_COURSE)
-                .description("Permission to get the course information in system")
-                .build();
-
-        permissionRepo.saveAll(List.of(createCourse, updateCourse, getCourse));
-    }
 
     private void initialRole(RoleRepository roleRepo) {
-        Set<Permission> permissions = new HashSet<>(permissionRepo.findAll());
-        Map<String, Permission> permissionMap = new HashMap<>();
-        permissions.forEach((p) -> permissionMap.put(p.getName(), p));
-
         Role admin = Role.builder()
                 .name(RoleEnum.ROLE_ADMIN.getName())
                 .description("admin role")
-                .permissions(Set.of(
-                        permissionMap.get(AuthorityConstants.PERMISSION_CREATE_COURSE),
-                        permissionMap.get(AuthorityConstants.PERMISSION_UPDATE_COURSE),
-                        permissionMap.get(AuthorityConstants.PERMISSION_READ_COURSE)
-                ))
                 .build();
 
         Role instructor = Role.builder()
@@ -92,9 +58,6 @@ public class DataInitializer implements CommandLineRunner {
         Role customer = Role.builder()
                 .name(RoleEnum.ROLE_CUSTOMER.getName())
                 .description("customer role")
-                .permissions(Set.of(
-                        permissionMap.get(AuthorityConstants.PERMISSION_READ_COURSE)
-                ))
                 .build();
 
         roleRepo.saveAll(List.of(admin, customer, instructor, student));
