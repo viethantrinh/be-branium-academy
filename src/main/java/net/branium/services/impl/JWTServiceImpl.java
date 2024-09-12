@@ -14,6 +14,7 @@ import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
 import net.branium.repositories.InvalidatedTokenRepository;
 import net.branium.repositories.UserRepository;
+import net.branium.services.JWTService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class JWTService implements net.branium.services.JWTService {
+public class JWTServiceImpl implements JWTService {
 
     private final InvalidatedTokenRepository invalidatedTokenRepo;
     private final UserRepository userRepo;
@@ -95,42 +96,45 @@ public class JWTService implements net.branium.services.JWTService {
     }
 
     /**
-     * Validate the token base on signature, expiration time
+     * Verify the token
      *
-     * @param token the token want to verify
-     * @return true if token is valid, false if token is invalid
+     * @param token the string token
+     * @param refresh flag for verify refresh token
+     * @return true if the token is valid, otherwise return false
      */
     @Override
-    public boolean verifyToken(String token, boolean isRefresh) {
-        boolean verified = false;
-        boolean expired = false;
-        boolean invalidatedTokenExisted = false;
-        String jwtid = null;
+    public boolean verifyToken(String token, boolean refresh) {
+        boolean verified;
+        boolean expired;
+        boolean existed;
 
         try {
+            // use JWSVerifier object to verify the token
             JWSVerifier jwsVerifier = new MACVerifier(secretKey.getBytes());
 
-            SignedJWT signedJWTToken = SignedJWT.parse(token);
-            verified = signedJWTToken.verify(jwsVerifier); // check if the signature valid
+            // parse the string form of token to SignedJWT object
+            SignedJWT signedJWT = SignedJWT.parse(token);
 
-            Date expirationTime = (isRefresh)
-                    ? new Date(signedJWTToken.getJWTClaimsSet().getIssueTime()
-                    .toInstant().plus(validRefreshTokenTime, ChronoUnit.SECONDS).toEpochMilli())
-                    : signedJWTToken.getJWTClaimsSet().getExpirationTime();
-            expired = expirationTime.before(new Date()); // check if the date is valid
+            // verify the token using the JWSVerifier object
+            verified = signedJWT.verify(jwsVerifier);
 
-            jwtid = signedJWTToken.getJWTClaimsSet().getJWTID();
+            // get the expiration time of token base on the refresh flag
+            Date issueTime = signedJWT.getJWTClaimsSet().getIssueTime();
+            Date expirationTime = refresh
+                    ? new Date(issueTime.toInstant().plus(validRefreshTokenTime, ChronoUnit.SECONDS).toEpochMilli())
+                    : signedJWT.getJWTClaimsSet().getExpirationTime();
+
+            // check if the token is expired
+            expired = expirationTime.before(new Date());
+
+            // check if the jwtid of token is existed in database
+            String jwtid = signedJWT.getJWTClaimsSet().getJWTID();
+            existed = invalidatedTokenRepo.existsById(jwtid);
         } catch (JOSEException | ParseException e) {
-            log.error(e.getMessage(), e);
-            throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
+            throw new RuntimeException(e);
         }
 
-        if (jwtid != null) {
-            invalidatedTokenExisted = invalidatedTokenRepo.existsById(jwtid);
-        }
-
-
-        return verified && !expired && !invalidatedTokenExisted;
+        return verified && !expired && !existed;
     }
 
     @Override
@@ -139,24 +143,19 @@ public class JWTService implements net.branium.services.JWTService {
             throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
         }
 
-        SignedJWT signedJWT = null;
+        SignedJWT signedJWT;
+        String refreshToken;
+
         try {
             signedJWT = SignedJWT.parse(token);
             String jwtId = signedJWT.getJWTClaimsSet().getJWTID();
             Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-            InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+            invalidatedTokenRepo.save(InvalidatedToken.builder()
                     .jwtid(jwtId)
                     .expirationTime(expirationTime)
-                    .build();
-            invalidatedTokenRepo.save(invalidatedToken);
-        } catch (ParseException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-
-        String refreshToken = null;
-        try {
+                    .build());
             String userEmail = signedJWT.getJWTClaimsSet().getSubject();
-            User user = userRepo.findByEmail(userEmail).orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));
+            User user = userRepo.findByEmail(userEmail).orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
             refreshToken = generateToken(user);
         } catch (ParseException e) {
             throw new RuntimeException(e.getMessage());

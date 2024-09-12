@@ -13,7 +13,8 @@ public enum ErrorCode {
     UNAUTHENTICATED(1003, HttpStatus.UNAUTHORIZED, "User not authenticated"),
     UNAUTHORIZED(1004, HttpStatus.FORBIDDEN, "User not have access"),
     ROLE_NON_EXISTED(1005, HttpStatus.NOT_FOUND, "Role not existed"),
-    INVALID_FIELD(1006, HttpStatus.BAD_REQUEST, "Field have some fields not valid");
+    INVALID_FIELD(1006, HttpStatus.BAD_REQUEST, "Field have some fields not valid"),
+    INVALID_TOKEN(1007, HttpStatus.BAD_REQUEST, "Something wrong with the token");
 
     private final int code;
     private final HttpStatus status;

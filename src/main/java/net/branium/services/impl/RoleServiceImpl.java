@@ -5,13 +5,14 @@ import net.branium.domains.Role;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
 import net.branium.repositories.RoleRepository;
+import net.branium.services.RoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RoleService implements net.branium.services.RoleService {
+public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepo;
 

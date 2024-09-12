@@ -1,5 +1,6 @@
 package net.branium.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.auth.refreshtoken.RefreshTokenRequest;
@@ -11,12 +12,11 @@ import net.branium.dtos.auth.signup.SignUpRequest;
 import net.branium.dtos.base.ApiResponse;
 import net.branium.services.AuthenticationService;
 import net.branium.services.JWTService;
+import net.branium.services.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -39,8 +39,8 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "/sign-up")
-    public ResponseEntity<ApiResponse<?>> signUp(@Valid @RequestBody SignUpRequest request) {
-        authenticationService.signUp(request);
+    public ResponseEntity<ApiResponse<?>> signUp(@Valid @RequestBody SignUpRequest request, HttpServletRequest servletRequest) {
+        authenticationService.signUp(request, servletRequest);
         ApiResponse<?> response = ApiResponse.builder()
                 .message("sign up succeeded")
                 .build();
@@ -54,12 +54,23 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "/refresh-token")
-    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest request) {
+    public ResponseEntity<ApiResponse<RefreshTokenResponse>> refreshToken(@RequestBody RefreshTokenRequest request) {
         String refreshedToken = jwtService.refreshToken(request.getToken());
-        RefreshTokenResponse response = RefreshTokenResponse.builder()
-                .token(refreshedToken)
+        ApiResponse<RefreshTokenResponse> response = ApiResponse.<RefreshTokenResponse>builder()
+                .message("refresh the token success")
+                .result(RefreshTokenResponse.builder()
+                        .token(refreshedToken)
+                        .build())
                 .build();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(path = "/verify", produces = MediaType.TEXT_HTML_VALUE)
+    public ResponseEntity<String> verify(@RequestParam(name = "code") String code) {
+        boolean verified = authenticationService.verify(code);
+        return verified
+                ? ResponseEntity.ok("<h1>verify successful. You can sign in now!</h1>")
+                : ResponseEntity.badRequest().body("<h1 style='color: red'>verify failed. Try again!</h1>");
     }
 
 

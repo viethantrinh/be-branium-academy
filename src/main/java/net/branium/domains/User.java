@@ -58,6 +58,9 @@ public class User {
     @Column(name = "phone_number", length = 30)
     private String phoneNumber;
 
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

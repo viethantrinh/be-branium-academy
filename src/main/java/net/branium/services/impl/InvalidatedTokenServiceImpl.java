@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.domains.InvalidatedToken;
 import net.branium.repositories.InvalidatedTokenRepository;
+import net.branium.services.InvalidatedTokenService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class InvalidatedTokenService implements net.branium.services.InvalidatedTokenService {
+public class InvalidatedTokenServiceImpl implements InvalidatedTokenService {
     private final InvalidatedTokenRepository invalidatedTokenRepo;
 
     @Override

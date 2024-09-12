@@ -29,7 +29,6 @@ public class JWTDecoder implements JwtDecoder {
             throw new InvalidBearerTokenException("Invalid Token");
         }
 
-
         SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), JWSAlgorithm.HS512.getName());
         NimbusJwtDecoder nimbusJwtDecoder = NimbusJwtDecoder
                 .withSecretKey(secretKeySpec)
