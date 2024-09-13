@@ -1,4 +1,4 @@
-package net.branium.dtos.auth.signup;
+package net.branium.dtos.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
@@ -13,15 +13,7 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignUpRequest {
-    @NotNull(message = "firstName field must not be null")
-    @NotEmpty(message = "firstName must not be blank or empty")
-    private String firstName;
-
-    @NotNull(message = "lastName field must not be null")
-    @NotEmpty(message = "lastName must not be blank or empty")
-    private String lastName;
-
+public class SignInRequest {
     @NotNull(message = "email field must not be null")
     @NotEmpty(message = "email must not be blank or empty")
     @Email(message = "email must have valid format")

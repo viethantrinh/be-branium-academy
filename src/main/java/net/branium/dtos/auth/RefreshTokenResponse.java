@@ -1,4 +1,4 @@
-package net.branium.dtos.auth.signin;
+package net.branium.dtos.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignInResponse {
+public class RefreshTokenResponse {
     private String token;
 }

@@ -1,4 +1,4 @@
-package net.branium.dtos.auth.signout;
+package net.branium.dtos.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

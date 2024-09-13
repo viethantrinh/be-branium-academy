@@ -3,16 +3,16 @@ package net.branium.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import net.branium.dtos.auth.refreshtoken.RefreshTokenRequest;
-import net.branium.dtos.auth.refreshtoken.RefreshTokenResponse;
-import net.branium.dtos.auth.signin.SignInRequest;
-import net.branium.dtos.auth.signin.SignInResponse;
-import net.branium.dtos.auth.signout.SignOutRequest;
-import net.branium.dtos.auth.signup.SignUpRequest;
+import net.branium.dtos.auth.ResetPasswordRequest;
+import net.branium.dtos.auth.RefreshTokenRequest;
+import net.branium.dtos.auth.RefreshTokenResponse;
+import net.branium.dtos.auth.SignInRequest;
+import net.branium.dtos.auth.SignInResponse;
+import net.branium.dtos.auth.SignOutRequest;
+import net.branium.dtos.auth.SignUpRequest;
 import net.branium.dtos.base.ApiResponse;
 import net.branium.services.AuthenticationService;
 import net.branium.services.JWTService;
-import net.branium.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -65,13 +65,28 @@ public class AuthenticationController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping(path = "/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam(value = "email") String email) {
+        authenticationService.resetPassword(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(path = "/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
+        boolean succeeded = authenticationService.updatePassword(request);
+        return succeeded
+                ? ResponseEntity.ok(ApiResponse.builder().message("reset password successful").build())
+                : ResponseEntity.badRequest().build();
+    }
+
     @GetMapping(path = "/verify", produces = MediaType.TEXT_HTML_VALUE)
     public ResponseEntity<String> verify(@RequestParam(name = "code") String code) {
         boolean verified = authenticationService.verify(code);
         return verified
-                ? ResponseEntity.ok("<h1>verify successful. You can sign in now!</h1>")
-                : ResponseEntity.badRequest().body("<h1 style='color: red'>verify failed. Try again!</h1>");
+                ? ResponseEntity.ok("<h1>Verify successful. You can sign in now!</h1>")
+                : ResponseEntity.badRequest().body("<h1 style='color: red'>Verify failed. Try again!</h1>");
     }
+
 
 
 

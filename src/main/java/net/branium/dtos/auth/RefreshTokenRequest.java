@@ -1,6 +1,5 @@
-package net.branium.dtos.auth.refreshtoken;
+package net.branium.dtos.auth;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

@@ -8,7 +8,6 @@ import net.branium.exceptions.ErrorCode;
 import net.branium.mappers.UserMapper;
 import net.branium.repositories.UserRepository;
 import net.branium.services.UserService;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
