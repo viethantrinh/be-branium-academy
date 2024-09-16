@@ -25,14 +25,23 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-
     public ResponseEntity<ApiResponse<UserResponse>> createUser(@RequestBody @Valid UserCreateRequest request) {
         UserResponse response = userService.createUser(request);
         var responseBody = ApiResponse.<UserResponse>builder()
                 .message("create user success")
                 .result(response)
                 .build();
-        return new ResponseEntity<ApiResponse<UserResponse>>(responseBody, HttpStatus.CREATED);
+        return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable(name = "id") String id) {
+        UserResponse response = userService.getUserById(id);
+        var responseBody = ApiResponse.<UserResponse>builder()
+                .message("get user by id success")
+                .result(response)
+                .build();
+        return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
 
 }

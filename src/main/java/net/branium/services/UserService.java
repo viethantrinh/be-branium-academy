@@ -4,6 +4,7 @@ import net.branium.domains.User;
 import net.branium.dtos.user.UserCreateRequest;
 import net.branium.dtos.user.UserResponse;
 import net.branium.dtos.user.UserUpdateRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 

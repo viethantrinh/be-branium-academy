@@ -41,21 +41,28 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse getUserById(String id) {
-        return null;
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
+        UserResponse response = userMapper.toUserResponse(user);
+        return response;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public List<UserResponse> getAllUsers() {
         return List.of();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse updateUser(String id, UserUpdateRequest request) {
         return null;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @Override
     public void deleteUser(String id) {
 
