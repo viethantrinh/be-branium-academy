@@ -44,4 +44,25 @@ public class UserController {
         return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
     }
 
+    @GetMapping
+    public ResponseEntity<?> listAllUsers() {
+        List<UserResponse> response = userService.getAllUsers();
+        var responseBody = ApiResponse.<List<UserResponse>>builder()
+                .message("get all users success")
+                .result(response)
+                .build();
+        return response.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(responseBody);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<ApiResponse<UserResponse>> deleteUserById(@PathVariable(name = "id") String id) {
+        userService.deleteUserById(id);
+        var responseBody = ApiResponse.<UserResponse>builder()
+                .message("delete user by id successful")
+                .build();
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
 }

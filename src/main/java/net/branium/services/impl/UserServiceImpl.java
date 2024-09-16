@@ -53,7 +53,10 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasRole('ADMIN')")
     @Override
     public List<UserResponse> getAllUsers() {
-        return List.of();
+        List<User> users = userRepo.findAll();
+        return users.stream()
+                .map(userMapper::toUserResponse)
+                .toList();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -64,7 +67,13 @@ public class UserServiceImpl implements UserService {
 
     @PreAuthorize("hasRole('ADMIN')")
     @Override
-    public void deleteUser(String id) {
+    public void deleteUserById(String id) {
+        // check if the user's email is existed or not
+        if (!userRepo.existsById(id)) {
+            throw new ApplicationException(ErrorCode.USER_NON_EXISTED);
+        }
 
+        // delete the user
+        userRepo.deleteById(id);
     }
 }
