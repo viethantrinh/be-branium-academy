@@ -1,19 +1,17 @@
 package net.branium.services;
 
 import net.branium.domains.User;
+import net.branium.dtos.user.UserCreateRequest;
+import net.branium.dtos.user.UserResponse;
+import net.branium.dtos.user.UserUpdateRequest;
 
 import java.util.List;
 
 
 public interface UserService {
-    User create(User user);
-
-    User getById(String id);
-
-    List<User> list();
-
-    User update(String id, User user);
-
-    void delete(String id);
-
+    UserResponse createUser(UserCreateRequest request);
+    UserResponse getUserById(String id);
+    List<UserResponse> getAllUsers();
+    UserResponse updateUser(String id, UserUpdateRequest request);
+    void deleteUser(String id);
 }

@@ -3,6 +3,9 @@ package net.branium.services.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.domains.User;
+import net.branium.dtos.user.UserCreateRequest;
+import net.branium.dtos.user.UserResponse;
+import net.branium.dtos.user.UserUpdateRequest;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
 import net.branium.mappers.UserMapper;
@@ -18,51 +21,43 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
     private final UserRepository userRepo;
-    private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
-    public User create(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse createUser(UserCreateRequest request) {
+        // check if the user's email is existed or not
+        if (userRepo.existsByEmail(request.getEmail())) {
+            throw new ApplicationException(ErrorCode.USER_EXISTED);
+        }
 
+        // map the creating user request to user entity
+        User user = userMapper.toUser(request);
+
+        // save the user to db
         User savedUser = userRepo.save(user);
-        return savedUser;
+        UserResponse response = userMapper.toUserResponse(savedUser);
+        return response;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
-    public User getById(String id) {
-        User user = userRepo.findById(id)
-                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
-        return user;
+    public UserResponse getUserById(String id) {
+        return null;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
-    public List<User> list() {
-        List<User> users = userRepo.findAll();
-        return users;
+    public List<UserResponse> getAllUsers() {
+        return List.of();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
-    public User update(String id, User user) {
-        User updateUser = userRepo.findById(id)
-                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
-        userMapper.updateUser(updateUser, user);
-        updateUser.setPassword(passwordEncoder.encode(updateUser.getPassword()));
-        User updatedUser = userRepo.save(updateUser);
-        return updatedUser;
+    public UserResponse updateUser(String id, UserUpdateRequest request) {
+        return null;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Override
-    public void delete(String id) {
-        User user = userRepo.findById(id)
-                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
-        userRepo.delete(user);
+    public void deleteUser(String id) {
+
     }
 }

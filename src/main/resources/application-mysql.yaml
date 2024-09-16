@@ -1,0 +1,43 @@
+server:
+  port: ${PORT:8080}
+  servlet:
+    context-path: ${SERVER_SERVLET_CONTEXT_PATH:/branium-academy/api/v1}
+spring:
+  application:
+    name: ${SPRING_APPLICATION_NAME:be-branium-academy}
+  datasource:
+    url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/han_branium_academy}
+    username: ${DATASOURCE_USERNAME:root}
+    password: ${DATASOURCE_PASSWORD:Sohappy212}
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hntrnn12@gmail.com
+    password: nfzsrfbrqhmtcayu
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+logging:
+  level:
+    org.springframework.security: trace
+jwt:
+  secret-key: 78040db429b610814e9f299ef8590b28be75aeacd9ff1f3e53bc8b72f4c0c88c
+  valid-access-token-time: 3600
+  valid-refresh-token-time: 7200
+

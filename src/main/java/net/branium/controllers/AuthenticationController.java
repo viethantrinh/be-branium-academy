@@ -26,6 +26,11 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final JWTService jwtService;
 
+    /**
+     * this api use for user to sign in to the system with their email and password
+     * @param request the request body contain data which compose of email and password
+     * @return @{@link SignInResponse } dto contain the token
+     */
     @PostMapping(path = "/sign-in")
     public ResponseEntity<ApiResponse<SignInResponse>> signIn(@Valid @RequestBody SignInRequest request) {
         String token = authenticationService.signIn(request);
@@ -86,9 +91,4 @@ public class AuthenticationController {
                 ? ResponseEntity.ok("<h1>Verify successful. You can sign in now!</h1>")
                 : ResponseEntity.badRequest().body("<h1 style='color: red'>Verify failed. Try again!</h1>");
     }
-
-
-
-
-
 }

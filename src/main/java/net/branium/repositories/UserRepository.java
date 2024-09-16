@@ -9,12 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-
-    @Query("SELECT u FROM User u WHERE u.email = ?1 AND u.enabled = true")
     Optional<User> findByEmail(String email);
-
-    @Query("SELECT u FROM User u WHERE u.verificationCode = ?1")
     Optional<User> findByVerificationCode(String verificationCode);
-
     boolean existsByEmail(String email);
 }

@@ -1,14 +1,17 @@
 package net.branium.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.domains.User;
+import net.branium.dtos.base.ApiResponse;
 import net.branium.dtos.user.UserCreateRequest;
 import net.branium.dtos.user.UserResponse;
 import net.branium.dtos.user.UserUpdateRequest;
 import net.branium.mappers.UserMapper;
 import net.branium.services.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,54 +23,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final UserMapper userMapper;
 
-    /**
-     * Create user api, only admin can use this to create user
-     *
-     * @param request the request body which contain the user's data
-     * @return the user data if created successful
-     */
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserCreateRequest request) {
-        User userCreateRequest = userMapper.toUser(request);
-        User savedUser = userService.create(userCreateRequest);
-        UserResponse response = userMapper.toUserResponse(savedUser);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
 
-
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable(value = "id") String id) {
-        User user = userService.getById(id);
-        UserResponse response = userMapper.toUserResponse(user);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping
-    public ResponseEntity<?> getUsers() {
-        List<User> users = userService.list();
-        List<UserResponse> userResponses = users.stream()
-                .map(userMapper::toUserResponse).toList();
-        return !userResponses.isEmpty()
-                ? ResponseEntity.ok(userResponses)
-                : ResponseEntity.noContent().build();
-    }
-
-
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable(value = "id") String id,
-                                        @RequestBody UserUpdateRequest request) {
-        User userUpdateRequest = userMapper.toUser(request);
-        User updatedUser = userService.update(id, userUpdateRequest);
-        UserResponse userResponse = userMapper.toUserResponse(updatedUser);
-        return ResponseEntity.ok(userResponse);
-    }
-
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable(value = "id") String id) {
-        userService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ApiResponse<UserResponse>> createUser(@RequestBody @Valid UserCreateRequest request) {
+        UserResponse response = userService.createUser(request);
+        var responseBody = ApiResponse.<UserResponse>builder()
+                .message("create user success")
+                .result(response)
+                .build();
+        return new ResponseEntity<ApiResponse<UserResponse>>(responseBody, HttpStatus.CREATED);
     }
 
 }
