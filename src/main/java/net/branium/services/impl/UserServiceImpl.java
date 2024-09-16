@@ -23,6 +23,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
@@ -36,6 +37,8 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toUser(request);
 
         // save the user to db
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        user.setPassword(encodedPassword);
         User savedUser = userRepo.save(user);
         UserResponse response = userMapper.toUserResponse(savedUser);
         return response;
@@ -62,7 +65,20 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasRole('ADMIN')")
     @Override
     public UserResponse updateUser(String id, UserUpdateRequest request) {
-        return null;
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
+
+        // mapped the update field to the entity
+        userMapper.updateUser(user, request);
+
+        if (request.getPassword() != null) {
+            String encodedPassword = passwordEncoder.encode(request.getPassword());
+            user.setPassword(encodedPassword);
+        }
+
+        User savedUser = userRepo.save(user);
+        UserResponse response = userMapper.toUserResponse(savedUser);
+        return response;
     }
 
     @PreAuthorize("hasRole('ADMIN')")

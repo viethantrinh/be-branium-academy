@@ -24,6 +24,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    // TODO: validation the request body
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponse>> createUser(@RequestBody @Valid UserCreateRequest request) {
         UserResponse response = userService.createUser(request);
@@ -55,6 +56,19 @@ public class UserController {
                 ? ResponseEntity.noContent().build()
                 : ResponseEntity.ok(responseBody);
     }
+
+    // TODO: validation the request body
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<ApiResponse<UserResponse>> updateUserById(@PathVariable(name = "id") String id,
+                                                                    @RequestBody @Valid UserUpdateRequest request) {
+        UserResponse response = userService.updateUser(id, request);
+        var responseBody = ApiResponse.<UserResponse>builder()
+                .message("update user success")
+                .result(response)
+                .build();
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+    }
+
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<ApiResponse<UserResponse>> deleteUserById(@PathVariable(name = "id") String id) {
