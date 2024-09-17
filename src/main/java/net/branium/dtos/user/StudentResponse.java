@@ -1,14 +1,13 @@
 package net.branium.dtos.user;
 
-import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.branium.dtos.role.RoleRequest;
-import org.hibernate.validator.constraints.Length;
+import net.branium.dtos.role.RoleResponse;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,15 +15,13 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreateRequest {
+public class StudentResponse {
+    private String id;
     private String email;
-    private String password;
     private String firstName;
     private String lastName;
-    private boolean enabled;
     private boolean gender;
     private LocalDate birthDate;
-    private int vipLevel;
     private String phoneNumber;
-    private Set<RoleRequest> roles = new HashSet<>();
+    private Set<RoleResponse> roles = new HashSet<>();
 }

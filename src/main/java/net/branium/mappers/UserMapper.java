@@ -1,9 +1,7 @@
 package net.branium.mappers;
 
 import net.branium.domains.User;
-import net.branium.dtos.user.UserCreateRequest;
-import net.branium.dtos.user.UserResponse;
-import net.branium.dtos.user.UserUpdateRequest;
+import net.branium.dtos.user.*;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
@@ -22,5 +20,19 @@ public interface UserMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
+
+    @Mapping(target = "vipLevel", ignore = true)
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "enabled", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "email", ignore = true)
+    @Mapping(target = "avatar", ignore = true)
+    @Mapping(target = "verificationCode", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    void updateUser(@MappingTarget User user, StudentUpdateRequest request);
+
     UserResponse toUserResponse(User user);
+    StudentResponse toStudentResponse(User user);
 }

@@ -3,15 +3,16 @@ package net.branium.services.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.domains.User;
-import net.branium.dtos.user.UserCreateRequest;
-import net.branium.dtos.user.UserResponse;
-import net.branium.dtos.user.UserUpdateRequest;
+import net.branium.dtos.user.*;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
 import net.branium.mappers.UserMapper;
 import net.branium.repositories.UserRepository;
 import net.branium.services.UserService;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -92,4 +93,40 @@ public class UserServiceImpl implements UserService {
         // delete the user
         userRepo.deleteById(id);
     }
+
+    @PostAuthorize("authentication.name.equals(returnObject.email)")
+    @Override
+    public StudentResponse getStudentInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
+        }
+        String email = authentication.getName();
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
+        StudentResponse response = userMapper.toStudentResponse(user);
+        return response;
+    }
+
+    @PostAuthorize("authentication.name.equals(returnObject.email)")
+    @Override
+    public StudentResponse updateStudentInfo(StudentUpdateRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
+        }
+        String email = authentication.getName();
+
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
+
+        // mapped the update field to the entity
+        userMapper.updateUser(user, request);
+
+        User savedUser = userRepo.save(user);
+        StudentResponse response = userMapper.toStudentResponse(savedUser);
+        return response;
+    }
+
+
 }

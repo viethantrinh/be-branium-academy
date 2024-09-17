@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.domains.User;
 import net.branium.dtos.base.ApiResponse;
-import net.branium.dtos.user.UserCreateRequest;
-import net.branium.dtos.user.UserResponse;
-import net.branium.dtos.user.UserUpdateRequest;
+import net.branium.dtos.user.*;
 import net.branium.mappers.UserMapper;
 import net.branium.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -79,4 +77,24 @@ public class UserController {
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/info")
+    public ResponseEntity<ApiResponse<StudentResponse>> getStudentInfo() {
+        StudentResponse response = userService.getStudentInfo();
+        var responseBody = ApiResponse.<StudentResponse>builder()
+                .message("get student info successful")
+                .result(response)
+                .build();
+        return ResponseEntity.ok(responseBody);
+    }
+
+    // TODO: validation the request body
+    @PutMapping(path = "/info")
+    public ResponseEntity<ApiResponse<StudentResponse>> updateStudentInfo(@RequestBody @Valid StudentUpdateRequest request) {
+        StudentResponse response = userService.updateStudentInfo(request);
+        var responseBody = ApiResponse.<StudentResponse>builder()
+                .message("update student info successful")
+                .result(response)
+                .build();
+        return ResponseEntity.ok(responseBody);
+    }
 }
