@@ -3,13 +3,10 @@ package net.branium.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.branium.domains.User;
 import net.branium.dtos.base.ApiResponse;
 import net.branium.dtos.user.*;
-import net.branium.mappers.UserMapper;
 import net.branium.services.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +19,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    // TODO: validation the request body
+    // TODO: validate the request body
     @PostMapping
     public ResponseEntity<ApiResponse<UserResponse>> createUser(@RequestBody @Valid UserCreateRequest request) {
         UserResponse response = userService.createUser(request);
@@ -55,7 +52,7 @@ public class UserController {
                 : ResponseEntity.ok(responseBody);
     }
 
-    // TODO: validation the request body
+    // TODO: validate the request body
     @PutMapping(path = "/{id}")
     public ResponseEntity<ApiResponse<UserResponse>> updateUserById(@PathVariable(name = "id") String id,
                                                                     @RequestBody @Valid UserUpdateRequest request) {
@@ -87,7 +84,7 @@ public class UserController {
         return ResponseEntity.ok(responseBody);
     }
 
-    // TODO: validation the request body
+    // TODO: validate the request body
     @PutMapping(path = "/info")
     public ResponseEntity<ApiResponse<StudentResponse>> updateStudentInfo(@RequestBody @Valid StudentUpdateRequest request) {
         StudentResponse response = userService.updateStudentInfo(request);

@@ -2,7 +2,9 @@ package net.branium.mappers;
 
 import net.branium.domains.User;
 import net.branium.dtos.user.*;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
