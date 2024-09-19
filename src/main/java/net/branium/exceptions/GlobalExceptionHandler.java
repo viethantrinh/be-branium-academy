@@ -1,6 +1,8 @@
 package net.branium.exceptions;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ControllerAdvice
 @Slf4j
@@ -51,6 +55,27 @@ public class GlobalExceptionHandler {
                 .build();
         log.error(e.getMessage(), e);
         return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(HttpServletRequest request,
+                                                                            ConstraintViolationException e) {
+        Set<String> errors = new HashSet<>();
+        Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
+        constraintViolations.forEach((cv) -> errors.add(cv.getMessage()));
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code(ErrorCode.INVALID_PARAM.getCode())
+                .message(ErrorCode.INVALID_PARAM.getMessage())
+                .timeStamp(LocalDateTime.now())
+                .path(request.getServletPath())
+                .errors(errors.stream().toList())
+                .build();
+
+        return ResponseEntity
+                .status(ErrorCode.INVALID_PARAM.getStatus())
+                .body(errorResponse);
     }
 
     @ExceptionHandler(ApplicationException.class)

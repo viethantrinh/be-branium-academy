@@ -1,13 +1,17 @@
 package net.branium.controllers;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.dtos.base.ApiResponse;
 import net.branium.dtos.user.*;
 import net.branium.services.UserService;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
+@Validated
 public class UserController {
     private final UserService userService;
 
@@ -31,13 +36,14 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ApiResponse<UserResponse>> getUserById(@PathVariable(name = "id") String id) {
+    public ResponseEntity<ApiResponse<UserResponse>> getUserById(
+            @PathVariable(name = "id") @UUID(message = "ID must be an UUID string") String id) {
         UserResponse response = userService.getUserById(id);
         var responseBody = ApiResponse.<UserResponse>builder()
                 .message("get user by id success")
                 .result(response)
                 .build();
-        return new ResponseEntity<>(responseBody, HttpStatus.CREATED);
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @GetMapping
@@ -71,7 +77,7 @@ public class UserController {
         var responseBody = ApiResponse.<UserResponse>builder()
                 .message("delete user by id successful")
                 .build();
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
+        return new ResponseEntity<>(responseBody, HttpStatus.NO_CONTENT);
     }
 
     @GetMapping(path = "/info")
