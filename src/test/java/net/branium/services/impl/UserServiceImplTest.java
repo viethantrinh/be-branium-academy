@@ -232,7 +232,7 @@ class UserServiceImplTest {
 
         Assertions.assertThat(users).isNotEmpty();
         Assertions.assertThat(users).size().isEqualTo(2);
-        Assertions.assertThat(users.getFirst().getId()).isEqualTo(user.getId());
+        Assertions.assertThat(users.get(0).getId()).isEqualTo(user.getId());
     }
 
     @Order(6)
