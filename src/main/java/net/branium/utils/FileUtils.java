@@ -73,9 +73,6 @@ public class FileUtils {
         if (foundedFile == null) {
             return null;
         }
-        System.out.println(foundedFile.toAbsolutePath());
-        System.out.println(foundedFile.toUri());
-        System.out.println(new UrlResource(foundedFile.toUri()));
         return new UrlResource(foundedFile.toUri());
     }
 
