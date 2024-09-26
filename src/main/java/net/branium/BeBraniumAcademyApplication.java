@@ -12,4 +12,5 @@ public class BeBraniumAcademyApplication {
         SpringApplication.run(BeBraniumAcademyApplication.class, args);
     }
 
+
 }

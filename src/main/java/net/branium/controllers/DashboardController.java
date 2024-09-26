@@ -85,7 +85,17 @@ public class DashboardController {
                                                                @RequestParam(name = "file") MultipartFile multipartFile) {
         FileResponse file = fileService.uploadUserAvatarById(id, multipartFile);
         ApiResponse<FileResponse> response = ApiResponse.<FileResponse>builder()
-                .message("upload user's avatar successful")
+                .message("upload user's avatar by id successful")
+                .result(file)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(path = "/users/{id}/avatar")
+    public ResponseEntity<ApiResponse<FileResponse>> getUserAvatarById(@PathVariable(name = "id") String id) {
+        FileResponse file = fileService.getUserAvatarById(id);
+        ApiResponse<FileResponse> response = ApiResponse.<FileResponse>builder()
+                .message("get user's avatar by id successful")
                 .result(file)
                 .build();
         return ResponseEntity.ok(response);

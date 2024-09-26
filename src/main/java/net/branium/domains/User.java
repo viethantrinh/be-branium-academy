@@ -46,7 +46,7 @@ public class User {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @Column(name = "avatar", unique = true, length = 200)
+    @Column(name = "avatar", length = 200)
     private String avatar;
 
     @Column(name = "vip_level")

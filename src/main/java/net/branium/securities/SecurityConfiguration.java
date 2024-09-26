@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/downloadFile/**").permitAll()
                         .requestMatchers("/dashboard/**").authenticated()
                         .anyRequest().permitAll()
                 )
