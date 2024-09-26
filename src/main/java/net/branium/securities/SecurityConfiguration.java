@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/users/**").authenticated()
+                        .requestMatchers("/dashboard/**").authenticated()
                         .anyRequest().permitAll()
                 )
                 .oauth2ResourceServer(o2sConfig -> o2sConfig
