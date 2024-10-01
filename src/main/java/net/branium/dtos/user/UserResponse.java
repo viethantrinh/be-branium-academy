@@ -24,7 +24,6 @@ public class UserResponse {
     private boolean gender;
     private LocalDate birthDate;
     private String avatar;
-    private int vipLevel;
     private String phoneNumber;
     private Set<RoleResponse> roles = new HashSet<>();
     private LocalDateTime createdAt;

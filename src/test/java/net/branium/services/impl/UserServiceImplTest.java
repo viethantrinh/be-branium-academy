@@ -72,8 +72,7 @@ class UserServiceImplTest {
                 .lastName("Trinh")
                 .enabled(true)
                 .gender(true)
-                .birthDate(LocalDate.of(2003, Month.DECEMBER, 2))
-                .vipLevel(9999)
+                .dateOfBirth(LocalDate.of(2003, Month.DECEMBER, 2))
                 .phoneNumber("0768701056")
                 .roles(roles)
                 .createdAt(LocalDateTime.now())
@@ -211,8 +210,7 @@ class UserServiceImplTest {
                 .lastName("Any")
                 .enabled(true)
                 .gender(true)
-                .birthDate(LocalDate.of(2003, Month.DECEMBER, 2))
-                .vipLevel(9999)
+                .dateOfBirth(LocalDate.of(2003, Month.DECEMBER, 2))
                 .phoneNumber("0768701056")
                 .roles(
                         Set.of(

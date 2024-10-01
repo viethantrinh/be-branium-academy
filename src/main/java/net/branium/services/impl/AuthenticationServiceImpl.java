@@ -94,7 +94,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .vipLevel(0)
                 .enabled(false)
                 .roles(Set.of(studentRole))
                 .verificationCode(randomCode)

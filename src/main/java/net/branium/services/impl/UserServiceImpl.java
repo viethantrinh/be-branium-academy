@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
         // save the user to db
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         user.setPassword(encodedPassword);
-        user.setAvatar("default.jpg");
+        user.setImage("default.jpg");
         User savedUser = userRepo.save(user);
         UserResponse response = userMapper.toUserResponse(savedUser);
         return response;

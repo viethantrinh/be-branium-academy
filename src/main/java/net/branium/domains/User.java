@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @EntityListeners(AuditingEntityListener.class)
 public class User {
     @Id
@@ -31,10 +31,10 @@ public class User {
     @Column(name = "password", nullable = false, length = 128)
     private String password;
 
-    @Column(name = "first_name", length = 45)
+    @Column(name = "first_name", nullable = false, length = 64)
     private String firstName;
 
-    @Column(name = "last_name", length = 45)
+    @Column(name = "last_name", nullable = false, length = 45)
     private String lastName;
 
     @Column(name = "enabled", nullable = false)
@@ -43,19 +43,16 @@ public class User {
     @Column(name = "gender")
     private boolean gender;
 
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
+    @Column(name = "dob")
+    private LocalDate dateOfBirth;
 
-    @Column(name = "avatar", length = 200)
-    private String avatar;
+    @Column(name = "image")
+    private String image;
 
-    @Column(name = "vip_level")
-    private int vipLevel;
-
-    @Column(name = "phone_number", length = 30)
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "verification_code", length = 64)
+    @Column(name = "verification_code", unique = true, length = 64)
     private String verificationCode;
 
     @CreatedDate
@@ -70,9 +67,9 @@ public class User {
             fetch = FetchType.EAGER
     )
     @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "roles_name", referencedColumnName = "name")
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_name", referencedColumnName = "name")
     )
     private Set<Role> roles = new HashSet<>();
 

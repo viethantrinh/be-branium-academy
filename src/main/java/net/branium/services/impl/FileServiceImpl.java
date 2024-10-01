@@ -32,7 +32,7 @@ public class FileServiceImpl implements FileService {
 
         // check if user already have avatar and not the default avatar => then delete the current avatar (the name with 8 random code not the default)
         // in folder and replace with the new one
-        if (user.getAvatar().contains(user.getId()) && !user.getAvatar().startsWith("default.jpg")) {
+        if (user.getImage().contains(user.getId()) && !user.getImage().startsWith("default.jpg")) {
             FileUtils.deleteUserAvatarFile(user.getId());
         }
 
@@ -43,12 +43,12 @@ public class FileServiceImpl implements FileService {
             throw new RuntimeException(e);
         }
 
-        user.setAvatar(fileName);
+        user.setImage(fileName);
         User savedUser = userRepo.save(user);
 
         FileResponse response = ImageResponse.builder()
-                .fileName(savedUser.getAvatar())
-                .downloadUrl(ApplicationConstants.DOWNLOAD_API_PATH + "/" + savedUser.getAvatar().substring(0, 8))
+                .fileName(savedUser.getImage())
+                .downloadUrl(ApplicationConstants.DOWNLOAD_API_PATH + "/" + savedUser.getImage().substring(0, 8))
                 .size(multipartFile.getSize())
                 .build();
 
@@ -62,17 +62,17 @@ public class FileServiceImpl implements FileService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
 
         String uri;
-        if (user.getAvatar().contains("default.jpg")) {
+        if (user.getImage().contains("default.jpg")) {
             uri = "default";
         } else {
-            uri = user.getAvatar().substring(0, 8);
+            uri = user.getImage().substring(0, 8);
         }
 
-        Path path = Path.of(ApplicationConstants.AVATAR_FOLDER_PATH).resolve(user.getAvatar());
+        Path path = Path.of(ApplicationConstants.AVATAR_FOLDER_PATH).resolve(user.getImage());
         long fileSize = path.toFile().length();
 
         FileResponse response = ImageResponse.builder()
-                .fileName(user.getAvatar())
+                .fileName(user.getImage())
                 .downloadUrl(ApplicationConstants.DOWNLOAD_API_PATH + "/" + uri)
                 .size(fileSize)
                 .build();
@@ -87,7 +87,7 @@ public class FileServiceImpl implements FileService {
 
         // check if user already have avatar and not the default avatar => then delete the current avatar (the name with 8 random code not the default)
         // in folder and replace with the new one
-        if (user.getAvatar().contains(user.getId()) && !user.getAvatar().startsWith("default.jpg")) {
+        if (user.getImage().contains(user.getId()) && !user.getImage().startsWith("default.jpg")) {
             FileUtils.deleteUserAvatarFile(user.getId());
         }
 
@@ -98,12 +98,12 @@ public class FileServiceImpl implements FileService {
             throw new RuntimeException(e);
         }
 
-        user.setAvatar(fileName);
+        user.setImage(fileName);
         User savedUser = userRepo.save(user);
 
         FileResponse response = ImageResponse.builder()
-                .fileName(savedUser.getAvatar())
-                .downloadUrl(ApplicationConstants.DOWNLOAD_API_PATH + "/" + savedUser.getAvatar().substring(0, 8))
+                .fileName(savedUser.getImage())
+                .downloadUrl(ApplicationConstants.DOWNLOAD_API_PATH + "/" + savedUser.getImage().substring(0, 8))
                 .size(multipartFile.getSize())
                 .build();
 
@@ -117,17 +117,17 @@ public class FileServiceImpl implements FileService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
 
         String uri;
-        if (user.getAvatar().contains("default.jpg")) {
+        if (user.getImage().contains("default.jpg")) {
             uri = "default";
         } else {
-            uri = user.getAvatar().substring(0, 8);
+            uri = user.getImage().substring(0, 8);
         }
 
-        Path path = Path.of(ApplicationConstants.AVATAR_FOLDER_PATH).resolve(user.getAvatar());
+        Path path = Path.of(ApplicationConstants.AVATAR_FOLDER_PATH).resolve(user.getImage());
         long fileSize = path.toFile().length();
 
         FileResponse response = ImageResponse.builder()
-                .fileName(user.getAvatar())
+                .fileName(user.getImage())
                 .downloadUrl(ApplicationConstants.DOWNLOAD_API_PATH + "/" + uri)
                 .size(fileSize)
                 .build();
