@@ -1,9 +1,7 @@
 package net.branium.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.branium.constants.RoleEnum;
-import net.branium.domains.Role;
+import net.branium.domains.RoleEnum;
 import net.branium.dtos.role.RoleRequest;
 import net.branium.dtos.role.RoleResponse;
 import net.branium.dtos.user.UserCreateRequest;
@@ -18,7 +16,6 @@ import org.junit.jupiter.api.*;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -32,7 +29,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -75,7 +71,6 @@ class UserControllerTests {
                 .enabled(true)
                 .gender(true)
                 .birthDate(LocalDate.of(2003, Month.MAY, 9))
-                .vipLevel(0)
                 .phoneNumber("0768701056")
                 .roles(roleRequests)
                 .build();
@@ -89,7 +84,6 @@ class UserControllerTests {
                 .gender(userCreateRequest.isGender())
                 .birthDate(userCreateRequest.getBirthDate())
                 .avatar(null)
-                .vipLevel(userCreateRequest.getVipLevel())
                 .phoneNumber(userCreateRequest.getPhoneNumber())
                 .roles(userCreateRequest.getRoles().stream().map((
                         (roleRequest) -> RoleResponse.builder()
@@ -166,7 +160,6 @@ class UserControllerTests {
                 .gender(true)
                 .birthDate(LocalDate.of(2003, Month.MAY, 9))
                 .avatar(null)
-                .vipLevel(9999)
                 .phoneNumber("0768701056")
                 .roles(Set.of(
                         RoleResponse.builder()
@@ -264,7 +257,6 @@ class UserControllerTests {
                 .gender(true)
                 .birthDate(LocalDate.of(2003, Month.MAY, 9))
                 .avatar(null)
-                .vipLevel(9999)
                 .phoneNumber("0768701056")
                 .roles(Set.of(
                         RoleResponse.builder()
@@ -286,7 +278,6 @@ class UserControllerTests {
                 .gender(true)
                 .birthDate(LocalDate.of(2003, Month.MAY, 9))
                 .avatar(null)
-                .vipLevel(9999)
                 .phoneNumber("0768701056")
                 .roles(Set.of(
                         RoleResponse.builder()
@@ -308,7 +299,6 @@ class UserControllerTests {
                 .gender(true)
                 .birthDate(LocalDate.of(2003, Month.MAY, 9))
                 .avatar(null)
-                .vipLevel(9999)
                 .phoneNumber("0768701056")
                 .roles(Set.of(
                         RoleResponse.builder()
@@ -372,7 +362,6 @@ class UserControllerTests {
                 .enabled(true)
                 .gender(true)
                 .birthDate(LocalDate.of(2003, Month.MAY, 9))
-                .vipLevel(0)
                 .phoneNumber("0768701056")
                 .roles(Set.of(
                         RoleRequest.builder()
@@ -391,7 +380,6 @@ class UserControllerTests {
                 .gender(userUpdateRequest.isGender())
                 .birthDate(userUpdateRequest.getBirthDate())
                 .avatar(null)
-                .vipLevel(userUpdateRequest.getVipLevel())
                 .phoneNumber(userUpdateRequest.getPhoneNumber())
                 .roles(userUpdateRequest.getRoles().stream().map((
                         (roleRequest) -> RoleResponse.builder()

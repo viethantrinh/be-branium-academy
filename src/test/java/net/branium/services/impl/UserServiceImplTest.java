@@ -1,6 +1,6 @@
 package net.branium.services.impl;
 
-import net.branium.constants.RoleEnum;
+import net.branium.domains.RoleEnum;
 import net.branium.domains.Role;
 import net.branium.domains.User;
 import net.branium.dtos.role.RoleRequest;
@@ -58,7 +58,6 @@ class UserServiceImplTest {
 
         Role roleAdmin = Role.builder()
                 .name(RoleEnum.ROLE_ADMIN.getName())
-                .description(RoleEnum.ROLE_ADMIN.getDescription())
                 .build();
 
         Set<Role> roles = new HashSet<>();
@@ -86,7 +85,6 @@ class UserServiceImplTest {
                 .enabled(true)
                 .gender(true)
                 .birthDate(LocalDate.of(2003, Month.DECEMBER, 2))
-                .vipLevel(9999)
                 .phoneNumber("0768701056")
                 .roles(roleRequests)
                 .build();
@@ -100,7 +98,6 @@ class UserServiceImplTest {
                 .enabled(true)
                 .gender(false)
                 .birthDate(LocalDate.of(2003, Month.DECEMBER, 2))
-                .vipLevel(9999)
                 .phoneNumber("0768701056")
                 .roles(roleRequests)
                 .build();
@@ -141,7 +138,6 @@ class UserServiceImplTest {
                 .enabled(true)
                 .gender(true)
                 .birthDate(LocalDate.of(2003, Month.DECEMBER, 2))
-                .vipLevel(9999)
                 .phoneNumber("0768701056")
                 .roles(
                         Set.of(
@@ -216,7 +212,6 @@ class UserServiceImplTest {
                         Set.of(
                                 Role.builder()
                                         .name(RoleEnum.ROLE_STUDENT.getName())
-                                        .description(RoleEnum.ROLE_STUDENT.getDescription())
                                         .build()
                         ))
                 .createdAt(LocalDateTime.now())

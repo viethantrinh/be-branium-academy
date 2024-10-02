@@ -6,7 +6,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.branium.constants.RoleEnum;
+import net.branium.domains.RoleEnum;
 import net.branium.domains.InvalidatedToken;
 import net.branium.domains.Role;
 import net.branium.domains.User;

@@ -12,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -107,4 +108,7 @@ public class GlobalExceptionHandler {
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(AsyncRequestNotUsableException.class)
+    void handleAsyncRequestNotUsableException(AsyncRequestNotUsableException e) { }
 }

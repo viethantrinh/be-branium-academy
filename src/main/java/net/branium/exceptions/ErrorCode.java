@@ -15,7 +15,8 @@ public enum ErrorCode {
     ROLE_NON_EXISTED(1005, HttpStatus.NOT_FOUND, "Role not existed"),
     INVALID_FIELD(1006, HttpStatus.BAD_REQUEST, "JSON request body have some fields not valid"),
     INVALID_PARAM(1007, HttpStatus.BAD_REQUEST, "Path parameter or Query parameter is invalid"),
-    INVALID_TOKEN(1008, HttpStatus.BAD_REQUEST, "Something wrong with the token");
+    INVALID_TOKEN(1008, HttpStatus.BAD_REQUEST, "Something wrong with the token"),
+    RESOURCE_NON_EXISTED(1009, HttpStatus.NOT_FOUND, "Resource not existed");
 
     private final int code;
     private final HttpStatus status;

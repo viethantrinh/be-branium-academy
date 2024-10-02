@@ -1,24 +1,19 @@
 package net.branium.controllers;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.branium.dtos.base.ApiResponse;
-import net.branium.dtos.file.FileResponse;
-import net.branium.dtos.user.*;
-import net.branium.services.FileService;
+import net.branium.dtos.resource.ResourceResponse;
+import net.branium.dtos.user.StudentResponse;
+import net.branium.dtos.user.StudentUpdateRequest;
+import net.branium.services.ResourceService;
 import net.branium.services.UserService;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -27,7 +22,7 @@ import java.util.List;
 @Validated
 public class UserController {
     private final UserService userService;
-    private final FileService fileService;
+    private final ResourceService resourceService;
 
     @GetMapping(path = "/info")
     public ResponseEntity<ApiResponse<StudentResponse>> getStudentInfo() {
@@ -50,23 +45,24 @@ public class UserController {
         return ResponseEntity.ok(responseBody);
     }
 
-    @PostMapping(path = "/avatar")
-    public ResponseEntity<ApiResponse<FileResponse>> createUserAvatarById(@RequestParam(name = "file") MultipartFile multipartFile, Authentication authentication) {
-        FileResponse file = fileService.uploadStudentAvatar(multipartFile, authentication);
-        ApiResponse<FileResponse> response = ApiResponse.<FileResponse>builder()
-                .message("upload user's avatar successful")
-                .result(file)
+    @PostMapping(path = "/image")
+    public ResponseEntity<ApiResponse<ResourceResponse>> uploadStudentImage(
+            @RequestParam(name = "image") MultipartFile file) {
+        ResourceResponse resourceResponse = userService.updateStudentImage(file);
+        var response = ApiResponse.<ResourceResponse>builder()
+                .message("upload student's image success")
+                .result(resourceResponse)
                 .build();
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/avatar")
-    public ResponseEntity<ApiResponse<FileResponse>> getUserAvatarById(Authentication authentication) {
-        FileResponse file = fileService.getStudentAvatar(authentication);
-        ApiResponse<FileResponse> response = ApiResponse.<FileResponse>builder()
-                .message("get user's avatar successful")
-                .result(file)
+    @GetMapping(path = "/image")
+    public ResponseEntity<ApiResponse<ResourceResponse>> getStudentImage() {
+        ResourceResponse resourceResponse = userService.getStudentImage();
+        var response = ApiResponse.<ResourceResponse>builder()
+                .message("get student's image success")
+                .result(resourceResponse)
                 .build();
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

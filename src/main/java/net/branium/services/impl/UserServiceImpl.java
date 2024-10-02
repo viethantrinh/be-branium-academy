@@ -2,19 +2,24 @@ package net.branium.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.branium.domains.ResourceType;
 import net.branium.domains.User;
+import net.branium.dtos.resource.ResourceResponse;
 import net.branium.dtos.user.*;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
 import net.branium.mappers.UserMapper;
 import net.branium.repositories.UserRepository;
+import net.branium.services.ResourceService;
 import net.branium.services.UserService;
+import net.branium.utils.ResourceUtils;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final ResourceService resourceService;
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
@@ -40,7 +46,6 @@ public class UserServiceImpl implements UserService {
         // save the user to db
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         user.setPassword(encodedPassword);
-        user.setImage("default.jpg");
         User savedUser = userRepo.save(user);
         UserResponse response = userMapper.toUserResponse(savedUser);
         return response;
@@ -129,5 +134,33 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    @Override
+    public ResourceResponse updateStudentImage(MultipartFile file) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepo.findByEmail(authentication.getName())
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
+        String fileCode = resourceService.uploadUserImage(user, file);
+        return ResourceResponse.builder()
+                .url(ResourceUtils.buildDownloadUrl(fileCode, ResourceType.IMAGE))
+                .build();
+    }
+
+    @Override
+    public ResourceResponse getStudentImage() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepo.findByEmail(authentication.getName())
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
+        String image = user.getImage();
+
+        if (image == null) {
+            throw new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED);
+        }
+
+        String fileCode = image.substring(0, 8);
+
+        return ResourceResponse.builder()
+                .url(ResourceUtils.buildDownloadUrl(fileCode, ResourceType.IMAGE))
+                .build();
+    }
 
 }

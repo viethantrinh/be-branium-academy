@@ -3,16 +3,14 @@ package net.branium.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.base.ApiResponse;
-import net.branium.dtos.file.FileResponse;
 import net.branium.dtos.user.UserCreateRequest;
 import net.branium.dtos.user.UserResponse;
 import net.branium.dtos.user.UserUpdateRequest;
-import net.branium.services.FileService;
+import net.branium.services.ResourceService;
 import net.branium.services.UserService;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DashboardController {
     private final UserService userService;
-    private final FileService fileService;
+    private final ResourceService resourceService;
 
     // TODO: validate the request body
     @PostMapping(path = "/users")
@@ -78,26 +76,5 @@ public class DashboardController {
                 .message("delete user by id successful")
                 .build();
         return new ResponseEntity<>(responseBody, HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping(path = "/users/{id}/avatar")
-    public ResponseEntity<ApiResponse<FileResponse>> createUserAvatarById(@PathVariable(name = "id") String id,
-                                                               @RequestParam(name = "file") MultipartFile multipartFile) {
-        FileResponse file = fileService.uploadUserAvatarById(id, multipartFile);
-        ApiResponse<FileResponse> response = ApiResponse.<FileResponse>builder()
-                .message("upload user's avatar by id successful")
-                .result(file)
-                .build();
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping(path = "/users/{id}/avatar")
-    public ResponseEntity<ApiResponse<FileResponse>> getUserAvatarById(@PathVariable(name = "id") String id) {
-        FileResponse file = fileService.getUserAvatarById(id);
-        ApiResponse<FileResponse> response = ApiResponse.<FileResponse>builder()
-                .message("get user's avatar by id successful")
-                .result(file)
-                .build();
-        return ResponseEntity.ok(response);
     }
 }

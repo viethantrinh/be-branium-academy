@@ -14,14 +14,12 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 public class Role {
     @Id
     @Column(name = "name", unique = true, nullable = false, length = 128)
     private String name;
 
-    @Column(name = "description")
-    private String description;
 
     @Override
     public boolean equals(Object o) {
@@ -29,13 +27,11 @@ public class Role {
         if (o == null || getClass() != o.getClass()) return false;
 
         Role role = (Role) o;
-        return name.equals(role.name) && Objects.equals(description, role.description);
+        return Objects.equals(name, role.name);
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + Objects.hashCode(description);
-        return result;
+        return Objects.hashCode(name);
     }
 }

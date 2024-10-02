@@ -1,4 +1,4 @@
-package net.branium.constants;
+package net.branium.domains;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
