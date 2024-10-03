@@ -22,8 +22,8 @@ public class UserResponse {
     private String lastName;
     private boolean enabled;
     private boolean gender;
-    private LocalDate birthDate;
-    private String avatar;
+    private LocalDate dateOfBirth;
+    private String image;
     private String phoneNumber;
     private Set<RoleResponse> roles = new HashSet<>();
     private LocalDateTime createdAt;

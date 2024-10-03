@@ -15,6 +15,6 @@ public class StudentUpdateRequest {
     private String firstName;
     private String lastName;
     private boolean gender;
-    private LocalDate birthDate;
+    private LocalDate dateOfBirth;
     private String phoneNumber;
 }

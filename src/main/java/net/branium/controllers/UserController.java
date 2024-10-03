@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Validated
 public class UserController {
     private final UserService userService;
-    private final ResourceService resourceService;
 
     @GetMapping(path = "/info")
     public ResponseEntity<ApiResponse<StudentResponse>> getStudentInfo() {
@@ -36,7 +35,8 @@ public class UserController {
 
     // TODO: validate the request body
     @PutMapping(path = "/info")
-    public ResponseEntity<ApiResponse<StudentResponse>> updateStudentInfo(@RequestBody @Valid StudentUpdateRequest request) {
+    public ResponseEntity<ApiResponse<StudentResponse>> updateStudentInfo(
+            @RequestBody @Valid StudentUpdateRequest request) {
         StudentResponse response = userService.updateStudentInfo(request);
         var responseBody = ApiResponse.<StudentResponse>builder()
                 .message("update student info successful")

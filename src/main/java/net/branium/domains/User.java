@@ -64,9 +64,7 @@ public class User {
     @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
 
-    @ManyToMany(
-            fetch = FetchType.EAGER
-    )
+    @ManyToMany
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

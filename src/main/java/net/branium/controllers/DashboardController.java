@@ -2,16 +2,21 @@ package net.branium.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import net.branium.domains.Course;
 import net.branium.dtos.base.ApiResponse;
+import net.branium.dtos.course.CourseCreateRequest;
+import net.branium.dtos.course.CourseResponse;
 import net.branium.dtos.resource.ResourceResponse;
 import net.branium.dtos.user.UserCreateRequest;
 import net.branium.dtos.user.UserResponse;
 import net.branium.dtos.user.UserUpdateRequest;
+import net.branium.services.CourseService;
 import net.branium.services.ResourceService;
 import net.branium.services.UserService;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,9 +25,10 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/dashboard")
 @RequiredArgsConstructor
+@Validated
 public class DashboardController {
     private final UserService userService;
-    private final ResourceService resourceService;
+    private final CourseService courseService;
 
     // TODO: validate the request body
     @PostMapping(path = "/users")
@@ -79,8 +85,7 @@ public class DashboardController {
         return new ResponseEntity<>(responseBody, HttpStatus.NO_CONTENT);
     }
 
-
-    @PostMapping(path = "/{id}/image")
+    @PostMapping(path = "/users/{id}/image")
     public ResponseEntity<ApiResponse<ResourceResponse>> uploadUserImage(
             @PathVariable(name = "id") String id,
             @RequestParam(name = "image") MultipartFile file) {
@@ -92,7 +97,7 @@ public class DashboardController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping(path = "/{id}/image")
+    @GetMapping(path = "/users/{id}/image")
     public ResponseEntity<ApiResponse<ResourceResponse>> getUserImage(@PathVariable(name = "id") String id) {
         ResourceResponse resourceResponse = userService.getUserImage(id);
         var response = ApiResponse.<ResourceResponse>builder()
@@ -100,5 +105,11 @@ public class DashboardController {
                 .result(resourceResponse)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/courses")
+    public ResponseEntity<?> createCourse(@RequestBody @Valid CourseCreateRequest request) {
+        CourseResponse response = courseService.createCourse(request);
+        return null;
     }
 }

@@ -20,7 +20,8 @@ public class StudentResponse {
     private String firstName;
     private String lastName;
     private boolean gender;
-    private LocalDate birthDate;
+    private LocalDate dateOfBirth;
+    private String image;
     private String phoneNumber;
     private Set<RoleResponse> roles = new HashSet<>();
 }

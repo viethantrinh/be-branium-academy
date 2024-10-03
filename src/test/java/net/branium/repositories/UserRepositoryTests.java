@@ -28,12 +28,16 @@ class UserRepositoryTests {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         user1 = User.builder()
                 .email("nphanh75@gmail.com")
+                .lastName("")
+                .firstName("")
                 .verificationCode("123456789")
                 .password(passwordEncoder.encode("Sohappy212@"))
                 .build();
 
         user2 = User.builder()
                 .email("maianhdo@gmail.com")
+                .lastName("")
+                .firstName("")
                 .password(passwordEncoder.encode("Sohappy212@"))
                 .verificationCode("123456784")
                 .build();
