@@ -32,4 +32,17 @@ public class ResourceController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
                 .body(resource);
     }
+
+    @GetMapping(path = "/videos/{file_code}")
+    public ResponseEntity<?> getVideoResource(@PathVariable(name = "file_code") String fileCode) {
+        Resource resource = resourceService.getResourceByFileCode(fileCode);
+
+        MediaType contentType = MediaType.APPLICATION_OCTET_STREAM;
+        String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
+
+        return ResponseEntity.ok()
+                .contentType(contentType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
+                .body(resource);
+    }
 }

@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RoleRequest {
     private String name;
-    private String description;
 }

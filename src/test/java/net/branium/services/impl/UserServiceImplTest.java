@@ -50,7 +50,6 @@ class UserServiceImplTest {
     void setUp() {
         RoleRequest roleRequestAdmin = RoleRequest.builder()
                 .name(RoleEnum.ROLE_ADMIN.getName())
-                .description(RoleEnum.ROLE_ADMIN.getDescription())
                 .build();
 
         Set<RoleRequest> roleRequests = new HashSet<>();
@@ -143,7 +142,6 @@ class UserServiceImplTest {
                         Set.of(
                                 RoleRequest.builder()
                                         .name(RoleEnum.ROLE_ADMIN.getName())
-                                        .description(RoleEnum.ROLE_ADMIN.getDescription())
                                         .build()
                         ))
                 .build();

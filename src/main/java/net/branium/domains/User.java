@@ -80,9 +80,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<QuizResult> quizResults = new HashSet<>();
 
-    @PrimaryKeyJoinColumn
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private WishList wishList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Order> orders = new HashSet<>();
 
 
     @Override

@@ -46,10 +46,10 @@ public class Course {
     private BigDecimal discountPrice;
 
     @Column(name = "study_count", nullable = false)
-    private int studyCount;
+    private int studyCount = 0;
 
     @Column(name = "buy_count", nullable = false)
-    private int buyCount;
+    private int buyCount = 0;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)

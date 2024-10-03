@@ -12,8 +12,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "`cart`")
-public class Cart {
+@Table(name = "`wish_list`")
+public class WishList {
     @Id
     @Column(name = "id", nullable = false, unique = true)
     private String id;
@@ -23,6 +23,6 @@ public class Cart {
     @MapsId("id")
     private User user;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    private Set<CartItem> cartItems = new HashSet<>();
+    @OneToMany(mappedBy = "wishList", cascade = CascadeType.ALL)
+    private Set<WishListItem> wishListItems = new HashSet<>();
 }

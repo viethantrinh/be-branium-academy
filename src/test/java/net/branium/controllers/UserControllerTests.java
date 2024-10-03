@@ -57,7 +57,6 @@ class UserControllerTests {
     void givenUserCreateRequest_whenCreateUser_thenReturn201Created() throws Exception {
         RoleRequest roleRequestAdmin = RoleRequest.builder()
                 .name(RoleEnum.ROLE_STUDENT.getName())
-                .description(RoleEnum.ROLE_STUDENT.getDescription())
                 .build();
 
         Set<RoleRequest> roleRequests = new HashSet<>();
@@ -88,7 +87,6 @@ class UserControllerTests {
                 .roles(userCreateRequest.getRoles().stream().map((
                         (roleRequest) -> RoleResponse.builder()
                                 .name(roleRequest.getName())
-                                .description(roleRequest.getDescription())
                                 .build()
                 )).collect(Collectors.toSet()))
                 .createdAt(LocalDateTime.now())
@@ -164,7 +162,6 @@ class UserControllerTests {
                 .roles(Set.of(
                         RoleResponse.builder()
                                 .name(RoleEnum.ROLE_ADMIN.getName())
-                                .description(RoleEnum.ROLE_ADMIN.getDescription())
                                 .build()
                 ))
                 .createdAt(LocalDateTime.now())
@@ -261,7 +258,6 @@ class UserControllerTests {
                 .roles(Set.of(
                         RoleResponse.builder()
                                 .name(RoleEnum.ROLE_ADMIN.getName())
-                                .description(RoleEnum.ROLE_ADMIN.getDescription())
                                 .build()
                 ))
                 .createdAt(LocalDateTime.now())
@@ -282,7 +278,6 @@ class UserControllerTests {
                 .roles(Set.of(
                         RoleResponse.builder()
                                 .name(RoleEnum.ROLE_ADMIN.getName())
-                                .description(RoleEnum.ROLE_ADMIN.getDescription())
                                 .build()
                 ))
                 .createdAt(LocalDateTime.now())
@@ -303,7 +298,6 @@ class UserControllerTests {
                 .roles(Set.of(
                         RoleResponse.builder()
                                 .name(RoleEnum.ROLE_ADMIN.getName())
-                                .description(RoleEnum.ROLE_ADMIN.getDescription())
                                 .build()
                 ))
                 .createdAt(LocalDateTime.now())
@@ -366,7 +360,6 @@ class UserControllerTests {
                 .roles(Set.of(
                         RoleRequest.builder()
                                 .name(RoleEnum.ROLE_ADMIN.getName())
-                                .description(RoleEnum.ROLE_ADMIN.getDescription())
                                 .build()
                 ))
                 .build();
@@ -384,7 +377,6 @@ class UserControllerTests {
                 .roles(userUpdateRequest.getRoles().stream().map((
                         (roleRequest) -> RoleResponse.builder()
                                 .name(roleRequest.getName())
-                                .description(roleRequest.getDescription())
                                 .build()
                 )).collect(Collectors.toSet()))
                 .createdAt(null)

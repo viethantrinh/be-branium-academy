@@ -9,16 +9,16 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "`cart_item`")
-public class CartItem {
+@Table(name = "`wish_list_item`")
+public class WishListItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @JoinColumn(name = "wish_list_id")
+    private WishList wishList;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
