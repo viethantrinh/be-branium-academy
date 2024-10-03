@@ -12,8 +12,8 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "`cart`")
-public class Cart {
+@Table(name = "`quiz`")
+public class Quiz {
     @Id
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
@@ -21,8 +21,11 @@ public class Cart {
     @OneToOne
     @JoinColumn(name = "id")
     @MapsId("id")
-    private User user;
+    private Lecture lecture;
 
-//    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-//    private Set<CartItem> cartItems = new HashSet<>();
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    private Set<Question> questions = new HashSet<>();
+
+    @OneToMany(mappedBy = "quiz")
+    private Set<QuizResult> quizResults = new HashSet<>();
 }

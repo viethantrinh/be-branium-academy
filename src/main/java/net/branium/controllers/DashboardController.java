@@ -3,6 +3,7 @@ package net.branium.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.base.ApiResponse;
+import net.branium.dtos.resource.ResourceResponse;
 import net.branium.dtos.user.UserCreateRequest;
 import net.branium.dtos.user.UserResponse;
 import net.branium.dtos.user.UserUpdateRequest;
@@ -76,5 +77,28 @@ public class DashboardController {
                 .message("delete user by id successful")
                 .build();
         return new ResponseEntity<>(responseBody, HttpStatus.NO_CONTENT);
+    }
+
+
+    @PostMapping(path = "/{id}/image")
+    public ResponseEntity<ApiResponse<ResourceResponse>> uploadUserImage(
+            @PathVariable(name = "id") String id,
+            @RequestParam(name = "image") MultipartFile file) {
+        ResourceResponse resourceResponse = userService.updateUserImage(id, file);
+        var response = ApiResponse.<ResourceResponse>builder()
+                .message("upload user's image success")
+                .result(resourceResponse)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping(path = "/{id}/image")
+    public ResponseEntity<ApiResponse<ResourceResponse>> getUserImage(@PathVariable(name = "id") String id) {
+        ResourceResponse resourceResponse = userService.getUserImage(id);
+        var response = ApiResponse.<ResourceResponse>builder()
+                .message("get user's image success")
+                .result(resourceResponse)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

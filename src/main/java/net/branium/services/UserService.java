@@ -13,6 +13,8 @@ public interface UserService {
     List<UserResponse> getAllUsers();
     UserResponse updateUser(String id, UserUpdateRequest request);
     void deleteUserById(String id);
+    ResourceResponse updateUserImage(String id, MultipartFile file);
+    ResourceResponse getUserImage(String id);
     StudentResponse getStudentInfo();
     StudentResponse updateStudentInfo(StudentUpdateRequest request);
     ResourceResponse updateStudentImage(MultipartFile file);

@@ -100,6 +100,35 @@ public class UserServiceImpl implements UserService {
         userRepo.deleteById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @Override
+    public ResourceResponse updateUserImage(String id, MultipartFile file) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
+        String fileCode = resourceService.uploadUserImage(user, file);
+        return ResourceResponse.builder()
+                .url(ResourceUtils.buildDownloadUrl(fileCode, ResourceType.IMAGE))
+                .build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @Override
+    public ResourceResponse getUserImage(String id) {
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
+        String image = user.getImage();
+
+        if (image == null) {
+            throw new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED);
+        }
+
+        String fileCode = image.substring(0, 8);
+
+        return ResourceResponse.builder()
+                .url(ResourceUtils.buildDownloadUrl(fileCode, ResourceType.IMAGE))
+                .build();
+    }
+
     @PostAuthorize("authentication.name.equals(returnObject.email)")
     @Override
     public StudentResponse getStudentInfo() {

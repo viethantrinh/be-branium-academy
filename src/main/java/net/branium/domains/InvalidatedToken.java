@@ -16,13 +16,13 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "invalidated_token")
+@Table(name = "`invalidated_token`")
 public class InvalidatedToken {
     @Id
-    @Column(name = "jwtid")
+    @Column(name = "jwtid", nullable = false, unique = true, length = 128)
     private String jwtid;
 
-    @Column(name = "expiration_time")
+    @Column(name = "expiration_time", nullable = false)
     private Date expirationTime;
 
     @Override

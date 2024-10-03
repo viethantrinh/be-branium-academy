@@ -14,10 +14,10 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "role")
+@Table(name = "`role`")
 public class Role {
     @Id
-    @Column(name = "name", unique = true, nullable = false, length = 128)
+    @Column(name = "name", nullable = false, unique = true, length = 32)
     private String name;
 
 

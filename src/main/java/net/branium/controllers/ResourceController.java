@@ -3,15 +3,16 @@ package net.branium.controllers;
 import com.google.common.net.HttpHeaders;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
+import net.branium.dtos.base.ApiResponse;
+import net.branium.dtos.resource.ResourceResponse;
 import net.branium.services.ResourceService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping(path = "/resources")
@@ -23,14 +24,12 @@ public class ResourceController {
     public ResponseEntity<?> getImageResource(@PathVariable(name = "file_code") String fileCode) {
         Resource resource = resourceService.getResourceByFileCode(fileCode);
 
-        String contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        MediaType contentType = MediaType.APPLICATION_OCTET_STREAM;
         String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
 
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
+                .contentType(contentType)
                 .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
                 .body(resource);
     }
-
-
 }

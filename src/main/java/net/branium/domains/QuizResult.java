@@ -14,20 +14,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "`answer`")
+@Table(name = "`quiz_result`")
 @EntityListeners({AuditingEntityListener.class})
-public class Answer {
-
+public class QuizResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @Column(name = "title", nullable = false, unique = true, length = 128)
-    private String title;
-
-    @Column(name = "correct", nullable = false)
-    private boolean correct;
+    @Column(name = "score", nullable = false)
+    private int score;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
@@ -38,6 +34,10 @@ public class Answer {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "question_id")
-    private Question question;
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "quiz_id")
+    private Quiz quiz;
 }
