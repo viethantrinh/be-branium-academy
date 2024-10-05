@@ -12,4 +12,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 
     @Query("SELECT c FROM Course c ORDER BY c.studyCount DESC, c.buyCount DESC LIMIT 7")
     List<Course> findByStudyCountDescAndBuyCountDesc();
+
+    @Query("SELECT COUNT(e) FROM Enrollment e WHERE e.course.id = ?1")
+    long countTotalStudentsEnrolledById(Integer courseId);
 }

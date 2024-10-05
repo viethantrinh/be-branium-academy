@@ -34,4 +34,10 @@ public class CourseServiceImpl implements CourseService {
                 .map(courseMapper::toCourseResponse)
                 .toList();
     }
+
+    @Override
+    public long getTotalStudentsEnrolledById(int id) {
+        long totalStudents = courseRepo.countTotalStudentsEnrolledById(id);
+        return totalStudents;
+    }
 }

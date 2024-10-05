@@ -3,6 +3,7 @@ package net.branium.controllers;
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.base.ApiResponse;
 import net.branium.dtos.category.CategoryResponse;
+import net.branium.dtos.course.CourseHomeResponse;
 import net.branium.dtos.course.CourseResponse;
 import net.branium.services.CartService;
 import net.branium.services.CategoryService;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/mobile")
@@ -38,9 +42,19 @@ public class MobileController {
 
     private Map<String, Object> buildResponseBody(Authentication authentication) {
         long cartQuantities = cartService.getCartQuantitiesByUserId(authentication.getName());
-        List<CourseResponse> popularCourses = courseService.getAllPopularCourses();
+        List<CourseHomeResponse> popularCourses = courseService.getAllPopularCourses().stream()
+                .map((c) -> CourseHomeResponse.builder()
+                        .id(c.getId())
+                        .title(c.getTitle())
+                        .image(c.getImage())
+                        .price(c.getPrice())
+                        .discountPrice(c.getDiscountPrice())
+                        .totalStudents((int) courseService.getTotalStudentsEnrolledById(c.getId()))
+                        .build())
+                .collect(Collectors.toList());
         List<CategoryResponse> categories = categoryService.getAllCategories();
         List<CourseResponse> topPickCourses = courseService.getAllCourses();
+
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("cartQuantities", cartQuantities);
         responseBody.put("popularCourses", popularCourses);

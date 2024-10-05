@@ -332,7 +332,8 @@ INSERT INTO ENROLLMENT (id, enrolled_at, user_id, course_id)
 VALUES
     (1, '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34', '1'),
     (2, '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34', '2'),
-    (3, '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34', '5');
+    (3, '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34', '5'),
+    (4, '2024-09-12 07:08:18', '9a39e0ff-27a0-4789-8ba2-b7e49677db34', '5');
 
 -- Inserting data into CART table
 INSERT INTO CART (id)
