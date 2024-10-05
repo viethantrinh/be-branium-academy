@@ -2,7 +2,6 @@ package net.branium.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import net.branium.domains.Course;
 import net.branium.dtos.base.ApiResponse;
 import net.branium.dtos.course.CourseCreateRequest;
 import net.branium.dtos.course.CourseResponse;
@@ -11,7 +10,6 @@ import net.branium.dtos.user.UserCreateRequest;
 import net.branium.dtos.user.UserResponse;
 import net.branium.dtos.user.UserUpdateRequest;
 import net.branium.services.CourseService;
-import net.branium.services.ResourceService;
 import net.branium.services.UserService;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.HttpStatus;

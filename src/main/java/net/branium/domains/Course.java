@@ -33,10 +33,10 @@ public class Course {
     @Column(name = "image", unique = true, length = 128)
     private String image;
 
-    @Column(name = "short_description", nullable = false)
+    @Column(name = "short_description", nullable = false, columnDefinition = "LONGTEXT")
     private String shortDescription;
 
-    @Column(name = "full_description", nullable = false)
+    @Column(name = "full_description", nullable = false, columnDefinition = "LONGTEXT")
     private String fullDescription;
 
     @Column(name = "price", nullable = false)

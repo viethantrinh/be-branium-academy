@@ -73,7 +73,7 @@ class DashboardControllerTests {
                 .lastName("Pham")
                 .enabled(true)
                 .gender(true)
-                .birthDate(LocalDate.of(2003, Month.MAY, 9))
+                .dateOfBirth(LocalDate.of(2003, Month.MAY, 9))
                 .phoneNumber("0768701056")
                 .roles(roleRequests)
                 .build();
@@ -85,8 +85,8 @@ class DashboardControllerTests {
                 .lastName(userCreateRequest.getLastName())
                 .enabled(userCreateRequest.isEnabled())
                 .gender(userCreateRequest.isGender())
-                .birthDate(userCreateRequest.getBirthDate())
-                .avatar(null)
+                .dateOfBirth(userCreateRequest.getDateOfBirth())
+                .image(null)
                 .phoneNumber(userCreateRequest.getPhoneNumber())
                 .roles(userCreateRequest.getRoles().stream().map((
                         (roleRequest) -> RoleResponse.builder()
@@ -160,8 +160,8 @@ class DashboardControllerTests {
                 .lastName("Trinh")
                 .enabled(true)
                 .gender(true)
-                .birthDate(LocalDate.of(2003, Month.MAY, 9))
-                .avatar(null)
+                .dateOfBirth(LocalDate.of(2003, Month.MAY, 9))
+                .dateOfBirth(null)
                 .phoneNumber("0768701056")
                 .roles(Set.of(
                         RoleResponse.builder()
@@ -256,8 +256,8 @@ class DashboardControllerTests {
                 .lastName("Trinh")
                 .enabled(true)
                 .gender(true)
-                .birthDate(LocalDate.of(2003, Month.MAY, 9))
-                .avatar(null)
+                .dateOfBirth(LocalDate.of(2003, Month.MAY, 9))
+                .image(null)
                 .phoneNumber("0768701056")
                 .roles(Set.of(
                         RoleResponse.builder()
@@ -276,8 +276,8 @@ class DashboardControllerTests {
                 .lastName("Trinh")
                 .enabled(true)
                 .gender(true)
-                .birthDate(LocalDate.of(2003, Month.MAY, 9))
-                .avatar(null)
+                .dateOfBirth(LocalDate.of(2003, Month.MAY, 9))
+                .image(null)
                 .phoneNumber("0768701056")
                 .roles(Set.of(
                         RoleResponse.builder()
@@ -296,8 +296,8 @@ class DashboardControllerTests {
                 .lastName("Trinh")
                 .enabled(true)
                 .gender(true)
-                .birthDate(LocalDate.of(2003, Month.MAY, 9))
-                .avatar(null)
+                .dateOfBirth(LocalDate.of(2003, Month.MAY, 9))
+                .image(null)
                 .phoneNumber("0768701056")
                 .roles(Set.of(
                         RoleResponse.builder()
@@ -359,7 +359,7 @@ class DashboardControllerTests {
                 .lastName("Pham")
                 .enabled(true)
                 .gender(true)
-                .birthDate(LocalDate.of(2003, Month.MAY, 9))
+                .dateOfBirth(LocalDate.of(2003, Month.MAY, 9))
                 .phoneNumber("0768701056")
                 .roles(Set.of(
                         RoleRequest.builder()
@@ -375,8 +375,8 @@ class DashboardControllerTests {
                 .lastName(userUpdateRequest.getLastName())
                 .enabled(userUpdateRequest.isEnabled())
                 .gender(userUpdateRequest.isGender())
-                .birthDate(userUpdateRequest.getBirthDate())
-                .avatar(null)
+                .dateOfBirth(userUpdateRequest.getDateOfBirth())
+                .image(null)
                 .phoneNumber(userUpdateRequest.getPhoneNumber())
                 .roles(userUpdateRequest.getRoles().stream().map((
                         (roleRequest) -> RoleResponse.builder()

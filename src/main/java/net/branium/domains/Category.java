@@ -39,12 +39,9 @@ public class Category {
     @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Category parent;
-
     @OneToMany(mappedBy = "category")
     private Set<Course> courses = new HashSet<>();
+
 
     @Override
     public boolean equals(Object o) {

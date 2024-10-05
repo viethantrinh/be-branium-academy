@@ -37,9 +37,6 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-logging:
-  level:
-    org.springframework.security: trace
 jwt:
   secret-key: 78040db429b610814e9f299ef8590b28be75aeacd9ff1f3e53bc8b72f4c0c88c
   valid-access-token-time: 3600

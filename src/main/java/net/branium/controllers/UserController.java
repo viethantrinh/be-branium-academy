@@ -7,7 +7,6 @@ import net.branium.dtos.base.ApiResponse;
 import net.branium.dtos.resource.ResourceResponse;
 import net.branium.dtos.user.StudentResponse;
 import net.branium.dtos.user.StudentUpdateRequest;
-import net.branium.services.ResourceService;
 import net.branium.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

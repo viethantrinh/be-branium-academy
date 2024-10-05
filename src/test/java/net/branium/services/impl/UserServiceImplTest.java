@@ -83,7 +83,7 @@ class UserServiceImplTest {
                 .lastName("Trinh")
                 .enabled(true)
                 .gender(true)
-                .birthDate(LocalDate.of(2003, Month.DECEMBER, 2))
+                .dateOfBirth(LocalDate.of(2003, Month.DECEMBER, 2))
                 .phoneNumber("0768701056")
                 .roles(roleRequests)
                 .build();
@@ -96,7 +96,7 @@ class UserServiceImplTest {
                 .lastName("Anh")
                 .enabled(true)
                 .gender(false)
-                .birthDate(LocalDate.of(2003, Month.DECEMBER, 2))
+                .dateOfBirth(LocalDate.of(2003, Month.DECEMBER, 2))
                 .phoneNumber("0768701056")
                 .roles(roleRequests)
                 .build();
@@ -136,7 +136,7 @@ class UserServiceImplTest {
                 .lastName("Trinh")
                 .enabled(true)
                 .gender(true)
-                .birthDate(LocalDate.of(2003, Month.DECEMBER, 2))
+                .dateOfBirth(LocalDate.of(2003, Month.DECEMBER, 2))
                 .phoneNumber("0768701056")
                 .roles(
                         Set.of(
