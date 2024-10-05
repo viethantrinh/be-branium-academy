@@ -9,6 +9,7 @@ import net.branium.dtos.user.UserResponse;
 import net.branium.dtos.user.UserUpdateRequest;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
+import net.branium.services.CourseService;
 import net.branium.services.ResourceService;
 import net.branium.services.UserService;
 import net.branium.utils.RandomGenerateUtils;
@@ -45,8 +46,12 @@ class DashboardControllerTests {
     @MockBean
     private UserService userService;
 
+    @MockBean
+    private CourseService courseService;
+
     @Autowired
     private ObjectMapper objectMapper;
+
     private final static String baseApiPath = "/dashboard/users";
 
     @BeforeEach

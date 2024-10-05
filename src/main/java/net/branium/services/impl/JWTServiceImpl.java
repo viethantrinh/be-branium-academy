@@ -50,7 +50,7 @@ public class JWTServiceImpl implements JWTService {
      */
     @Override
     public String generateToken(User user) {
-        String subject = user.getEmail();
+        String subject = user.getId();
         String issuer = "Branium Academy";
         String scope = extractUserRoles(user);
 
@@ -154,8 +154,8 @@ public class JWTServiceImpl implements JWTService {
                     .jwtid(jwtId)
                     .expirationTime(expirationTime)
                     .build());
-            String userEmail = signedJWT.getJWTClaimsSet().getSubject();
-            User user = userRepo.findByEmail(userEmail).orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
+            String userId = signedJWT.getJWTClaimsSet().getSubject();
+            User user = userRepo.findById(userId).orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
             refreshToken = generateToken(user);
         } catch (ParseException e) {
             throw new RuntimeException(e.getMessage());

@@ -47,14 +47,14 @@ INSERT INTO USER (ID, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, ENABLED, GENDER, D
                   PHONE_NUMBER, CREATED_AT)
 VALUES ('9a39e0ff-27a0-4789-8ba2-b7e49677db34', 'hntrnn195@gmail.com',
         '$2a$10$Z9mB1/tSfBLpcxX.Y4.KDeDNoqNivdRgsepjIEgeH3AmtBovDtPIa',
-        'Mai Anh', 'Do', 0, 0, '2001-10-06', 'rKftfWen.jpg',
+        'Mai Anh', 'Do', 1, 0, '2001-10-06', 'rKftfWen.jpg',
         '0987666543', '2024-09-12 07:08:18');
 
 INSERT INTO USER (ID, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, ENABLED, GENDER, DOB, IMAGE,
                   PHONE_NUMBER, CREATED_AT)
 VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 'hntrnn19@gmail.com',
         '$2a$10$Z9mB1/tSfBLpcxX.Y4.KDeDNoqNivdRgsepjIEgeH3AmtBovDtPIa',
-        'Linh', 'Khanh', 0, 0, '2001-10-06', 'riftfWen.jpg',
+        'Linh', 'Khanh', 1, 0, '2001-10-06', 'riftfWen.jpg',
         '0987666543', '2024-09-12 07:08:18');
 
 -- Inserting data into ROLE table
@@ -94,69 +94,69 @@ VALUES (1, 'Pro Flutter 2025', 'XgYqkzQJ.jpg',
         'Khóa học Pro Flutter sẽ cung cấp cho bạn các kiến thức và kĩ năng...',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         4499000, 1999000,
-        0, 0, '2024-09-12 07:08:18', NULL, 8),
+        344, 234, '2024-09-12 07:08:18', NULL, 8),
        (2, 'Khóa học lập trình Java cơ bản',
         'IypolLPp.jpg',
         'Khóa học này cung cấp cho các bạn kiến thức từ cơ bản của ngôn ngữ lập trình Java.',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         399000, 349000,
-        0, 0, '2024-09-12 07:08:18', NULL, 1),
+        554, 234, '2024-09-12 07:08:18', NULL, 1),
        (3, 'Lập trình C cho người mới', 'NvosnH7x.jpg',
         'Đây là khóa học lập trình HƯỚNG CẤU TRÚC dựa trên nền tảng ngôn ngữ lập trình C.',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         899000, 520000,
-        0, 0, '2024-09-12 07:08:18', NULL, 4),
+        123, 45, '2024-09-12 07:08:18', NULL, 4),
        (4, 'Android Jetpack Compose', 'KI7iFcji.jpg',
         'Khóa học này sẽ hướng dẫn bạn tạo ứng dụng Android hoàn chỉnh...',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         899000, 520000,
-        0, 0, '2024-09-12 07:08:18', NULL, 6),
+        234, 123, '2024-09-12 07:08:18', NULL, 6),
        (5, 'Android Kotlin Thực Chiến',
         'As3xxLM1.jpg',
         'Khóa học này sẽ hướng dẫn bạn THỰC HÀNH tạo ứng dụng Android native...',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         2199000, 1499000,
-        0, 0, '2024-09-12 07:08:18', NULL, 6),
+        789, 345, '2024-09-12 07:08:18', NULL, 6),
        (6, 'Git Cơ Bản & Nâng Cao', 'dXCDEoao.jpg',
         'Nội dung khóa học này sẽ hướng dẫn bạn sử dụng các lệnh trong công cụ...',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         399000, 349000,
-        0, 0, '2024-09-12 07:08:18', NULL, 7),
+        987, 567, '2024-09-12 07:08:18', NULL, 7),
        (7, 'CSDL SQL từ cơ bản đến nâng cao', 'mP9nbbX3.jpg',
         'Nội dung khóa học SQL từ cơ bản đến nâng cao cung cấp cho bạn...',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         1249000, 649000,
-        0, 0, '2024-09-12 07:08:18', NULL, 9),
+        1874, 567, '2024-09-12 07:08:18', NULL, 9),
        (8, 'Lập trình C# OOP từ cơ bản đến nâng cao',
         'wTJPergu.jpg',
         'Đây là khóa học lập trình HƯỚNG ĐỐI TƯỢNG trên nền tảng C#.',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         1799000, 729000,
-        0, 0, '2024-09-12 07:08:18', NULL, 3),
+        1344, 456, '2024-09-12 07:08:18', NULL, 3),
        (9, 'Cấu trúc dữ liệu và Giải thuật',
         '3IY3X2sK.jpg',
         'Đây là khóa học cấu trúc dữ liệu và giải thuật với C++.',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         1799000, 729000,
-        0, 0, '2024-09-12 07:08:18', NULL, 2),
+        2345, 500, '2024-09-12 07:08:18', NULL, 2),
        (10, 'Cấu trúc dữ liệu và Giải thuật với Java',
         'XoRrONX9.jpg',
         'Đây là khóa học cấu trúc dữ liệu và giải thuật với Java.',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         1299000, 599000,
-        0, 0, '2024-09-12 07:08:18', NULL, 1),
+        1234, 245, '2024-09-12 07:08:18', NULL, 1),
        (11, 'Cấu trúc dữ liệu và Giải thuật với Python',
         'IIxQqy9w.jpg',
         'Đây là khóa học cấu trúc dữ liệu và giải thuật với Python.',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         1799000, 729000,
-        0, 0, '2024-09-12 07:08:18', NULL, 5),
+        456, 123, '2024-09-12 07:08:18', NULL, 5),
        (12, 'Lập trình C++ OOP từ cơ bản đến nâng cao',
         'h9Cy7M42S.jpg',
         'Đây là khóa học lập trình HƯỚNG ĐỐI TƯỢNG dựa trên nền tảng ngôn ngữ lập trình C++.',
         'Khóa học được lồng ghép các yêu cầu nâng cao vào các bài học để bạn có thể đáp ứng được yêu cầu của nhà tuyển dụng ngày càng tăng#Sau khi kết thúc khóa học bạn có thể tự tin đi thực tập, intern, fresher vị trí Mobile App Developer với Flutter#Khóa học sẽ được cập nhật, thay đổi nội dung mới nhất mà không có thông báo trước',
         1199000, 649000,
-        0, 0, '2024-09-12 07:08:18', NULL, 2);
+        987, 234, '2024-09-12 07:08:18', NULL, 2);
 
 -- Inserting data into SECTION table
 INSERT INTO SECTION (id, title, course_id, ord, created_at, updated_at)
@@ -333,6 +333,20 @@ VALUES
     (1, '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34', '1'),
     (2, '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34', '2'),
     (3, '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34', '5');
+
+-- Inserting data into CART table
+INSERT INTO CART (id)
+VALUES
+    ('4a39e0fe-27a0-4789-8ba2-b7e49677db34');
+
+-- Inserting data into CART_ITEM table
+INSERT INTO CART_ITEM (id, cart_id, course_id)
+VALUES
+    (1, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 1),
+    (2, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 5),
+    (3, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 6),
+    (4, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 4),
+    (5, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 9);
 
 
 

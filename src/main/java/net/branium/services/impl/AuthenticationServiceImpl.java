@@ -65,6 +65,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
         }
 
+        // check if user is enabled or not
+        if (!user.isEnabled()) {
+            throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
+        }
+
         // if all above is oke => generate the access token for user
         String token = jwtService.generateToken(user);
 

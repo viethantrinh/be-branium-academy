@@ -129,30 +129,30 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    @PostAuthorize("authentication.name.equals(returnObject.email)")
+
     @Override
     public StudentResponse getStudentInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
         }
-        String email = authentication.getName();
-        User user = userRepo.findByEmail(email)
+        String userId = authentication.getName();
+        User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
         StudentResponse response = userMapper.toStudentResponse(user);
         return response;
     }
 
-    @PostAuthorize("authentication.name.equals(returnObject.email)")
+
     @Override
     public StudentResponse updateStudentInfo(StudentUpdateRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
             throw new ApplicationException(ErrorCode.UNAUTHENTICATED);
         }
-        String email = authentication.getName();
+        String userId = authentication.getName();
 
-        User user = userRepo.findByEmail(email)
+        User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
 
         // mapped the update field to the entity
@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResourceResponse updateStudentImage(MultipartFile file) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepo.findByEmail(authentication.getName())
+        User user = userRepo.findById(authentication.getName())
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
         String fileCode = resourceService.uploadUserImage(user, file);
         return ResourceResponse.builder()
@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResourceResponse getStudentImage() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepo.findByEmail(authentication.getName())
+        User user = userRepo.findById(authentication.getName())
                 .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
         String image = user.getImage();
 
