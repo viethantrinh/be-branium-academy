@@ -3,8 +3,6 @@ package net.branium.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.base.ApiResponse;
-import net.branium.dtos.course.CourseCreateRequest;
-import net.branium.dtos.course.CourseResponse;
 import net.branium.dtos.resource.ResourceResponse;
 import net.branium.dtos.user.UserCreateRequest;
 import net.branium.dtos.user.UserResponse;
@@ -103,11 +101,5 @@ public class DashboardController {
                 .result(resourceResponse)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PostMapping(path = "/courses")
-    public ResponseEntity<?> createCourse(@RequestBody @Valid CourseCreateRequest request) {
-        CourseResponse response = courseService.createCourse(request);
-        return null;
     }
 }

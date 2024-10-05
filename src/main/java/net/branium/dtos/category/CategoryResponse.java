@@ -1,21 +1,16 @@
-package net.branium.dtos.course;
+package net.branium.dtos.category;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CourseResponse {
-    private Integer id;
+public class CategoryResponse {
+    private String id;
     private String title;
     private String image;
-    private BigDecimal price;
-    private BigDecimal discountPrice;
 }

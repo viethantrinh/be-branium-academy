@@ -1,7 +1,9 @@
 package net.branium.mappers;
 
+import net.branium.domains.ResourceType;
 import net.branium.domains.User;
 import net.branium.dtos.user.*;
+import net.branium.utils.ResourceUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -49,6 +51,20 @@ public interface UserMapper {
     @Mapping(target = "updatedAt", ignore = true)
     void updateUser(@MappingTarget User user, StudentUpdateRequest request);
 
+    @Mapping(target = "image", expression = "java(buildImageLink(user))")
     UserResponse toUserResponse(User user);
+
+    @Mapping(target = "image", expression = "java(buildImageLink(user))")
     StudentResponse toStudentResponse(User user);
+
+
+    default String buildImageLink(User user) {
+        String imageFileName = user.getImage();
+        if (imageFileName == null) {
+            return null;
+        }
+        String fileCode = imageFileName.substring(0, 8);
+        String url = ResourceUtils.buildDownloadUrl(fileCode, ResourceType.IMAGE);
+        return url;
+    }
 }
