@@ -19,8 +19,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             Order o inner join o.orderDetails orderDetails
             where 
                 o.user.id = ?1 
-                and 
-                o.orderStatus = ?2 and orderDetails.course.id = ?3""")
+                and o.orderStatus = ?2 
+                and orderDetails.course.id = ?3""")
     boolean isUserPaid(String userId, OrderStatus orderStatus, int courseId);
 
 

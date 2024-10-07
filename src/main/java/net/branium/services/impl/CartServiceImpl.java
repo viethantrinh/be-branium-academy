@@ -58,6 +58,11 @@ public class CartServiceImpl implements CartService {
         Course course = courseRepo.findById(courseId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED));
 
+        // check if this cart item already existed
+        if (cartRepo.isCourseExistedInUserCart(user.getId(), course.getId())) {
+            throw new ApplicationException(ErrorCode.UNCATEGORIZED_ERROR);
+        }
+
         // check if the course is bought by user yet
         if (orderRepo.isUserPaid(userId, OrderStatus.SUCCEEDED, course.getId())) {
             throw new ApplicationException(ErrorCode.UNCATEGORIZED_ERROR);
@@ -68,6 +73,7 @@ public class CartServiceImpl implements CartService {
             // If yes, remove the course associated with the wish list
             wishListRepo.deleteByWishListIdAndCourseId(user.getCart().getId(), course.getId());
         }
+
 
         // If no, just add the course straight to the cart
         CartItem newCartItem = CartItem.builder()

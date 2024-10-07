@@ -53,6 +53,11 @@ public class WishListServiceImpl implements WishListService {
         Course course = courseRepo.findById(courseId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED));
 
+        // check if this wish list item already existed
+        if (wishListRepo.isCourseExistedInUserWishList(user.getId(), course.getId())) {
+            throw new ApplicationException(ErrorCode.UNCATEGORIZED_ERROR);
+        }
+
         // check if the course is bought by user yet
         if (orderRepo.isUserPaid(userId, OrderStatus.SUCCEEDED, course.getId())) {
             throw new ApplicationException(ErrorCode.UNCATEGORIZED_ERROR);
