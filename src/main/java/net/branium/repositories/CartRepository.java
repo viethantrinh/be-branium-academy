@@ -24,8 +24,6 @@ public interface CartRepository extends JpaRepository<Cart, String> {
     @Query("SELECT ci FROM CartItem ci WHERE ci.cart.user.id = ?1")
     List<CartItem> findCartItemsByUserId(String userId);
 
-    boolean existsByUserId(String userId);
-
     @Transactional
     @Modifying
     @Query("delete from CartItem ci where ci.cart.id = ?1 and ci.course.id = ?2")

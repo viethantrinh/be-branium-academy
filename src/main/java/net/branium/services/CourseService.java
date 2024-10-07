@@ -13,4 +13,5 @@ public interface CourseService {
     List<CourseResponse> getAllCoursesBoughtByUser();
     CourseDetailResponse getCourseDetails(int courseId);
     List<CourseResponse> getAllCoursesByCategoryId(int categoryId);
+    boolean enrollInCourse(int courseId);
 }

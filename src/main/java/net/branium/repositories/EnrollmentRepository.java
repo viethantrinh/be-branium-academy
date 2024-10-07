@@ -15,6 +15,4 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
      */
     @Query("select (count(e) > 0) from Enrollment e where e.user.id = ?1 and e.course.id = ?2")
     boolean isUserEnrolled(String userId, int courseId);
-
-
 }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
+    private final UserRepository userRepo;
     private final CourseRepository courseRepo;
     private final EnrollmentRepository enrollmentRepo;
     private final OrderRepository orderRepo;
@@ -154,5 +156,38 @@ public class CourseServiceImpl implements CourseService {
         return courses.stream()
                 .map(courseMapper::toCourseResponse)
                 .toList();
+    }
+
+    @Override
+    public boolean enrollInCourse(int courseId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+
+        // find the user
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.USER_NON_EXISTED));
+
+        // find the course by its id
+        Course course = courseRepo.findById(courseId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED));
+
+        // check if user has bought this course yet
+        if (!orderRepo.isUserPaid(user.getId(), OrderStatus.SUCCEEDED, course.getId())) {
+            return false;
+        }
+
+        // check if user is already enrolled in this course => not save to database
+        if (enrollmentRepo.isUserEnrolled(user.getId(), course.getId())) {
+            return false;
+        }
+
+        Enrollment enrollment = Enrollment.builder()
+                .user(user)
+                .course(course)
+                .enrolledAt(LocalDateTime.now())
+                .build();
+
+        enrollmentRepo.save(enrollment);
+        return true;
     }
 }

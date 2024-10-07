@@ -348,6 +348,17 @@ VALUES
     (4, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 8),
     (5, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 9);
 
+-- Inserting data into WISH_LIST table
+INSERT INTO `WISH_LIST` (id)
+VALUES
+    ('4a39e0fe-27a0-4789-8ba2-b7e49677db34');
+
+-- Inserting data into WISH_LIST_ITEM table
+INSERT INTO `WISH_LIST_ITEM` (id, wish_list_id, course_id)
+VALUES
+    (1, '4a39e0fe-27a0-4789-8ba2-b7e49677db34',10),
+    (2, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 11);
+
 
 -- Inserting data into ORDER table
 INSERT INTO `ORDER` (id, order_status, total_price, stripe_payment_id, stripe_session_id, created_at, user_id)

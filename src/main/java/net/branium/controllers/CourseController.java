@@ -7,12 +7,11 @@ import net.branium.dtos.course.CourseResponse;
 import net.branium.services.CartService;
 import net.branium.services.CourseService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/courses")
@@ -40,6 +39,18 @@ public class CourseController {
         var response = ApiResponse.<CourseDetailResponse>builder()
                 .message("get course information by id success")
                 .result(courseDetails)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(path = "/{id}/enroll")
+    public ResponseEntity<ApiResponse<?>> enrollInCourse(@PathVariable(name = "id") String id) {
+        Map<String, Boolean> result = new HashMap<>();
+        boolean isSucceeded = courseService.enrollInCourse(Integer.parseInt(id));
+        result.put("result", isSucceeded);
+        var response = ApiResponse.<Object>builder()
+                .message(isSucceeded ? "enroll in course successful" : "enroll in course unsuccessful")
+                .result(result)
                 .build();
         return ResponseEntity.ok(response);
     }
