@@ -13,20 +13,15 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findByUserIdAndOrderStatus(String userId, OrderStatus orderStatus);
 
-    @Query(value = """
-            SELECT 
-                (COUNT(*) > 0)
-            FROM    
-                `USER` u
-                INNER JOIN `ORDER` o ON u.id = o.user_id
-                INNER JOIN `ORDER_DETAIL` oi ON o.id = oi.order_id
-            WHERE
-                u.id = ?1
-                AND
-                o.order_status = ?2
-                AND 
-                oi.course_id = ?3
-            """,
-            nativeQuery = true)
-    long isUserPaid(String userId, String orderStatus, int courseId);
+    @Query("""
+            select (count(o) > 0) 
+            from 
+            Order o inner join o.orderDetails orderDetails
+            where 
+                o.user.id = ?1 
+                and 
+                o.orderStatus = ?2 and orderDetails.course.id = ?3""")
+    boolean isUserPaid(String userId, OrderStatus orderStatus, int courseId);
+
+
 }

@@ -8,10 +8,7 @@ import net.branium.dtos.course.CourseResponse;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
 import net.branium.mappers.CourseMapper;
-import net.branium.repositories.CartRepository;
-import net.branium.repositories.CourseRepository;
-import net.branium.repositories.OrderRepository;
-import net.branium.repositories.WishListRepository;
+import net.branium.repositories.*;
 import net.branium.services.CourseService;
 import net.branium.utils.ResourceUtils;
 import org.jcodec.api.FrameGrab;
@@ -31,6 +28,7 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepo;
+    private final EnrollmentRepository enrollmentRepo;
     private final OrderRepository orderRepo;
     private final CartRepository cartRepo;
     private final WishListRepository wishListRepo;
@@ -87,10 +85,10 @@ public class CourseServiceImpl implements CourseService {
         int totalSections = (int) courseRepo.countTotalSectionsByCourseId(courseId);
         int totalLectures = (int) courseRepo.countTotalLecturesByCourseId(courseId);
         String totalDuration = getTotalCourseDuration(courseId);
-        boolean paid = orderRepo.isUserPaid(userId, OrderStatus.SUCCEEDED.name(), courseId) > 0;
-        boolean enrolled = courseRepo.isUserEnrolled(userId, courseId) > 0;
-        boolean inCart = cartRepo.existsByUserIdAndCartItemsCourseId(userId, course.getId()) > 0;
-        boolean inWishList = wishListRepo.existsByUserIdAndWishListItemsCourseId(userId, course.getId()) > 0;
+        boolean paid = orderRepo.isUserPaid(userId, OrderStatus.SUCCEEDED, courseId);
+        boolean enrolled = enrollmentRepo.isUserEnrolled(userId, courseId);
+        boolean inCart = cartRepo.isCourseExistedInUserCart(userId, course.getId());
+        boolean inWishList = wishListRepo.isCourseExistedInUserWishList(userId, course.getId());
 
         response.setTotalStudents(totalStudents);
         response.setTotalSections(totalSections);

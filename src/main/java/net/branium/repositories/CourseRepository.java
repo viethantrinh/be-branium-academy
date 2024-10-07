@@ -31,23 +31,6 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
      */
     List<Course> findByOrderDetailsOrderId(int courseId);
 
-    /**
-     * Check if User with id is enrolled in Course with id
-     * @param userId user's id want to check
-     * @param courseId course's id want to check
-     * @return true if user is enrolled, otherwise return false
-     */
-    @Query(value = """
-            SELECT 
-                (COUNT(*) > 0)
-            FROM    
-                `ENROLLMENT` e
-            WHERE 
-                e.user_id = ?1
-                AND
-                e.course_id = ?2
-            """, nativeQuery = true)
-    long isUserEnrolled(String userId, int courseId);
 
     @Query(value = """
             SELECT 
