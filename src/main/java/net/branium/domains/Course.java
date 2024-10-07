@@ -62,10 +62,10 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private Set<Enrollment> enrollments = new HashSet<>();
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
     private Set<Section> sections = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 

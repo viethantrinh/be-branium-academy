@@ -41,7 +41,7 @@ public class MobileController {
     }
 
     private Map<String, Object> buildResponseBody(Authentication authentication) {
-        long cartQuantities = cartService.getCartQuantitiesByUserId(authentication.getName());
+        long cartQuantities = cartService.getCartQuantities(authentication.getName());
         List<CourseHomeResponse> popularCourses = courseService.getAllPopularCourses().stream()
                 .map((c) -> CourseHomeResponse.builder()
                         .id(c.getId())

@@ -46,7 +46,7 @@ public class Section {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    @OneToMany(mappedBy = "section")
+    @OneToMany(mappedBy = "section", fetch = FetchType.EAGER)
     private Set<Lecture> lectures = new HashSet<>();
 
     @Override

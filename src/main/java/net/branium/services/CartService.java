@@ -1,5 +1,6 @@
 package net.branium.services;
 
 public interface CartService {
-    long getCartQuantitiesByUserId(String id);
+    long getCartQuantities(String id);
+    boolean isCartItemExisted(int courseId);
 }

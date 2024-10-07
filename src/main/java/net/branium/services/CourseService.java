@@ -8,9 +8,8 @@ import java.util.List;
 public interface CourseService {
     List<CourseResponse> getAllPopularCourses();
     List<CourseResponse> getAllCourses();
-    long getTotalStudentsEnrolled(int id);
-    List<CourseResponse> getAllCoursesEnrolledByUser();
+    long getTotalStudentsEnrolled(int courseId);
     List<CourseResponse> getAllCoursesBoughtByUser();
-    CourseDetailResponse getCourseDetails(int id);
+    CourseDetailResponse getCourseDetails(int courseId);
 
 }

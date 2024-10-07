@@ -6,7 +6,7 @@ public class ApplicationConstants {
 
     public static String USER_IMAGE_RESOURCE_PATH = "src/main/resources/static/images/user";
     public static String COURSE_IMAGE_RESOURCE_PATH = "src/main/resources/static/images/course";
-    public static String COURSE_VIDEO_RESOURCE_PATH = "src/main/resources/static/videos/course";
+    public static String LECTURE_VIDEO_RESOURCE_PATH = "src/main/resources/static/videos/lecture";
     public static String CATEGORY_IMAGE_RESOURCE_PATH = "src/main/resources/static/images/category";
 
     // change this to 10.0.0.2 if the android is emulator.

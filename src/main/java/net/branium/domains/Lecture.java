@@ -47,7 +47,7 @@ public class Lecture {
     private LocalDateTime updatedAt;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "section_id")
     private Section section;
 
