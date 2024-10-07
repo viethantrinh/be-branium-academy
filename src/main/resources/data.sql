@@ -36,21 +36,21 @@
 -- VALUES ('9a39e0ff-27a0-4789-8ba2-b7e49677db35', 'STUDENT');
 
 -- Inserting data into USER table
-INSERT INTO USER (ID, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, ENABLED, GENDER, DOB, IMAGE,
+INSERT INTO `USER` (ID, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, ENABLED, GENDER, DOB, IMAGE,
                   PHONE_NUMBER, CREATED_AT)
 VALUES ('fa211ceb-be09-4370-9a98-a55ea8fed578', 'hntrnn12@gmail.com',
         '$2a$10$B3MFJWFT04c9hSeqy2TseurKFoADyeHG3yzDOuWXUNUGruerDsqBK',
         'Viet Han', 'Trinh', 1, 1, '2003-12-02', NULL,
         '0768701056', '2024-09-12 07:08:18');
 
-INSERT INTO USER (ID, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, ENABLED, GENDER, DOB, IMAGE,
+INSERT INTO `USER` (ID, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, ENABLED, GENDER, DOB, IMAGE,
                   PHONE_NUMBER, CREATED_AT)
 VALUES ('9a39e0ff-27a0-4789-8ba2-b7e49677db34', 'hntrnn195@gmail.com',
         '$2a$10$Z9mB1/tSfBLpcxX.Y4.KDeDNoqNivdRgsepjIEgeH3AmtBovDtPIa',
         'Mai Anh', 'Do', 1, 0, '2001-10-06', 'rKftfWen.jpg',
         '0987666543', '2024-09-12 07:08:18');
 
-INSERT INTO USER (ID, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, ENABLED, GENDER, DOB, IMAGE,
+INSERT INTO `USER` (ID, EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, ENABLED, GENDER, DOB, IMAGE,
                   PHONE_NUMBER, CREATED_AT)
 VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 'hntrnn19@gmail.com',
         '$2a$10$Z9mB1/tSfBLpcxX.Y4.KDeDNoqNivdRgsepjIEgeH3AmtBovDtPIa',
@@ -58,24 +58,24 @@ VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 'hntrnn19@gmail.com',
         '0987666543', '2024-09-12 07:08:18');
 
 -- Inserting data into ROLE table
-INSERT INTO ROLE (NAME)
+INSERT INTO `ROLE` (NAME)
 VALUES ('ADMIN');
 
-INSERT INTO ROLE (NAME)
+INSERT INTO `ROLE` (NAME)
 VALUES ('STUDENT');
 
 -- Inserting data into USER_ROLE table
-INSERT INTO USER_ROLE (USER_ID, ROLE_NAME)
+INSERT INTO `USER_ROLE` (USER_ID, ROLE_NAME)
 VALUES ('fa211ceb-be09-4370-9a98-a55ea8fed578', 'ADMIN');
 
-INSERT INTO USER_ROLE (USER_ID, ROLE_NAME)
+INSERT INTO `USER_ROLE` (USER_ID, ROLE_NAME)
 VALUES ('9a39e0ff-27a0-4789-8ba2-b7e49677db34', 'STUDENT');
 
-INSERT INTO USER_ROLE (USER_ID, ROLE_NAME)
+INSERT INTO `USER_ROLE` (USER_ID, ROLE_NAME)
 VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 'STUDENT');
 
 -- Inserting data into CATEGORY table
-INSERT INTO CATEGORY (id, title, image, created_at, updated_at)
+INSERT INTO `CATEGORY` (id, title, image, created_at, updated_at)
 VALUES
     (1, 'Java', 'FR12KyLv.jpg', '2024-09-12 07:08:18', NULL),
     (2, 'C++', 'LvHa6smM.jpg', '2024-09-12 07:08:18', NULL),
@@ -88,7 +88,7 @@ VALUES
     (9, 'SQL', '7m3lwHvU.jpg', '2024-09-12 07:08:18', NULL);
 
 -- Inserting data into COURSE table
-INSERT INTO COURSE (id, title, image, short_description, full_description, price, discount_price, study_count,
+INSERT INTO `COURSE` (id, title, image, short_description, full_description, price, discount_price, study_count,
                     buy_count, created_at, updated_at, category_id)
 VALUES (1, 'Pro Flutter 2025', 'XgYqkzQJ.jpg',
         'Khóa học Pro Flutter sẽ cung cấp cho bạn các kiến thức và kĩ năng...',
@@ -159,7 +159,7 @@ VALUES (1, 'Pro Flutter 2025', 'XgYqkzQJ.jpg',
         987, 234, '2024-09-12 07:08:18', NULL, 2);
 
 -- Inserting data into SECTION table
-INSERT INTO SECTION (id, title, course_id, ord, created_at, updated_at)
+INSERT INTO `SECTION` (id, title, course_id, ord, created_at, updated_at)
 VALUES
     (1, 'Chương 1. Nhập môn và cài đặt', 1, 1, '2024-09-12 07:08:18', NULL),
     (2, 'Chương 2. Ngôn ngữ lập trình Dart cơ bản', 1, 2, '2024-09-12 07:08:18', NULL),
@@ -187,7 +187,7 @@ VALUES
     (22, 'Chương 7: Kí tự và xâu kí tự', 3, 7, '2024-09-12 07:08:18', NULL);
 
 -- Inserting data into LECTURE table
-INSERT INTO LECTURE (id, title, section_id, ord, type, resource, created_at, updated_at)
+INSERT INTO `LECTURE` (id, title, section_id, ord, type, resource, created_at, updated_at)
 VALUES
     (1, 'Bài 1.1. Cài đặt Android Studio cho máy Windows', 1, 1, 'video', 'pzIeMntY.mp4', '2024-09-12 07:08:18', NULL),
     (2, 'Bài 1.2. Cài đặt Android Studio cho máy Mac', 1, 2, 'video', 'pzIeMntY.mp4', '2024-09-12 07:08:18', NULL),
@@ -328,7 +328,7 @@ VALUES
     (123, 'Bài kiểm tra cuối chương 5', 20, 6, 'quiz', NULL, '2024-09-12 07:08:18', NULL);
 
 -- Inserting data into ENROLLMENT table
-INSERT INTO ENROLLMENT (id, enrolled_at, user_id, course_id)
+INSERT INTO `ENROLLMENT` (id, enrolled_at, user_id, course_id)
 VALUES
     (1, '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34', '1'),
     (2, '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34', '2'),
@@ -336,18 +336,32 @@ VALUES
     (4, '2024-09-12 07:08:18', '9a39e0ff-27a0-4789-8ba2-b7e49677db34', '5');
 
 -- Inserting data into CART table
-INSERT INTO CART (id)
+INSERT INTO `CART` (id)
 VALUES
     ('4a39e0fe-27a0-4789-8ba2-b7e49677db34');
 
 -- Inserting data into CART_ITEM table
-INSERT INTO CART_ITEM (id, cart_id, course_id)
+INSERT INTO `CART_ITEM` (id, cart_id, course_id)
 VALUES
     (1, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 1),
     (2, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 5),
     (3, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 6),
     (4, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 4),
     (5, '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 9);
+
+
+-- Inserting data into ORDER table
+INSERT INTO `ORDER` (id, order_status, total_price, stripe_payment_id, stripe_session_id, created_at, user_id)
+VALUES
+    (1, 'succeeded', 3798556, '234', '673', '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34');
+
+-- Inserting data into ORDER_DETAIL table
+INSERT INTO ORDER_DETAIL (id, price, quantity, order_id, course_id)
+VALUES
+    (1, 399000, 1, 1, 1),
+    (2, 4499000, 1, 1, 2),
+    (3, 399000, 1, 1, 3),
+    (4, 899000, 1, 1, 4);
 
 
 

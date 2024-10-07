@@ -25,6 +25,7 @@ public class Order {
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "order_status", nullable = false)
     private OrderStatus orderStatus;
 

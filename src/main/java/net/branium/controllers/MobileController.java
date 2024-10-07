@@ -49,7 +49,7 @@ public class MobileController {
                         .image(c.getImage())
                         .price(c.getPrice())
                         .discountPrice(c.getDiscountPrice())
-                        .totalStudents((int) courseService.getTotalStudentsEnrolledById(c.getId()))
+                        .totalStudents((int) courseService.getTotalStudentsEnrolled(c.getId()))
                         .build())
                 .collect(Collectors.toList());
         List<CategoryResponse> categories = categoryService.getAllCategories();

@@ -65,9 +65,12 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private Set<Section> sections = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "course")
+    private Set<OrderDetail> orderDetails = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
