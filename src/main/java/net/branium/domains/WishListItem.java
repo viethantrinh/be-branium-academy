@@ -23,7 +23,7 @@ public class WishListItem {
     private WishList wishList;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", unique = true)
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @Override
