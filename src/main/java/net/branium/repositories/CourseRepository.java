@@ -6,15 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Integer> {
 
     @Query("SELECT c FROM Course c ORDER BY c.studyCount DESC, c.buyCount DESC LIMIT 7")
-    List<Course> findAllByStudyCountDescAndBuyCountDesc();
+    List<Course> findByStudyCountDescAndBuyCountDesc();
 
     /**
      * Count total students which enrolled in a course
@@ -31,7 +29,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
      * @param courseId the id of the order
      * @return All the Courses which belong to the specific Order
      */
-    List<Course> findAllByOrderDetailsOrderId(int courseId);
+    List<Course> findByOrderDetailsOrderId(int courseId);
 
     /**
      * Check if User with id is enrolled in Course with id
@@ -75,14 +73,8 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     long countTotalLecturesByCourseId(int courseId);
 
     @Query("SELECT l FROM Lecture l WHERE l.section.course.id = ?1")
-    List<Lecture> findAllLecturesByCourseId(int courseId);
+    List<Lecture> findLecturesByCourseId(int courseId);
 
-//    @Query("""
-//            SELECT c
-//            FROM Course c
-//            INNER JOIN Section s ON c.id = s.course.id
-//            INNER JOIN Lecture l ON s.id = l.section.id
-//            WHERE c.id = ?1
-//            """)
-//    Optional<Course> findCourseDetailsById(int courseId);
+    @Query("SELECT c FROM Course  c WHERE c.category.id = ?1")
+    List<Course> findByCategoryId(int categoryId);
 }

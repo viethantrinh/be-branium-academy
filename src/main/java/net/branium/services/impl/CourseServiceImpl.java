@@ -1,6 +1,5 @@
 package net.branium.services.impl;
 
-import com.fasterxml.jackson.databind.cfg.EnumFeature;
 import lombok.RequiredArgsConstructor;
 import net.branium.constants.ApplicationConstants;
 import net.branium.domains.*;
@@ -40,7 +39,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<CourseResponse> getAllPopularCourses() {
-        List<Course> courses = courseRepo.findAllByStudyCountDescAndBuyCountDesc();
+        List<Course> courses = courseRepo.findByStudyCountDescAndBuyCountDesc();
         return courses.stream()
                 .map(courseMapper::toCourseResponse)
                 .toList();
@@ -63,10 +62,10 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<CourseResponse> getAllCoursesBoughtByUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        List<Order> orders = orderRepo.findAllByUserIdAndOrderStatus(authentication.getName(), OrderStatus.SUCCEEDED);
+        List<Order> orders = orderRepo.findByUserIdAndOrderStatus(authentication.getName(), OrderStatus.SUCCEEDED);
         List<Course> courses = new ArrayList<>();
         for (Order order : orders) {
-            List<Course> boughtCourses = courseRepo.findAllByOrderDetailsOrderId(order.getId());
+            List<Course> boughtCourses = courseRepo.findByOrderDetailsOrderId(order.getId());
             courses.addAll(boughtCourses);
         }
         return courses.stream()
@@ -122,7 +121,7 @@ public class CourseServiceImpl implements CourseService {
 
     // TODO: change the path of video later with id of lecture (now use 1 video for test)
     private String getTotalCourseDuration(int courseId) {
-        List<Lecture> lectures = courseRepo.findAllLecturesByCourseId(courseId);
+        List<Lecture> lectures = courseRepo.findLecturesByCourseId(courseId);
         double totalSeconds = 0L;
 
         if (lectures.isEmpty()) {
@@ -149,5 +148,13 @@ public class CourseServiceImpl implements CourseService {
         }
         double durationInSeconds = grab.getVideoTrack().getMeta().getTotalDuration();
         return durationInSeconds;
+    }
+
+    @Override
+    public List<CourseResponse> getAllCoursesByCategoryId(int categoryId) {
+        List<Course> courses = courseRepo.findByCategoryId(categoryId);
+        return courses.stream()
+                .map(courseMapper::toCourseResponse)
+                .toList();
     }
 }

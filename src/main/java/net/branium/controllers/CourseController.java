@@ -20,7 +20,6 @@ import java.util.List;
 public class CourseController {
 
     private final CourseService courseService;
-    private final CartService cartService;
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<CourseResponse>>> listAllCoursesWhichBoughtByUser() {

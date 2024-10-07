@@ -1,5 +1,6 @@
 package net.branium.services;
 
+import net.branium.dtos.category.CategoryResponse;
 import net.branium.dtos.course.CourseDetailResponse;
 import net.branium.dtos.course.CourseResponse;
 
@@ -11,5 +12,5 @@ public interface CourseService {
     long getTotalStudentsEnrolled(int courseId);
     List<CourseResponse> getAllCoursesBoughtByUser();
     CourseDetailResponse getCourseDetails(int courseId);
-
+    List<CourseResponse> getAllCoursesByCategoryId(int categoryId);
 }
