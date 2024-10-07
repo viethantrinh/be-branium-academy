@@ -14,4 +14,5 @@ public interface CourseService {
     CourseDetailResponse getCourseDetails(int courseId);
     List<CourseResponse> getAllCoursesByCategoryId(int categoryId);
     boolean enrollInCourse(int courseId);
+    int increaseStudyCount(int courseId);
 }

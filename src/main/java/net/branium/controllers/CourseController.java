@@ -55,4 +55,16 @@ public class CourseController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping(path = "/{id}/go-to-course")
+    public ResponseEntity<ApiResponse<?>> increaseStudyCount(@PathVariable(name = "id") String id) {
+        Map<String, Integer> results = new HashMap<>();
+        int studyCount = courseService.increaseStudyCount(Integer.parseInt(id));
+        results.put("studyCount", studyCount);
+        var response = ApiResponse.<Object>builder()
+                .message("Increase study count of course success")
+                .result(results)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
 }

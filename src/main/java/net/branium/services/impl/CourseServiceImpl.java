@@ -190,4 +190,14 @@ public class CourseServiceImpl implements CourseService {
         enrollmentRepo.save(enrollment);
         return true;
     }
+
+    @Override
+    public int increaseStudyCount(int courseId) {
+        // find the course by its id
+        Course course = courseRepo.findById(courseId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED));
+        course.setStudyCount(course.getStudyCount() + 1);
+        Course savedCourse = courseRepo.save(course);
+        return savedCourse.getStudyCount();
+    }
 }
