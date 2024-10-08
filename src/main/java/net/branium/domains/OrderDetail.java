@@ -20,12 +20,6 @@ public class OrderDetail {
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @Column(name = "price", nullable = false)
-    private BigDecimal price;
-
-    @Column(name = "quantity", nullable = false)
-    private int quantity = 1;
-
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
