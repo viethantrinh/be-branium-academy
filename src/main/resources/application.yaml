@@ -41,6 +41,8 @@ jwt:
   secret-key: 78040db429b610814e9f299ef8590b28be75aeacd9ff1f3e53bc8b72f4c0c88c
   valid-access-token-time: 3600
   valid-refresh-token-time: 7200
-
+stripe:
+  publishable-key: pk_test_51Q2psLDmtILFtFXB2Eq86fYiljYg7nVkcdtKXUBr04obrVebQPBCJDwhIXVuS29IHLDZlidi9SzrT6HRLg0oKXJi00l1cab1Xk
+  secret-key: sk_test_51Q2psLDmtILFtFXBrBDezDUOCI1ptshMVrd69SUafboSO0tlMeAOiQowE06xoe3s7sxgC5S1ULVFlEoRlzzuForx00oo0xZWYG
 
 
