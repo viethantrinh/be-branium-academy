@@ -2,9 +2,11 @@ package net.branium.services;
 
 import net.branium.domains.Order;
 import net.branium.domains.OrderStatus;
+import net.branium.dtos.payment.OrderItemRequest;
+import net.branium.dtos.payment.OrderResponse;
 
 import java.util.List;
 
 public interface OrderService {
-    List<Order> getAllOrdersByUserIdAndOrderStatus(String userId, OrderStatus orderStatus);
+    OrderResponse checkOut(List<OrderItemRequest> request);
 }

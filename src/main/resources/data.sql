@@ -361,17 +361,17 @@ VALUES
 
 
 -- Inserting data into ORDER table
-INSERT INTO `ORDER` (id, order_status, total_price, stripe_payment_id, stripe_session_id, created_at, user_id)
+INSERT INTO `ORDER` (id, order_status, total_price, stripe_payment_intent_id, created_at, user_id)
 VALUES
-    (1, 'succeeded', 3798556, '234', '673', '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34');
+    (1, 'succeeded', 3798556, '234', '2024-09-12 07:08:18', '4a39e0fe-27a0-4789-8ba2-b7e49677db34');
 
 -- Inserting data into ORDER_DETAIL table
-INSERT INTO ORDER_DETAIL (id, price, quantity, order_id, course_id)
+INSERT INTO ORDER_DETAIL (id, order_id, course_id)
 VALUES
-    (1, 399000, 1, 1, 1),
-    (2, 4499000, 1, 1, 2),
-    (3, 399000, 1, 1, 3),
-    (4, 899000, 1, 1, 4);
+    (1, 1, 1),
+    (2, 1, 2),
+    (3, 1, 3),
+    (4, 1, 4);
 
 
 

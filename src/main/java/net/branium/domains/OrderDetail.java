@@ -34,11 +34,14 @@ public class OrderDetail {
         if (o == null || getClass() != o.getClass()) return false;
 
         OrderDetail that = (OrderDetail) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(id, that.id) && Objects.equals(order, that.order) && Objects.equals(course, that.course);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(order);
+        result = 31 * result + Objects.hashCode(course);
+        return result;
     }
 }
