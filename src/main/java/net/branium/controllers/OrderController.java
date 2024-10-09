@@ -3,15 +3,13 @@ package net.branium.controllers;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.base.ApiResponse;
+import net.branium.dtos.payment.OrderDetailResponse;
 import net.branium.dtos.payment.OrderItemRequest;
 import net.branium.dtos.payment.OrderResponse;
 import net.branium.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -41,6 +39,20 @@ public class OrderController {
                 .result(responseBody)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // order status in request only: "succeeded" or "failed" or "canceled"
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<OrderDetailResponse>> updateOrderStatusAfterPayment(@RequestBody Map<String, String> request,
+                                                                        @PathVariable(name = "id") String id) {
+        String status = request.get("status");
+        int orderId = Integer.parseInt(id);
+        OrderDetailResponse orderDetailResponse = orderService.updateOrderStatus(orderId, status);
+        var response = ApiResponse.<OrderDetailResponse>builder()
+                .message("update order status successful")
+                .result(orderDetailResponse)
+                .build();
+        return ResponseEntity.ok(response);
     }
 
 

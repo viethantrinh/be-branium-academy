@@ -7,6 +7,7 @@ import com.stripe.param.PaymentIntentCreateParams;
 import lombok.RequiredArgsConstructor;
 import net.branium.domains.*;
 import net.branium.dtos.course.CourseResponse;
+import net.branium.dtos.payment.OrderDetailResponse;
 import net.branium.dtos.payment.OrderItemRequest;
 import net.branium.dtos.payment.OrderResponse;
 import net.branium.exceptions.ApplicationException;
@@ -87,27 +88,6 @@ public class OrderServiceImpl implements OrderService {
         return response;
     }
 
-    private BigDecimal calculateTotalPrice(List<OrderItemRequest> items) {
-        BigDecimal totalPrice = BigDecimal.ZERO;
-
-        for (OrderItemRequest i : items) {
-            totalPrice = totalPrice.add(i.getDiscountPrice());
-        }
-
-        return totalPrice;
-    }
-
-    private List<CourseResponse> convertToOrderDetails(Set<OrderDetail> orderDetails) {
-        List<CourseResponse> courseResponses = new ArrayList<>();
-        for (OrderDetail orderDetail : orderDetails) {
-            Course course = courseRepo.findById(orderDetail.getCourse().getId())
-                    .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED));
-            CourseResponse courseResponse = courseMapper.toCourseResponse(course);
-            courseResponses.add(courseResponse);
-        }
-        return courseResponses;
-    }
-
     @Override
     public Map<String, String> createPayment(int orderId) {
         Order order = orderRepo.findById(orderId)
@@ -139,5 +119,65 @@ public class OrderServiceImpl implements OrderService {
         responseData.put("publishableKey", env.getProperty("stripe.publishable-key"));
 
         return responseData;
+    }
+
+    @Override
+    public OrderDetailResponse updateOrderStatus(int orderId, String status) {
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED));
+        String stripePaymentStatus;
+
+        try {
+            stripePaymentStatus = PaymentIntent.retrieve(order.getStripePaymentIntentId()).getStatus();
+        } catch (StripeException e) {
+            throw new RuntimeException(e);
+        }
+
+        // TODO: check again the stripe payment status to match the enum (test moi biet duoc)
+        if (!status.equalsIgnoreCase(stripePaymentStatus)) {
+            throw new ApplicationException(ErrorCode.UNCATEGORIZED_ERROR);
+        }
+
+        switch (status) {
+            case "succeeded" -> order.setOrderStatus(OrderStatus.SUCCEEDED);
+            case "failed" -> order.setOrderStatus(OrderStatus.FAILED);
+            case "canceled" -> order.setOrderStatus(OrderStatus.CANCELED);
+        }
+
+        Order savedOrder = orderRepo.save(order);
+        OrderDetailResponse response = convertToOrderDetailResponse(savedOrder);
+        return response;
+    }
+
+    private OrderDetailResponse convertToOrderDetailResponse(Order savedOrder) {
+        OrderDetailResponse orderDetailResponse = new OrderDetailResponse();
+        orderDetailResponse.setOrderId(savedOrder.getId());
+        orderDetailResponse.setOrderStatus(savedOrder.getOrderStatus());
+        orderDetailResponse.setTotalPrice(savedOrder.getTotalPrice());
+        orderDetailResponse.setOrderDetails(convertToOrderDetails(savedOrder.getOrderDetails()));
+        orderDetailResponse.setCreatedAt(savedOrder.getCreatedAt());
+        orderDetailResponse.setUpdatedAt(savedOrder.getUpdatedAt());
+        return orderDetailResponse;
+    }
+
+    private BigDecimal calculateTotalPrice(List<OrderItemRequest> items) {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+
+        for (OrderItemRequest i : items) {
+            totalPrice = totalPrice.add(i.getDiscountPrice());
+        }
+
+        return totalPrice;
+    }
+
+    private List<CourseResponse> convertToOrderDetails(Set<OrderDetail> orderDetails) {
+        List<CourseResponse> courseResponses = new ArrayList<>();
+        for (OrderDetail orderDetail : orderDetails) {
+            Course course = courseRepo.findById(orderDetail.getCourse().getId())
+                    .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED));
+            CourseResponse courseResponse = courseMapper.toCourseResponse(course);
+            courseResponses.add(courseResponse);
+        }
+        return courseResponses;
     }
 }

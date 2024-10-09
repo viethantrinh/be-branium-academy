@@ -1,9 +1,7 @@
 package net.branium.dtos.payment;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import net.branium.dtos.course.CourseResponse;
 
 import java.math.BigDecimal;
@@ -11,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderResponse {
