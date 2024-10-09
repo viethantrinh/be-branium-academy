@@ -42,7 +42,7 @@ public class OrderController {
     }
 
     // order status in request only: "succeeded" or "failed" or "canceled"
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/status")
     public ResponseEntity<ApiResponse<OrderDetailResponse>> updateOrderStatusAfterPayment(@RequestBody Map<String, String> request,
                                                                         @PathVariable(name = "id") String id) {
         String status = request.get("status");
