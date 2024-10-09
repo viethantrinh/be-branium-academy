@@ -1,5 +1,9 @@
 package net.branium.services.impl;
 
+import com.google.gson.Gson;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
 import lombok.RequiredArgsConstructor;
 import net.branium.domains.*;
 import net.branium.dtos.course.CourseResponse;
@@ -13,16 +17,14 @@ import net.branium.repositories.OrderRepository;
 import net.branium.repositories.UserRepository;
 import net.branium.repositories.WishListRepository;
 import net.branium.services.OrderService;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class OrderServiceImpl implements OrderService {
     private final CourseRepository courseRepo;
     private final WishListRepository wishListRepo;
     private final CourseMapper courseMapper;
+    private final Environment env;
 
     @Override
     public OrderResponse checkOut(List<OrderItemRequest> request) {
@@ -105,4 +108,36 @@ public class OrderServiceImpl implements OrderService {
         return courseResponses;
     }
 
+    @Override
+    public Map<String, String> createPayment(int orderId) {
+        Order order = orderRepo.findById(orderId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED));
+
+        PaymentIntentCreateParams paymentIntentCreateParams = PaymentIntentCreateParams.builder()
+                .setAmount(order.getTotalPrice().longValue())
+                .setCurrency("vnd")
+                .setAutomaticPaymentMethods(
+                        PaymentIntentCreateParams.AutomaticPaymentMethods.builder()
+                                .setEnabled(true)
+                                .build()
+                )
+                .build();
+
+        PaymentIntent paymentIntent;
+
+        try {
+            paymentIntent = PaymentIntent.create(paymentIntentCreateParams);
+        } catch (StripeException e) {
+            throw new RuntimeException(e);
+        }
+
+        order.setStripePaymentIntentId(paymentIntent.getId());
+        orderRepo.save(order);
+
+        Map<String, String> responseData = new HashMap<>();
+        responseData.put("clientSecret", paymentIntent.getClientSecret());
+        responseData.put("publishableKey", env.getProperty("stripe.publishable-key"));
+
+        return responseData;
+    }
 }

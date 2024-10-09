@@ -1,5 +1,6 @@
 package net.branium.controllers;
 
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.base.ApiResponse;
 import net.branium.dtos.payment.OrderItemRequest;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/orders")
@@ -32,8 +34,13 @@ public class OrderController {
     }
 
     @PostMapping("/payment")
-    public ResponseEntity<?> payment() {
-        return null;
+    public ResponseEntity<ApiResponse<?>> payment(@RequestBody Map<String, Integer> request) {
+        Map<String, String> responseBody = orderService.createPayment(request.get("orderId"));
+        var response = ApiResponse.<Map<String, String>>builder()
+                .message("create payment successful")
+                .result(responseBody)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 

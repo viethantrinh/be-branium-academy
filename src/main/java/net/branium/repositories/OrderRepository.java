@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, Long> {
+public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     List<Order> findByUserIdAndOrderStatus(String userId, OrderStatus orderStatus);
 
     @Query("""
-            select (count(o) > 0) 
+            select (count(o) > 0)
             from 
             Order o inner join o.orderDetails orderDetails
             where 
