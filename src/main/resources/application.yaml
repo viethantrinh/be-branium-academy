@@ -6,8 +6,8 @@ spring:
   application:
     name: ${SPRING_APPLICATION_NAME:be-branium-academy}
   datasource:
-    url: ${DATASOURCE_URL:jdbc:mysql://192.168.1.7:3306/han_branium_academy}
-    username: ${DATASOURCE_USERNAME:han}
+    url: ${DATASOURCE_URL:jdbc:mysql://be-branium-academy-ad1581e47cac.herokuapp.com/han_branium_academy}
+    username: ${DATASOURCE_USERNAME:heroku}
     password: ${DATASOURCE_PASSWORD:Sohappy212}
   jpa:
     database: mysql
