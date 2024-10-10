@@ -6,18 +6,18 @@ spring:
   application:
     name: ${SPRING_APPLICATION_NAME:be-branium-academy}
   datasource:
-    url: ${DATASOURCE_URL:jdbc:mysql://localhost:3306/han_branium_academy}
-    username: ${DATASOURCE_USERNAME:root}
+    url: ${DATASOURCE_URL:jdbc:oracle:thin:@//localhost:1521/orclpdb}
+    username: ${DATASOURCE_USERNAME:han_branium_academy}
     password: ${DATASOURCE_PASSWORD:Sohappy212}
   jpa:
-    database: mysql
+    database: oracle
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
-        show_sql: false
+        show_sql: true
         format_sql: true
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.OracleDialect
     defer-datasource-initialization: true
   sql:
     init:
@@ -44,4 +44,5 @@ jwt:
 stripe:
   publishable-key: pk_test_51Q2psLDmtILFtFXB2Eq86fYiljYg7nVkcdtKXUBr04obrVebQPBCJDwhIXVuS29IHLDZlidi9SzrT6HRLg0oKXJi00l1cab1Xk
   secret-key: sk_test_51Q2psLDmtILFtFXBrBDezDUOCI1ptshMVrd69SUafboSO0tlMeAOiQowE06xoe3s7sxgC5S1ULVFlEoRlzzuForx00oo0xZWYG
+
 
