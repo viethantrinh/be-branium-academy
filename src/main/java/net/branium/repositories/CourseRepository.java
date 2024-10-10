@@ -36,8 +36,8 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
             SELECT 
                 COUNT(*)
             FROM    
-                `COURSE` e
-                INNER JOIN `SECTION` s ON e.id = s.course_id
+                "course" e
+                INNER JOIN "section" s ON e.id = s.course_id
             WHERE 
                 e.id = ?1
             """, nativeQuery = true)
@@ -47,9 +47,9 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
             SELECT 
                 COUNT(*)
             FROM    
-                `COURSE` e
-                INNER JOIN `SECTION` s ON e.id = s.course_id
-                INNER JOIN `LECTURE` l ON s.id = l.section_id
+                "course" e
+                INNER JOIN "section" s ON e.id = s.course_id
+                INNER JOIN "lecture" l ON s.id = l.section_id
             WHERE 
                 e.id = ?1
             """, nativeQuery = true)
