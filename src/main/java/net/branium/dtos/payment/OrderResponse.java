@@ -15,5 +15,6 @@ import java.util.List;
 public class OrderResponse {
     private Integer orderId;
     private List<CourseResponse> orderDetails = new ArrayList<>();
+    private BigDecimal totalDiscountPrice;
     private BigDecimal totalPrice;
 }

@@ -52,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
                 .user(user)
                 .orderStatus(OrderStatus.PROCESSING)
                 .totalPrice(calculateTotalPrice(request))
+                .totalDiscountPrice(calculateTotalDiscountPrice(request))
                 .build();
 
         // create all order details base on request
@@ -83,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
                 .orderId(savedOrder.getId())
                 .orderDetails(convertToOrderDetails(savedOrder.getOrderDetails()))
                 .totalPrice(savedOrder.getTotalPrice())
+                .totalDiscountPrice(savedOrder.getTotalDiscountPrice())
                 .build();
 
         return response;
@@ -164,10 +166,19 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal totalPrice = BigDecimal.ZERO;
 
         for (OrderItemRequest i : items) {
-            totalPrice = totalPrice.add(i.getDiscountPrice());
+            totalPrice = totalPrice.add(i.getPrice());
         }
 
         return totalPrice;
+    }
+
+    private BigDecimal calculateTotalDiscountPrice(List<OrderItemRequest> items) {
+        BigDecimal totalDiscountPrice = BigDecimal.ZERO;
+        for (OrderItemRequest i : items) {
+            totalDiscountPrice = totalDiscountPrice.add(i.getDiscountPrice());
+        }
+
+        return totalDiscountPrice;
     }
 
     private List<CourseResponse> convertToOrderDetails(Set<OrderDetail> orderDetails) {

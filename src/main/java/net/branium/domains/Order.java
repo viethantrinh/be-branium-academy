@@ -33,6 +33,9 @@ public class Order {
     @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
 
+    @Column(name = "total_discount_price", nullable = false)
+    private BigDecimal totalDiscountPrice;
+
     @Column(name = "stripe_payment_intent_id")
     private String stripePaymentIntentId;
 
