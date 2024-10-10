@@ -9,9 +9,7 @@ public class ApplicationConstants {
     public static String LECTURE_VIDEO_RESOURCE_PATH = "src/main/resources/static/videos/lecture";
     public static String CATEGORY_IMAGE_RESOURCE_PATH = "src/main/resources/static/images/category";
 
-    // change this to 10.0.0.2 if the android is emulator.
-    // In case using external android device => change to the local ip of dev's device (eg: 192.168.1.7)
-    public static String RESOURCE_HOST = "localhost".concat(":8080");
+    public static String RESOURCE_HOST = "be-branium-academy-ad1581e47cac.herokuapp.com";
 
 
 }
