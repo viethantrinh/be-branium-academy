@@ -6,17 +6,18 @@ spring:
   application:
     name: ${SPRING_APPLICATION_NAME:be-branium-academy}
   datasource:
-    url: ${DATASOURCE_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres}
-    username: ${DATASOURCE_USERNAME:postgres.vofzighecqfnrmdsiwap}
-    password: ${DATASOURCE_PASSWORD:Sohappy2122003@}
+    url: ${DATASOURCE_URL:jdbc:mysql://sql.freedb.tech:3306/freedb_han_branium_academy}
+    username: ${DATASOURCE_USERNAME:freedb_viethantrinh}
+    password: ${DATASOURCE_PASSWORD:6E?!xn6@jaP@5cS}
   jpa:
-    database: postgresql
+    database: mysql
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: false
         format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
     defer-datasource-initialization: true
   sql:
     init:
