@@ -10,6 +10,7 @@ public class ApplicationConstants {
     public static String CATEGORY_IMAGE_RESOURCE_PATH = "src/main/resources/static/images/category";
 
     public static String RESOURCE_HOST = "be-branium-academy-ad1581e47cac.herokuapp.com";
+    public static String RESOURCE_HOST_LOCAL = "192.168.1.108".concat(":8080");
 
 
 }
