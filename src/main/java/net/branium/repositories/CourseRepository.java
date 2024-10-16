@@ -32,27 +32,10 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     List<Course> findByOrderDetailsOrderId(int courseId);
 
 
-    @Query(value = """
-            SELECT 
-                COUNT(*)
-            FROM    
-                "course" e
-                INNER JOIN "section" s ON e.id = s.course_id
-            WHERE 
-                e.id = ?1
-            """, nativeQuery = true)
+    @Query(value = "SELECT COUNT(s) FROM Section s WHERE s.course.id = ?1")
     long countTotalSectionsByCourseId(int courseId);
 
-    @Query(value = """
-            SELECT 
-                COUNT(*)
-            FROM    
-                "course" e
-                INNER JOIN "section" s ON e.id = s.course_id
-                INNER JOIN "lecture" l ON s.id = l.section_id
-            WHERE 
-                e.id = ?1
-            """, nativeQuery = true)
+    @Query(value = "SELECT COUNT(l) FROM Lecture l WHERE l.section.course.id = ?1")
     long countTotalLecturesByCourseId(int courseId);
 
     @Query("SELECT l FROM Lecture l WHERE l.section.course.id = ?1")
