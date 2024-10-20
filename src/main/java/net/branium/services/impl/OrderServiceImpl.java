@@ -96,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED));
 
         PaymentIntentCreateParams paymentIntentCreateParams = PaymentIntentCreateParams.builder()
-                .setAmount(order.getTotalPrice().longValue())
+                .setAmount(order.getTotalDiscountPrice().longValue())
                 .setCurrency("vnd")
                 .setAutomaticPaymentMethods(
                         PaymentIntentCreateParams.AutomaticPaymentMethods.builder()
@@ -141,7 +141,10 @@ public class OrderServiceImpl implements OrderService {
         }
 
         switch (status) {
-            case "succeeded" -> order.setOrderStatus(OrderStatus.SUCCEEDED);
+            case "succeeded" -> {
+                order.setOrderStatus(OrderStatus.SUCCEEDED);
+                /* TODO: Delete all course which buy success in cart */
+            }
             case "failed" -> order.setOrderStatus(OrderStatus.FAILED);
             case "canceled" -> order.setOrderStatus(OrderStatus.CANCELED);
         }

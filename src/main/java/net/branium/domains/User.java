@@ -25,8 +25,7 @@ public class User {
     @Column(name = "id", nullable = false, unique = true)
     private String id;
 
-    // TODO: change unique to true later
-    @Column(name = "email", unique = false, nullable = false, length = 128)
+    @Column(name = "email", unique = true, nullable = false, length = 128)
     private String email;
 
     @Column(name = "password", nullable = false, length = 128)
