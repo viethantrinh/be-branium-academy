@@ -3,6 +3,7 @@ package net.branium.services.impl;
 import com.google.gson.Gson;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCancelParams;
 import com.stripe.param.PaymentIntentCreateParams;
 import lombok.RequiredArgsConstructor;
 import net.branium.domains.*;
@@ -13,10 +14,7 @@ import net.branium.dtos.payment.OrderResponse;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
 import net.branium.mappers.CourseMapper;
-import net.branium.repositories.CourseRepository;
-import net.branium.repositories.OrderRepository;
-import net.branium.repositories.UserRepository;
-import net.branium.repositories.WishListRepository;
+import net.branium.repositories.*;
 import net.branium.services.OrderService;
 import org.springframework.core.env.Environment;
 import org.springframework.security.core.Authentication;
@@ -35,6 +33,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepo;
     private final CourseRepository courseRepo;
     private final WishListRepository wishListRepo;
+    private final CartRepository cartRepo;
     private final CourseMapper courseMapper;
     private final Environment env;
 
@@ -135,18 +134,25 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException(e);
         }
 
-        // TODO: check again the stripe payment status to match the enum (test moi biet duoc)
-        if (!status.equalsIgnoreCase(stripePaymentStatus)) {
-            throw new ApplicationException(ErrorCode.UNCATEGORIZED_ERROR);
-        }
-
-        switch (status) {
-            case "succeeded" -> {
-                order.setOrderStatus(OrderStatus.SUCCEEDED);
-                /* TODO: Delete all course which buy success in cart */
+        if (status.equalsIgnoreCase("succeeded")
+                && stripePaymentStatus.equalsIgnoreCase("succeeded")) {
+            order.setOrderStatus(OrderStatus.SUCCEEDED);
+            // Delete all courses which succeeded transaction
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            List<Integer> courseIds = order.getOrderDetails().stream().map(orderDetail -> orderDetail.getCourse().getId()).toList();
+            String cartId = authentication.getName();
+            for (Integer courseId : courseIds) {
+                cartRepo.deleteByCartIdAndCourseId(cartId, courseId);
             }
-            case "failed" -> order.setOrderStatus(OrderStatus.FAILED);
-            case "canceled" -> order.setOrderStatus(OrderStatus.CANCELED);
+        } else if (status.equalsIgnoreCase("failed") || status.equalsIgnoreCase("canceled")) {
+            order.setOrderStatus(OrderStatus.FAILED);
+            try {
+                PaymentIntent resource = PaymentIntent.retrieve(order.getStripePaymentIntentId());
+                PaymentIntentCancelParams params = PaymentIntentCancelParams.builder().build();
+                resource.cancel(params);
+            } catch (StripeException e) {
+                throw new ApplicationException(ErrorCode.UNCATEGORIZED_ERROR);
+            }
         }
 
         Order savedOrder = orderRepo.save(order);
