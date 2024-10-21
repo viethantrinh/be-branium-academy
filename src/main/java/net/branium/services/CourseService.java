@@ -15,4 +15,5 @@ public interface CourseService {
     List<CourseResponse> getAllCoursesByCategoryId(int categoryId);
     boolean enrollInCourse(int courseId);
     int increaseStudyCount(int courseId);
+    int increaseBuyCount(int courseId);
 }

@@ -28,4 +28,6 @@ public interface CartRepository extends JpaRepository<Cart, String> {
     @Modifying
     @Query("delete from CartItem ci where ci.cart.id = ?1 and ci.course.id = ?2")
     void deleteByCartIdAndCourseId(String cartId, int courseId);
+
+
 }

@@ -139,10 +139,13 @@ public class OrderServiceImpl implements OrderService {
             order.setOrderStatus(OrderStatus.SUCCEEDED);
             // Delete all courses which succeeded transaction
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            List<Integer> courseIds = order.getOrderDetails().stream().map(orderDetail -> orderDetail.getCourse().getId()).toList();
+            List<Course> courses = order.getOrderDetails().stream().map(OrderDetail::getCourse).toList();
+
             String cartId = authentication.getName();
-            for (Integer courseId : courseIds) {
-                cartRepo.deleteByCartIdAndCourseId(cartId, courseId);
+            for (Course course : courses) {
+                cartRepo.deleteByCartIdAndCourseId(cartId, course.getId());
+                course.setBuyCount(course.getBuyCount() + 1);
+                courseRepo.save(course);
             }
         } else if (status.equalsIgnoreCase("failed") || status.equalsIgnoreCase("canceled")) {
             order.setOrderStatus(OrderStatus.FAILED);
