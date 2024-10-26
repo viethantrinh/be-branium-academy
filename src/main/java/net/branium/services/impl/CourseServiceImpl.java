@@ -2,6 +2,7 @@ package net.branium.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import net.branium.constants.ApplicationConstants;
+import net.branium.controllers.CourseController;
 import net.branium.domains.*;
 import net.branium.dtos.course.CourseDetailResponse;
 import net.branium.dtos.course.CourseResponse;
@@ -14,6 +15,14 @@ import net.branium.utils.ResourceUtils;
 import org.jcodec.api.FrameGrab;
 import org.jcodec.api.JCodecException;
 import org.jcodec.common.io.NIOUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,6 +32,8 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,18 +47,73 @@ public class CourseServiceImpl implements CourseService {
     private final WishListRepository wishListRepo;
     private final CourseMapper courseMapper;
 
+    @Override
+    public CollectionModel<CourseResponse> getAllCourses(int page, int size, String sort) {
+        int pageNumber = page;
+        int pageSize = size;
+        Sort sortBy = null;
+        switch (sort) {
+            case "priceDesc" -> sortBy = Sort.by("price").descending();
+            case "priceAsc" -> sortBy = Sort.by("price").ascending();
+            default -> sortBy = Sort.by("buyCount", "studyCount").descending();
+        }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortBy);
+        Page<Course> pages = courseRepo.findAllWithOption(pageable);
+        List<Course> courses = pages.getContent();
+        List<CourseResponse> courseResponses = courses.stream()
+                .map(courseMapper::toCourseResponse)
+                .toList();
+        return addPageMetaData(courseResponses, pages, sort);
+    }
+
+    private CollectionModel<CourseResponse> addPageMetaData(List<CourseResponse> courseResponses,
+                                                            Page<Course> pageInfo, String sort) {
+        int pageSize = pageInfo.getSize();
+        int pageNum = pageInfo.getNumber() + 1;
+        long totalElements = pageInfo.getTotalElements();
+        long totalPages = pageInfo.getTotalPages();
+        PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(pageSize, pageNum, totalElements);
+        CollectionModel<CourseResponse> collectionModel = PagedModel.of(courseResponses, pageMetadata);
+
+        // add links to collection its self
+        collectionModel
+                .add(
+                        linkTo(methodOn(CourseController.class).searchForCourses(pageNum, pageSize, sort))
+                                .withSelfRel()
+                );
+
+        // add links to first page if the current page is not 1 (the first one)
+        if (pageNum > 1) {
+            collectionModel.add(
+
+                    linkTo(methodOn(CourseController.class).searchForCourses(1, pageSize, sort))
+                            .withRel(IanaLinkRelations.FIRST)
+            );
+
+            // add links to previous page if the current page is not 1 (the first one)
+            collectionModel.add(
+                    linkTo(methodOn(CourseController.class).searchForCourses(pageNum - 1, pageSize, sort))
+                            .withRel(IanaLinkRelations.PREVIOUS)
+            );
+        }
+
+        if (pageNum < totalPages) {
+            collectionModel.add(
+                    linkTo(methodOn(CourseController.class).searchForCourses(pageNum + 1, pageSize, sort))
+                            .withRel(IanaLinkRelations.NEXT)
+            );
+            collectionModel.add(
+                    linkTo(methodOn(CourseController.class).searchForCourses((int) totalPages, pageSize, sort))
+                            .withRel(IanaLinkRelations.LAST)
+            );
+        }
+
+        return collectionModel;
+    }
 
     @Override
     public List<CourseResponse> getAllPopularCourses() {
         List<Course> courses = courseRepo.findByStudyCountDescAndBuyCountDesc();
-        return courses.stream()
-                .map(courseMapper::toCourseResponse)
-                .toList();
-    }
-
-    @Override
-    public List<CourseResponse> getAllCourses() {
-        List<Course> courses = courseRepo.findAll();
         return courses.stream()
                 .map(courseMapper::toCourseResponse)
                 .toList();
@@ -68,6 +134,7 @@ public class CourseServiceImpl implements CourseService {
             List<Course> boughtCourses = courseRepo.findByOrderDetailsOrderId(order.getId());
             courses.addAll(boughtCourses);
         }
+
         return courses.stream()
                 .map(courseMapper::toCourseResponse)
                 .toList();

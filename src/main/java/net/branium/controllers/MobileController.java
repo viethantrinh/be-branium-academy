@@ -42,7 +42,8 @@ public class MobileController {
 
     private Map<String, Object> buildResponseBody(Authentication authentication) {
         long cartQuantities = cartService.getCartQuantities(authentication.getName());
-        List<CourseHomeResponse> popularCourses = courseService.getAllPopularCourses().stream()
+        List<CourseHomeResponse> popularCourses = courseService.getAllPopularCourses()
+                .stream()
                 .map((c) -> CourseHomeResponse.builder()
                         .id(c.getId())
                         .title(c.getTitle())
@@ -51,9 +52,13 @@ public class MobileController {
                         .discountPrice(c.getDiscountPrice())
                         .totalStudents((int) courseService.getTotalStudentsEnrolled(c.getId()))
                         .build())
+                .limit(7)
                 .collect(Collectors.toList());
         List<CategoryResponse> categories = categoryService.getAllCategories();
-        List<CourseResponse> topPickCourses = courseService.getAllCourses();
+        List<CourseResponse> topPickCourses = courseService.getAllPopularCourses()
+                .stream()
+                .limit(5)
+                .toList();
 
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("cartQuantities", cartQuantities);

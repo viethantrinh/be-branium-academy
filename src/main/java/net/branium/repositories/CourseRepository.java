@@ -2,6 +2,8 @@ package net.branium.repositories;
 
 import net.branium.domains.Course;
 import net.branium.domains.Lecture;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -10,6 +12,14 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Integer> {
+
+    /**
+     * Find all courses with pagination option
+     * @param pageable page request option
+     * @return page object that hold requested data
+     */
+    @Query("SELECT c FROM Course c")
+    Page<Course> findAllWithOption(Pageable pageable);
 
     @Query("SELECT c FROM Course c ORDER BY c.studyCount DESC, c.buyCount DESC LIMIT 7")
     List<Course> findByStudyCountDescAndBuyCountDesc();

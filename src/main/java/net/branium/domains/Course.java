@@ -30,7 +30,7 @@ public class Course {
     @Column(name = "title", nullable = false, unique = true, length = 128)
     private String title;
 
-    @Column(name = "image", unique = true, length = 128)
+    @Column(name = "image", length = 128)
     private String image;
 
     @Column(name = "short_description", nullable = false, length = 40000)
@@ -86,4 +86,20 @@ public class Course {
         return Objects.hashCode(id);
     }
 
+    @Override
+    public String toString() {
+        return "Course{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", image='" + image + '\'' +
+                ", shortDescription='" + shortDescription + '\'' +
+                ", fullDescription='" + fullDescription + '\'' +
+                ", price=" + price +
+                ", discountPrice=" + discountPrice +
+                ", studyCount=" + studyCount +
+                ", buyCount=" + buyCount +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

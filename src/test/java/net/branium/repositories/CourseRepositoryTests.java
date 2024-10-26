@@ -5,7 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
@@ -13,8 +18,9 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ActiveProfiles({"test"})
+@ActiveProfiles({"mysql"})
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class CourseRepositoryTests {
 
     @Autowired
@@ -44,4 +50,25 @@ class CourseRepositoryTests {
         assertNotNull(savedCourse);
     }
 
+    @Test
+    void testListFirstPage() {
+        int page = 0;
+        int size = 3;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Course> pages = courseRepo.findAllWithOption(pageable);
+        assertEquals(size, pages.getSize());
+        pages.forEach(System.out::println);
+    }
+
+    @Test
+    void testListSecondPageWithSort() {
+        int page = 1;
+        int size = 5;
+        Sort sort = Sort.by("price").descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Course> pages = courseRepo.findAllWithOption(pageable);
+        System.out.println(pages.getTotalElements());
+        System.out.println(pages.getTotalPages());
+        pages.forEach(System.out::println);
+    }
 }
