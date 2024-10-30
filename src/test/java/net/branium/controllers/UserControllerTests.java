@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 @ActiveProfiles({"test"})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@WebMvcTest(UserController.class)
+@WebMvcTest({UserController.class})
 class UserControllerTests {
 
     @Autowired
@@ -180,6 +180,6 @@ class UserControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message",
                         CoreMatchers.is(ErrorCode.USER_NON_EXISTED.getMessage())))
                 .andDo(MockMvcResultHandlers.print());
-
     }
+
 }

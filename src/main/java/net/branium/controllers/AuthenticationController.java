@@ -22,6 +22,7 @@ public class AuthenticationController {
 
     /**
      * this api use for user to sign in to the system with their email and password
+     *
      * @param request the request body contain data which compose of email and password
      * @return @{@link SignInResponse } dto contain the token
      */

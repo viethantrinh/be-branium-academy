@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.branium.validation.ValidPassword;
 import org.hibernate.validator.constraints.Length;
 
 @Data
@@ -14,13 +15,13 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignInRequest {
-    @NotNull(message = "email field must not be null")
-    @NotEmpty(message = "email must not be blank or empty")
-    @Email(message = "email must have valid format")
+    @NotNull(message = "Email must no be null")
+    @Length(min = 2, max = 50, message = "Email must be between 5 and 128 characters")
+    @Email
     private String email;
 
-    @NotNull(message = "password field must not be null")
-    @NotEmpty(message = "password must not be blank or empty")
-    @Length(min = 8, message = "password must have at least 8 characters")
+    @NotNull(message = "Password must no be null")
+    @Length(min = 8, message = "Password must be at least 8 characters")
+    @ValidPassword
     private String password;
 }

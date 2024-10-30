@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -110,5 +111,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AsyncRequestNotUsableException.class)
-    void handleAsyncRequestNotUsableException(AsyncRequestNotUsableException e) { }
+    void handleAsyncRequestNotUsableException(AsyncRequestNotUsableException e) {
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpServletRequest request,
+                                                                  HttpRequestMethodNotSupportedException ex) {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getCode())
+                .message(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getMessage())
+                .timeStamp(LocalDateTime.now())
+                .path(request.getServletPath())
+                .errors(List.of(ex.getMessage()))
+                .build();
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
+    }
 }

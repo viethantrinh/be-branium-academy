@@ -1,12 +1,11 @@
 package net.branium.dtos.auth;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.branium.validation.ValidPassword;
 import org.hibernate.validator.constraints.Length;
 
 @Data
@@ -14,21 +13,30 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpRequest {
-    @NotNull(message = "firstName field must not be null")
-    @NotEmpty(message = "firstName must not be blank or empty")
+
+    @NotNull(message = "First name must no be null")
+    @Length(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
+    @Pattern.List({
+            @Pattern(regexp = "^[^0-9]*$", message = "First name must not have number"),
+            @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "First name must not have special characters")
+    })
     private String firstName;
 
-    @NotNull(message = "lastName field must not be null")
-    @NotEmpty(message = "lastName must not be blank or empty")
+    @NotNull(message = "Last name must no be null")
+    @Length(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
+    @Pattern.List({
+            @Pattern(regexp = "^[^0-9]*$", message = "Last name must not have number"),
+            @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "First name must not have special characters")
+    })
     private String lastName;
 
-    @NotNull(message = "email field must not be null")
-    @NotEmpty(message = "email must not be blank or empty")
-    @Email(message = "email must have valid format")
+    @NotNull(message = "Email must no be null")
+    @Length(min = 2, max = 50, message = "Email must be between 5 and 128 characters")
+    @Email
     private String email;
 
-    @NotNull(message = "password field must not be null")
-    @NotEmpty(message = "password must not be blank or empty")
-    @Length(min = 8, message = "password must have at least 8 characters")
+    @NotNull(message = "Password must no be null")
+    @Length(min = 8, message = "Password must be at least 8 characters")
+    @ValidPassword
     private String password;
 }

@@ -16,7 +16,9 @@ public enum ErrorCode {
     INVALID_FIELD(1006, HttpStatus.BAD_REQUEST, "JSON request body have some fields not valid"),
     INVALID_PARAM(1007, HttpStatus.BAD_REQUEST, "Path parameter or Query parameter is invalid"),
     INVALID_TOKEN(1008, HttpStatus.BAD_REQUEST, "Something wrong with the token"),
-    RESOURCE_NON_EXISTED(1009, HttpStatus.NOT_FOUND, "Resource not existed");
+    RESOURCE_NON_EXISTED(1009, HttpStatus.NOT_FOUND, "Resource not existed"),
+    USER_NOT_ACTIVATED(1010, HttpStatus.FORBIDDEN, "User is not activated"),
+    REQUEST_METHOD_NOT_SUPPORT(1011, HttpStatus.METHOD_NOT_ALLOWED, "Request method is not supported");
 
     private final int code;
     private final HttpStatus status;
