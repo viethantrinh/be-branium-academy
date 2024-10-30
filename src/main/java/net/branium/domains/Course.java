@@ -62,7 +62,7 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private Set<Enrollment> enrollments = new HashSet<>();
 
-    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "course")
     private Set<Section> sections = new HashSet<>();
 
     @ManyToOne
