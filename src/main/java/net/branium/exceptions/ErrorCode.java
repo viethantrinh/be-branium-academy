@@ -18,7 +18,10 @@ public enum ErrorCode {
     INVALID_TOKEN(1008, HttpStatus.BAD_REQUEST, "Something wrong with the token"),
     RESOURCE_NON_EXISTED(1009, HttpStatus.NOT_FOUND, "Resource not existed"),
     USER_NOT_ACTIVATED(1010, HttpStatus.FORBIDDEN, "User is not activated"),
-    REQUEST_METHOD_NOT_SUPPORT(1011, HttpStatus.METHOD_NOT_ALLOWED, "Request method is not supported");
+    REQUEST_METHOD_NOT_SUPPORT(1011, HttpStatus.METHOD_NOT_ALLOWED, "Request method is not supported"),
+    OVERSIZE_FILE(1012, HttpStatus.PAYLOAD_TOO_LARGE, "oversize file"),
+    INVALID_IMAGE_EXTENSION(1013, HttpStatus.METHOD_NOT_ALLOWED, "image extension is not valid"),
+    BAD_REQUEST(9998, HttpStatus.BAD_REQUEST, "bad request");
 
     private final int code;
     private final HttpStatus status;

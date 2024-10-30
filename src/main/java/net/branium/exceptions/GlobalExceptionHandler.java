@@ -13,7 +13,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -126,5 +128,21 @@ public class GlobalExceptionHandler {
                 .build();
         log.error(ex.getMessage(), ex);
         return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleMissingParameter(HttpServletRequest request,
+                                                                MissingServletRequestPartException ex) {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.BAD_REQUEST.getCode())
+                .message(ErrorCode.BAD_REQUEST.getMessage())
+                .timeStamp(LocalDateTime.now())
+                .path(request.getServletPath())
+                .errors(List.of(ex.getMessage()))
+                .build();
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
