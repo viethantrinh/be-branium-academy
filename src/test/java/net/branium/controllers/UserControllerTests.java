@@ -34,8 +34,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -540,5 +539,103 @@ class UserControllerTests {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName(value = "get user's info success")
+    @Tag(value = "get-user-info")
+    @Order(1)
+    void testGetUserInfoSuccess() throws Exception {
+        String path = "/users/info";
 
+        when(userService.getStudentInfo())
+                .thenReturn(studentResponse);
+
+        ResultActions resultActions =
+                mockMvc.perform(get(path));
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code", is(1000)))
+                .andExpect(jsonPath("$.message", is("get student info successful")))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "get user's info failed because user not existed")
+    @Tag(value = "get-user-info")
+    @Order(2)
+    void testGetUserInfoFailedBecauseUserNotExisted() throws Exception {
+        String path = "/users/info";
+
+        when(userService.getStudentInfo())
+                .thenThrow(new ApplicationException(ErrorCode.USER_NON_EXISTED));
+
+        ResultActions resultActions =
+                mockMvc.perform(get(path));
+
+        resultActions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code", is(ErrorCode.USER_NON_EXISTED.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.USER_NON_EXISTED.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "get user's info failed because user not activated")
+    @Tag(value = "get-user-info")
+    @Order(3)
+    void testGetUserInfoFailedBecauseUserNotActivated() throws Exception {
+        String path = "/users/info";
+
+        when(userService.getStudentInfo())
+                .thenThrow(new ApplicationException(ErrorCode.USER_NOT_ACTIVATED));
+
+        ResultActions resultActions =
+                mockMvc.perform(get(path));
+
+        resultActions
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code", is(ErrorCode.USER_NOT_ACTIVATED.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.USER_NOT_ACTIVATED.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "get user's info failed because user not authenticated")
+    @Tag(value = "get-user-info")
+    @Order(4)
+    void testGetUserInfoFailedBecauseUserNotAuthenticated() throws Exception {
+        String path = "/users/info";
+
+        when(userService.getStudentInfo())
+                .thenThrow(new ApplicationException(ErrorCode.UNAUTHENTICATED));
+
+        ResultActions resultActions =
+                mockMvc.perform(get(path));
+
+        resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code", is(ErrorCode.UNAUTHENTICATED.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.UNAUTHENTICATED.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "get user's info failed because request method not supported")
+    @Tag(value = "get-user-info")
+    @Order(5)
+    void testGetUserInfoFailedBecauseRequestMethodNotSupported() throws Exception {
+        String path = "/users/info";
+
+        when(userService.getStudentInfo())
+                .thenThrow(new ApplicationException(ErrorCode.REQUEST_METHOD_NOT_SUPPORT));
+
+        ResultActions resultActions =
+                mockMvc.perform(get(path));
+
+        resultActions
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(jsonPath("$.code", is(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getMessage())))
+                .andDo(print());
+    }
 }
