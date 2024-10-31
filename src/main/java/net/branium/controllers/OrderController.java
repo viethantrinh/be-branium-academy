@@ -1,6 +1,9 @@
 package net.branium.controllers;
 
 import com.google.gson.Gson;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.base.ApiResponse;
 import net.branium.dtos.payment.OrderDetailResponse;
@@ -9,6 +12,7 @@ import net.branium.dtos.payment.OrderResponse;
 import net.branium.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,12 +21,17 @@ import java.util.Map;
 @RestController
 @RequestMapping(path = "/orders")
 @RequiredArgsConstructor
+@Validated
 public class OrderController {
 
     private final OrderService orderService;
 
     @PostMapping("/checkout")
-    public ResponseEntity<ApiResponse<OrderResponse>> checkOut(@RequestBody List<OrderItemRequest> request) {
+    public ResponseEntity<ApiResponse<OrderResponse>> checkOut(
+            @RequestBody
+            @Valid
+            @Size(min = 1, message = "At least one item to create order")
+            List<OrderItemRequest> request) {
         OrderResponse orderResponse = orderService.checkOut(request);
         var response = ApiResponse.<OrderResponse>builder()
                 .message("create order successful")
