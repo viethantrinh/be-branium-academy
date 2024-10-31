@@ -9,6 +9,7 @@ import net.branium.dtos.user.StudentUpdateRequest;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
 import net.branium.services.UserService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.*;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
@@ -32,8 +33,8 @@ import java.util.UUID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -634,6 +635,494 @@ class UserControllerTests {
 
         resultActions
                 .andExpect(status().isMethodNotAllowed())
+                .andExpect(jsonPath("$.code", is(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info success")
+    @Tag(value = "update-user-info")
+    @Order(1)
+    void testUpdateUserInfoSuccess() throws Exception {
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenReturn(studentResponse);
+
+        ResultActions resultActions =
+                mockMvc.perform(put(path)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(requestBody));
+
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(1000)))
+                .andExpect(jsonPath("$.message", is("update student info successful")))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because last name is null")
+    @Tag(value = "update-user-info")
+    @Order(2)
+    void testUpdateUserInfoFailedBecauseLastNameIsNull() throws Exception {
+        studentUpdateRequest.setLastName(null);
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because last name have less than 2 characters")
+    @Tag(value = "update-user-info")
+    @Order(3)
+    void testUpdateUserInfoFailedBecauseLastNameHaveLessThan2Characters() throws Exception {
+        studentUpdateRequest.setLastName("a");
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because last name have more than 51 characters")
+    @Tag(value = "update-user-info")
+    @Order(4)
+    void testUpdateUserInfoFailedBecauseLastNameHaveMoreThan50Characters() throws Exception {
+        studentUpdateRequest.setLastName(RandomStringUtils.randomAlphanumeric(51));
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "updated user's info failed because last name have number")
+    @Tag(value = "update-user-info")
+    @Order(5)
+    void testUpdateUserInfoFailedBecauseLastNameHaveNumber() throws Exception {
+        studentUpdateRequest.setLastName("4556");
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because last name have special characters")
+    @Tag(value = "update-user-info")
+    @Order(6)
+    void testUpdateUserInfoFailedBecauseLastNameHaveSpecialCharacter() throws Exception {
+        studentUpdateRequest.setLastName("Han@@@");
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because first name is null")
+    @Tag(value = "update-user-info")
+    @Order(7)
+    void testSignUpFailedBecauseFirstNameIsNull() throws Exception {
+        studentUpdateRequest.setFirstName(null);
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because first name have less than 2 characters")
+    @Tag(value = "update-user-info")
+    @Order(8)
+    void testUpdateUserInfoFailedBecauseFirstNameHaveLessThan2Characters() throws Exception {
+        studentUpdateRequest.setFirstName("a");
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because first name have more than 51 characters")
+    @Tag(value = "update-user-info")
+    @Order(9)
+    void testUpdateUserIndoFailedBecauseFirstNameHaveMoreThan50Characters() throws Exception {
+        studentUpdateRequest.setFirstName(RandomStringUtils.randomAlphanumeric(51));
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because first name have number")
+    @Tag(value = "update-user-info")
+    @Order(10)
+    void testSignUpFailedBecauseFirstNameHaveNumber() throws Exception {
+        studentUpdateRequest.setFirstName("4556");
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because first name have special characters")
+    @Tag(value = "update-user-info")
+    @Order(11)
+    void testUpdateUserInfoFailedBecauseFirstNameHaveSpecialCharacter() throws Exception {
+        studentUpdateRequest.setFirstName("Han@@@");
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because date of birth is not valid")
+    @Tag(value = "update-user-info")
+    @Order(12)
+    void testUpdateUserInfoFailedBecauseDateOfBirthIsNotValid() throws Exception {
+        studentUpdateRequest.setDateOfBirth(
+                LocalDate.of(2029, 2, 2)
+        );
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because phone number is less than 10 digits")
+    @Tag(value = "update-user-info")
+    @Order(13)
+    void testUpdateUserInfoFailedBecausePhoneNumberIsLessThan10Digits() throws Exception {
+        studentUpdateRequest.setPhoneNumber("0987");
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because phone number is more than 12 digits")
+    @Tag(value = "update-user-info")
+    @Order(14)
+    void testUpdateUserInfoFailedBecausePhoneNumberIsMoreThan12Digits() throws Exception {
+        studentUpdateRequest.setPhoneNumber("0987849857894359834");
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because phone number is contain another character")
+    @Tag(value = "update-user-info")
+    @Order(15)
+    void testUpdateUserInfoFailedBecausePhoneNumberIsContainAnotherCharacters() throws Exception {
+        studentUpdateRequest.setPhoneNumber("0768701056@");
+
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.INVALID_FIELD));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because user is not existed")
+    @Tag(value = "update-user-info")
+    @Order(16)
+    void testUpdateUserInfoFailedBecauseUserIsNotExisted() throws Exception {
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.USER_NON_EXISTED));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.USER_NON_EXISTED.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.USER_NON_EXISTED.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because user is not activated")
+    @Tag(value = "update-user-info")
+    @Order(17)
+    void testUpdateUserInfoFailedBecauseUserIsNotActivated() throws Exception {
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.USER_NOT_ACTIVATED));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.USER_NOT_ACTIVATED.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.USER_NOT_ACTIVATED.getMessage())))
+                .andDo(print());
+    }
+
+
+    @Test
+    @DisplayName(value = "update user's info failed because user is not authenticated")
+    @Tag(value = "update-user-info")
+    @Order(18)
+    void testUpdateUserInfoFailedBecauseUserIsNotAuthenticated() throws Exception {
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.UNAUTHENTICATED));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.UNAUTHENTICATED.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.UNAUTHENTICATED.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "update user's info failed because request method is not supported")
+    @Tag(value = "update-user-info")
+    @Order(19)
+    void testUpdateUserInfoFailedBecauseRequestMethodIsNotSupported() throws Exception {
+        String path = "/users/info";
+
+        String requestBody = objectMapper.writeValueAsString(studentUpdateRequest);
+
+        when(userService.updateStudentInfo(studentUpdateRequest))
+                .thenThrow(new ApplicationException(ErrorCode.REQUEST_METHOD_NOT_SUPPORT));
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.code", is(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getCode())))
                 .andExpect(jsonPath("$.message", is(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getMessage())))
                 .andDo(print());

@@ -41,7 +41,7 @@ public class User {
     private boolean enabled;
 
     @Column(name = "gender")
-    private boolean gender;
+    private Boolean gender;
 
     @Column(name = "dob")
     private LocalDate dateOfBirth;
