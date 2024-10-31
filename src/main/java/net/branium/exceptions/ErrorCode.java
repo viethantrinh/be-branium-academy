@@ -21,7 +21,10 @@ public enum ErrorCode {
     REQUEST_METHOD_NOT_SUPPORT(1011, HttpStatus.METHOD_NOT_ALLOWED, "Request method is not supported"),
     OVERSIZE_FILE(1012, HttpStatus.PAYLOAD_TOO_LARGE, "oversize file"),
     INVALID_IMAGE_EXTENSION(1013, HttpStatus.METHOD_NOT_ALLOWED, "image extension is not valid"),
-    BAD_REQUEST(9998, HttpStatus.BAD_REQUEST, "bad request");
+    BAD_REQUEST(9998, HttpStatus.BAD_REQUEST, "bad request"),
+    COURSE_NON_EXISTED(1014, HttpStatus.NOT_FOUND, "Course not existed"),
+    COURSE_ALREADY_BOUGHT(1015, HttpStatus.CONFLICT, "Course already bought"),
+    COURSE_ALREADY_IN_CART(1016, HttpStatus.CONFLICT, "This course already in your cart");
 
     private final int code;
     private final HttpStatus status;
