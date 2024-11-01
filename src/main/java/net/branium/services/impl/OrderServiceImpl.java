@@ -11,6 +11,7 @@ import net.branium.dtos.course.CourseResponse;
 import net.branium.dtos.payment.OrderDetailResponse;
 import net.branium.dtos.payment.OrderItemRequest;
 import net.branium.dtos.payment.OrderResponse;
+import net.branium.dtos.payment.PaymentIntentResponse;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
 import net.branium.mappers.CourseMapper;
@@ -90,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Map<String, String> createPayment(int orderId) {
+    public PaymentIntentResponse createPayment(int orderId) {
         Order order = orderRepo.findById(orderId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NON_EXISTED));
 
@@ -115,9 +116,10 @@ public class OrderServiceImpl implements OrderService {
         order.setStripePaymentIntentId(paymentIntent.getId());
         orderRepo.save(order);
 
-        Map<String, String> responseData = new HashMap<>();
-        responseData.put("clientSecret", paymentIntent.getClientSecret());
-        responseData.put("publishableKey", env.getProperty("stripe.publishable-key"));
+        PaymentIntentResponse responseData = PaymentIntentResponse.builder()
+                .clientSecret(paymentIntent.getClientSecret())
+                .publishableKey(env.getProperty("stripe.publishable-key"))
+                .build();
 
         return responseData;
     }

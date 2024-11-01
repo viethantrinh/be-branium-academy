@@ -25,7 +25,9 @@ public enum ErrorCode {
     COURSE_NON_EXISTED(1014, HttpStatus.NOT_FOUND, "Course not existed"),
     COURSE_ALREADY_BOUGHT(1015, HttpStatus.CONFLICT, "Course already bought"),
     COURSE_ALREADY_IN_CART(1016, HttpStatus.CONFLICT, "This course already in your cart"),
-    COURSE_ALREADY_IN_WISHLIST(1017, HttpStatus.CONFLICT, "Course is already in wishlist");
+    COURSE_ALREADY_IN_WISHLIST(1017, HttpStatus.CONFLICT, "Course is already in wishlist"),
+    ORDER_NOT_EXISTED(1018, HttpStatus.NOT_FOUND, "Order is not existed"),
+    ORDER_STATUS_NOT_PROCESSING(1019, HttpStatus.CONFLICT, "Order's status is not processing");
 
     private final int code;
     private final HttpStatus status;

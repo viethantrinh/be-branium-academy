@@ -6,6 +6,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -117,6 +118,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseBody
     public ResponseEntity<ErrorResponse> handleMethodNotSupported(HttpServletRequest request,
                                                                   HttpRequestMethodNotSupportedException ex) {
         ErrorResponse response = ErrorResponse.builder()
@@ -132,12 +134,27 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MissingServletRequestPartException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
     public ResponseEntity<ErrorResponse> handleMissingParameter(HttpServletRequest request,
                                                                 MissingServletRequestPartException ex) {
         ErrorResponse response = ErrorResponse.builder()
                 .code(ErrorCode.BAD_REQUEST.getCode())
                 .message(ErrorCode.BAD_REQUEST.getMessage())
+                .timeStamp(LocalDateTime.now())
+                .path(request.getServletPath())
+                .errors(List.of(ex.getMessage()))
+                .build();
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleMissingParameter(HttpServletRequest request,
+                                                                HttpMessageNotReadableException ex) {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.INVALID_FIELD.getCode())
+                .message(ErrorCode.INVALID_FIELD.getMessage())
                 .timeStamp(LocalDateTime.now())
                 .path(request.getServletPath())
                 .errors(List.of(ex.getMessage()))

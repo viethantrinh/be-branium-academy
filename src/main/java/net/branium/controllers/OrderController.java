@@ -1,14 +1,12 @@
 package net.branium.controllers;
 
-import com.google.gson.Gson;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import net.branium.dtos.base.ApiResponse;
-import net.branium.dtos.payment.OrderDetailResponse;
-import net.branium.dtos.payment.OrderItemRequest;
-import net.branium.dtos.payment.OrderResponse;
+import net.branium.dtos.payment.*;
 import net.branium.services.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,9 +39,10 @@ public class OrderController {
     }
 
     @PostMapping("/payment")
-    public ResponseEntity<ApiResponse<?>> payment(@RequestBody Map<String, Integer> request) {
-        Map<String, String> responseBody = orderService.createPayment(request.get("orderId"));
-        var response = ApiResponse.<Map<String, String>>builder()
+    public ResponseEntity<ApiResponse<PaymentIntentResponse>> payment(
+            @RequestBody @Valid PaymentIntentRequest request) {
+        PaymentIntentResponse responseBody = orderService.createPayment(request.getOrderId());
+        var response = ApiResponse.<PaymentIntentResponse>builder()
                 .message("create payment successful")
                 .result(responseBody)
                 .build();

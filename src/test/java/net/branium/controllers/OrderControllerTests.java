@@ -1,15 +1,16 @@
 package net.branium.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.branium.dtos.course.CourseResponse;
 import net.branium.dtos.payment.OrderItemRequest;
 import net.branium.dtos.payment.OrderResponse;
+import net.branium.dtos.payment.PaymentIntentResponse;
+import net.branium.dtos.payment.PaymentIntentRequest;
 import net.branium.exceptions.ApplicationException;
 import net.branium.exceptions.ErrorCode;
-import net.branium.services.CartService;
 import net.branium.services.OrderService;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,6 +25,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -46,6 +49,9 @@ class OrderControllerTests {
 
     private List<OrderItemRequest> orderItemRequests = new ArrayList<>();
     private OrderResponse orderResponse;
+
+    private PaymentIntentRequest paymentIntentRequest;
+    private PaymentIntentResponse paymentIntentResponse;
 
     @BeforeEach
     void setUp() {
@@ -74,6 +80,15 @@ class OrderControllerTests {
                 .orderDetails(courseResponses)
                 .totalPrice(BigDecimal.valueOf(10_000_000))
                 .totalDiscountPrice(BigDecimal.valueOf(10_000_000))
+                .build();
+
+        paymentIntentRequest = PaymentIntentRequest.builder()
+                .orderId(1)
+                .build();
+
+        paymentIntentResponse = PaymentIntentResponse.builder()
+                .clientSecret("eir8948ehfjbdsbfdjfjdhfjdhjf")
+                .publishableKey("kjafldjfkasnfdado093423432")
                 .build();
     }
 
@@ -259,6 +274,248 @@ class OrderControllerTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.code", is(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getCode())))
                 .andExpect(jsonPath("$.message", is(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "create payment intent success")
+    @Tag(value = "create-payment-intent")
+    @Order(value = 1)
+    void testCreatePaymentIntentSuccess() throws Exception {
+        String path = "/orders/payment";
+
+        String requestBody = objectMapper.writeValueAsString(paymentIntentRequest);
+
+        when(orderService.createPayment(anyInt()))
+                .thenReturn(paymentIntentResponse);
+
+        ResultActions resultActions = mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(1000)))
+                .andExpect(jsonPath("$.message", is("create payment successful")))
+                .andExpect(jsonPath("$.result.clientSecret", is(paymentIntentResponse.getClientSecret())))
+                .andExpect(jsonPath("$.result.publishableKey", is(paymentIntentResponse.getPublishableKey())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "create payment intent failed because order id is null")
+    @Tag(value = "create-payment-intent")
+    @Order(value = 2)
+    void testCreatePaymentIntentFailedBecauseOrderIdIsNull() throws Exception {
+        String path = "/orders/payment";
+
+        ResultActions resultActions = mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("{}"));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "create payment intent failed because order id is not a number")
+    @Tag(value = "create-payment-intent")
+    @Order(value = 3)
+    void testCreatePaymentIntentFailedBecauseOrderIdIsNotANumber() throws Exception {
+        String path = "/orders/payment";
+
+        ResultActions resultActions = mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("{\"orderId\": \"abc123\"}"));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "create payment intent failed because order id is less than 1")
+    @Tag(value = "create-payment-intent")
+    @Order(value = 4)
+    void testCreatePaymentIntentFailedBecauseOrderIdIsLessThan1() throws Exception {
+        paymentIntentRequest.setOrderId(-3);
+
+        String path = "/orders/payment";
+
+        String requestBody = objectMapper.writeValueAsString(paymentIntentRequest);
+
+        when(orderService.createPayment(anyInt()))
+                .thenReturn(paymentIntentResponse);
+
+        ResultActions resultActions = mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.INVALID_FIELD.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.INVALID_FIELD.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "create payment intent failed because order not existed")
+    @Tag(value = "create-payment-intent")
+    @Order(value = 5)
+    void testCreatePaymentIntentFailedBecauseOrderNotExisted() throws Exception {
+        paymentIntentRequest.setOrderId(99999);
+
+        String path = "/orders/payment";
+
+        String requestBody = objectMapper.writeValueAsString(paymentIntentRequest);
+
+        when(orderService.createPayment(anyInt()))
+                .thenThrow(new ApplicationException(ErrorCode.ORDER_NOT_EXISTED));
+
+        ResultActions resultActions = mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.ORDER_NOT_EXISTED.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.ORDER_NOT_EXISTED.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "create payment intent failed because order's status is not processing")
+    @Tag(value = "create-payment-intent")
+    @Order(value = 6)
+    void testCreatePaymentIntentFailedBecauseOrderStatusIsNotProcessing() throws Exception {
+        paymentIntentRequest.setOrderId(7);
+
+        String path = "/orders/payment";
+
+        String requestBody = objectMapper.writeValueAsString(paymentIntentRequest);
+
+        when(orderService.createPayment(anyInt()))
+                .thenThrow(new ApplicationException(ErrorCode.ORDER_STATUS_NOT_PROCESSING));
+
+        ResultActions resultActions = mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isConflict())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.ORDER_STATUS_NOT_PROCESSING.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.ORDER_STATUS_NOT_PROCESSING.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "create payment intent failed because user not existed")
+    @Tag(value = "create-payment-intent")
+    @Order(value = 7)
+    void testCreatePaymentIntentFailedBecauseUserNotExisted() throws Exception {
+        paymentIntentRequest.setOrderId(7);
+
+        String path = "/orders/payment";
+
+        String requestBody = objectMapper.writeValueAsString(paymentIntentRequest);
+
+        when(orderService.createPayment(anyInt()))
+                .thenThrow(new ApplicationException(ErrorCode.USER_NON_EXISTED));
+
+        ResultActions resultActions = mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.USER_NON_EXISTED.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.USER_NON_EXISTED.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "create payment intent failed because request method not supported")
+    @Tag(value = "create-payment-intent")
+    @Order(value = 8)
+    void testCreatePaymentIntentFailedBecauseRequestMethodNotSupported() throws Exception {
+        paymentIntentRequest.setOrderId(7);
+
+        String path = "/orders/payment";
+
+        String requestBody = objectMapper.writeValueAsString(paymentIntentRequest);
+
+
+        ResultActions resultActions = mockMvc.perform(put(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.REQUEST_METHOD_NOT_SUPPORT.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "create payment intent failed because user not authenticated")
+    @Tag(value = "create-payment-intent")
+    @Order(value = 9)
+    void testCreatePaymentIntentFailedBecauseUserNotAuthenticated() throws Exception {
+        paymentIntentRequest.setOrderId(7);
+
+        String path = "/orders/payment";
+
+        String requestBody = objectMapper.writeValueAsString(paymentIntentRequest);
+
+        when(orderService.createPayment(anyInt()))
+                .thenThrow(new ApplicationException(ErrorCode.UNAUTHENTICATED));
+
+        ResultActions resultActions = mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.UNAUTHENTICATED.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.UNAUTHENTICATED.getMessage())))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName(value = "create payment intent failed because user not activated")
+    @Tag(value = "create-payment-intent")
+    @Order(value = 10)
+    void testCreatePaymentIntentFailedBecauseUserNotActivated() throws Exception {
+        paymentIntentRequest.setOrderId(7);
+
+        String path = "/orders/payment";
+
+        String requestBody = objectMapper.writeValueAsString(paymentIntentRequest);
+
+        when(orderService.createPayment(anyInt()))
+                .thenThrow(new ApplicationException(ErrorCode.USER_NOT_ACTIVATED));
+
+        ResultActions resultActions = mockMvc.perform(post(path)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(requestBody));
+
+        resultActions
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.code", is(ErrorCode.USER_NOT_ACTIVATED.getCode())))
+                .andExpect(jsonPath("$.message", is(ErrorCode.USER_NOT_ACTIVATED.getMessage())))
                 .andDo(print());
     }
 }
