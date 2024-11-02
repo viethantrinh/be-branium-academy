@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface CourseService {
-    CollectionModel<CourseResponse> getAllCourses(int page, int size, String sort);
     CollectionModel<CourseResponse> getAllCourses(int page, int size, String sort, Map<String, Object> filterFields);
     List<CourseResponse> getAllPopularCourses();
     long getTotalStudentsEnrolled(int courseId);

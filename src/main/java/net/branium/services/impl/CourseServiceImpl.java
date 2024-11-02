@@ -48,26 +48,6 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
 
     @Override
-    @Deprecated
-    public CollectionModel<CourseResponse> getAllCourses(int page, int size, String sort) {
-        int pageNumber = page;
-        int pageSize = size;
-        Sort sortBy = null;
-        switch (sort) {
-            case "priceDesc" -> sortBy = Sort.by("price").descending();
-            case "priceAsc" -> sortBy = Sort.by("price").ascending();
-            default -> sortBy = Sort.by("buyCount", "studyCount").descending();
-        }
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortBy);
-        Page<Course> pages = courseRepo.findAllWithOption(pageable);
-        List<Course> courses = pages.getContent();
-        List<CourseResponse> courseResponses = courses.stream()
-                .map(courseMapper::toCourseResponse)
-                .toList();
-        return addPageMetaData(courseResponses, pages, sort, null);
-    }
-
-    @Override
     public CollectionModel<CourseResponse> getAllCourses(int page, int size, String sort, Map<String, Object> filterFields) {
         int pageNumber = page;
         int pageSize = size;

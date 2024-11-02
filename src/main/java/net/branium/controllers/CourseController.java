@@ -59,7 +59,7 @@ public class CourseController {
             @Min(value = 5)
             @Max(value = 10)
             Integer size,
-            @RequestParam(name = "sort", required = false, defaultValue = "popular")
+            @RequestParam(name = "sort", required = false, defaultValue = "")
             String sort,
             @RequestParam(name = "category", required = false, defaultValue = "")
             String category,
