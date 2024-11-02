@@ -2,7 +2,10 @@ package net.branium.controllers;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import net.branium.domains.Category;
 import net.branium.dtos.base.ApiResponse;
 import net.branium.dtos.course.CourseDetailResponse;
 import net.branium.dtos.course.CourseResponse;
@@ -28,22 +31,61 @@ public class CourseController {
 
     private final CourseService courseService;
     private Map<String, String> sortProperty = Map.of(
+            "", "",
             "priceAsc", "priceAsc",
             "priceDesc", "priceDesc",
             "popular", "popular"
     );
 
+    private Map<String, Object> category = Map.of(
+            "", "",
+            "java", Category.builder().id(1).title("Java").build(),
+            "c++", Category.builder().id(2).title("C++").build(),
+            "c#", Category.builder().id(3).title("C#").build(),
+            "c", Category.builder().id(4).title("C").build(),
+            "python", Category.builder().id(5).title("Python").build(),
+            "android", Category.builder().id(6).title("Android").build(),
+            "git", Category.builder().id(7).title("Git").build(),
+            "flutter", Category.builder().id(8).title("Flutter").build(),
+            "sql", Category.builder().id(9).title("SQL").build()
+    );
+
     @GetMapping(path = "/search")
     public ResponseEntity<ApiResponse<?>> searchForCourses(
-            @RequestParam(name = "page", required = false, defaultValue = "1") @Min(value = 1) Integer page,
-            @RequestParam(name = "size", required = false, defaultValue = "5") @Min(value = 5) @Max(value = 10) Integer size,
-            @RequestParam(name = "sort", required = false, defaultValue = "popular") String sort
+            @RequestParam(name = "page", required = false, defaultValue = "1")
+            @Min(value = 1)
+            Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "5")
+            @Min(value = 5)
+            @Max(value = 10)
+            Integer size,
+            @RequestParam(name = "sort", required = false, defaultValue = "popular")
+            String sort,
+            @RequestParam(name = "category", required = false, defaultValue = "")
+            String category,
+            @RequestParam(name = "keyword", required = true)
+            String keyword
     ) {
         if (!sortProperty.containsKey(sort)) {
             throw new ApplicationException(ErrorCode.INVALID_PARAM);
         }
 
-        var courses = courseService.getAllCourses(page - 1, size, sort);
+
+        if (!this.category.containsKey(category)) {
+            throw new ApplicationException(ErrorCode.INVALID_PARAM);
+        }
+
+        Map<String, Object> filterFields = new HashMap<>();
+
+        if (!"".equals(category)) {
+            filterFields.put("category", this.category.get(category));
+        }
+
+        if (!"".equals(keyword)) {
+            filterFields.put("title", keyword);
+        }
+
+        var courses = courseService.getAllCourses(page - 1, size, sort, filterFields);
         var response = ApiResponse.<CollectionModel<CourseResponse>>builder()
                 .message("search courses success")
                 .result(courses)

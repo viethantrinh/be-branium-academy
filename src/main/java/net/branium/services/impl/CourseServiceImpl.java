@@ -22,7 +22,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -32,6 +31,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -48,6 +48,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseMapper courseMapper;
 
     @Override
+    @Deprecated
     public CollectionModel<CourseResponse> getAllCourses(int page, int size, String sort) {
         int pageNumber = page;
         int pageSize = size;
@@ -63,11 +64,31 @@ public class CourseServiceImpl implements CourseService {
         List<CourseResponse> courseResponses = courses.stream()
                 .map(courseMapper::toCourseResponse)
                 .toList();
-        return addPageMetaData(courseResponses, pages, sort);
+        return addPageMetaData(courseResponses, pages, sort, null);
     }
 
+    @Override
+    public CollectionModel<CourseResponse> getAllCourses(int page, int size, String sort, Map<String, Object> filterFields) {
+        int pageNumber = page;
+        int pageSize = size;
+        Sort sortBy = null;
+        switch (sort) {
+            case "priceDesc" -> sortBy = Sort.by("price").descending();
+            case "priceAsc" -> sortBy = Sort.by("price").ascending();
+            default -> sortBy = Sort.by("buyCount", "studyCount").descending();
+        }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sortBy);
+        Page<Course> pages = courseRepo.listWithFilter(pageable, filterFields);
+        List<Course> courses = pages.getContent();
+        List<CourseResponse> courseResponses = courses.stream()
+                .map(courseMapper::toCourseResponse)
+                .toList();
+        return addPageMetaData(courseResponses, pages, sort, filterFields);
+    }
+
+
     private CollectionModel<CourseResponse> addPageMetaData(List<CourseResponse> courseResponses,
-                                                            Page<Course> pageInfo, String sort) {
+                                                            Page<Course> pageInfo, String sort, Map<String, Object> filterFields) {
         int pageSize = pageInfo.getSize();
         int pageNum = pageInfo.getNumber() + 1;
         long totalElements = pageInfo.getTotalElements();
@@ -75,10 +96,14 @@ public class CourseServiceImpl implements CourseService {
         PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(pageSize, pageNum, totalElements);
         CollectionModel<CourseResponse> collectionModel = PagedModel.of(courseResponses, pageMetadata);
 
+        String actualCategory = filterFields.get("category") == null ? "" : ((Category) filterFields.get("category")).getTitle();
+        String actualKeyword = filterFields.get("title") == "" ? "" : (String) filterFields.get("title");
+
+
         // add links to collection its self
         collectionModel
                 .add(
-                        linkTo(methodOn(CourseController.class).searchForCourses(pageNum, pageSize, sort))
+                        linkTo(methodOn(CourseController.class).searchForCourses(pageNum, pageSize, sort, actualCategory, actualKeyword))
                                 .withSelfRel()
                 );
 
@@ -86,24 +111,24 @@ public class CourseServiceImpl implements CourseService {
         if (pageNum > 1) {
             collectionModel.add(
 
-                    linkTo(methodOn(CourseController.class).searchForCourses(1, pageSize, sort))
+                    linkTo(methodOn(CourseController.class).searchForCourses(1, pageSize, sort, actualCategory, actualKeyword))
                             .withRel(IanaLinkRelations.FIRST)
             );
 
             // add links to previous page if the current page is not 1 (the first one)
             collectionModel.add(
-                    linkTo(methodOn(CourseController.class).searchForCourses(pageNum - 1, pageSize, sort))
+                    linkTo(methodOn(CourseController.class).searchForCourses(pageNum - 1, pageSize, sort, actualCategory, actualKeyword))
                             .withRel(IanaLinkRelations.PREVIOUS)
             );
         }
 
         if (pageNum < totalPages) {
             collectionModel.add(
-                    linkTo(methodOn(CourseController.class).searchForCourses(pageNum + 1, pageSize, sort))
+                    linkTo(methodOn(CourseController.class).searchForCourses(pageNum + 1, pageSize, sort, actualCategory, actualKeyword))
                             .withRel(IanaLinkRelations.NEXT)
             );
             collectionModel.add(
-                    linkTo(methodOn(CourseController.class).searchForCourses((int) totalPages, pageSize, sort))
+                    linkTo(methodOn(CourseController.class).searchForCourses((int) totalPages, pageSize, sort, actualCategory, actualKeyword))
                             .withRel(IanaLinkRelations.LAST)
             );
         }

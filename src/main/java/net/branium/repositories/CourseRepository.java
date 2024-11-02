@@ -18,8 +18,11 @@ public interface CourseRepository extends JpaRepository<Course, Integer>, Filter
      * @param pageable page request option
      * @return page object that hold requested data
      */
+    @Deprecated
     @Query("SELECT c FROM Course c")
     Page<Course> findAllWithOption(Pageable pageable);
+
+
 
     @Query("SELECT c FROM Course c ORDER BY c.studyCount DESC, c.buyCount DESC LIMIT 7")
     List<Course> findByStudyCountDescAndBuyCountDesc();

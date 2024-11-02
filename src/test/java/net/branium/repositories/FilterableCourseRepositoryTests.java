@@ -1,5 +1,6 @@
 package net.branium.repositories;
 
+import net.branium.domains.Category;
 import net.branium.domains.Course;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,11 +31,16 @@ class FilterableCourseRepositoryTests {
         int pageSize = 5;
         int pageNumber = 0;
         String sortField = "title";
+        String title = "Java";
 
         Sort sort = Sort.by(sortField).ascending();
         Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-        Page<Course> pages = courseRepo.listWithFilter(pageable, Collections.emptyMap());
+        Map<String, Object> filterFields = new HashMap<>();
+        filterFields.put("title", title);
+        filterFields.put("category", Category.builder().title("Java").id(1).build());
+
+        Page<Course> pages = courseRepo.listWithFilter(pageable, filterFields);
 
         List<Course> content = pages.getContent();
 

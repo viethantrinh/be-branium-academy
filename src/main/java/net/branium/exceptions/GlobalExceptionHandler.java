@@ -11,10 +11,10 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
@@ -135,8 +135,23 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestPartException.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> handleMissingParameter(HttpServletRequest request,
-                                                                MissingServletRequestPartException ex) {
+    public ResponseEntity<ErrorResponse> handleMissingPart(HttpServletRequest request,
+                                                           MissingServletRequestPartException ex) {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.BAD_REQUEST.getCode())
+                .message(ErrorCode.BAD_REQUEST.getMessage())
+                .timeStamp(LocalDateTime.now())
+                .path(request.getServletPath())
+                .errors(List.of(ex.getMessage()))
+                .build();
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleMissingPart(HttpServletRequest request,
+                                                           MissingServletRequestParameterException ex) {
         ErrorResponse response = ErrorResponse.builder()
                 .code(ErrorCode.BAD_REQUEST.getCode())
                 .message(ErrorCode.BAD_REQUEST.getMessage())
@@ -150,8 +165,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody
-    public ResponseEntity<ErrorResponse> handleMissingParameter(HttpServletRequest request,
-                                                                HttpMessageNotReadableException ex) {
+    public ResponseEntity<ErrorResponse> handleMissingPart(HttpServletRequest request,
+                                                           HttpMessageNotReadableException ex) {
         ErrorResponse response = ErrorResponse.builder()
                 .code(ErrorCode.INVALID_FIELD.getCode())
                 .message(ErrorCode.INVALID_FIELD.getMessage())
