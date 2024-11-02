@@ -1,9 +1,6 @@
 package net.branium.controllers;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
 import net.branium.domains.Category;
 import net.branium.dtos.base.ApiResponse;
@@ -64,6 +61,10 @@ public class CourseController {
             @RequestParam(name = "category", required = false, defaultValue = "")
             String category,
             @RequestParam(name = "keyword", required = true)
+            @Pattern.List({
+//                    @Pattern(regexp = "^[^0-9]*$", message = "Keyword must not have number"),
+                    @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Keyword must not have special characters")
+            })
             String keyword
     ) {
         if (!sortProperty.containsKey(sort)) {

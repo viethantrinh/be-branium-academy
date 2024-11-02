@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.time.LocalDateTime;
@@ -170,6 +171,21 @@ public class GlobalExceptionHandler {
         ErrorResponse response = ErrorResponse.builder()
                 .code(ErrorCode.INVALID_FIELD.getCode())
                 .message(ErrorCode.INVALID_FIELD.getMessage())
+                .timeStamp(LocalDateTime.now())
+                .path(request.getServletPath())
+                .errors(List.of(ex.getMessage()))
+                .build();
+        log.error(ex.getMessage(), ex);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleMissingPart(HttpServletRequest request,
+                                                           MethodArgumentTypeMismatchException ex) {
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.INVALID_PARAM.getCode())
+                .message(ErrorCode.INVALID_PARAM.getMessage())
                 .timeStamp(LocalDateTime.now())
                 .path(request.getServletPath())
                 .errors(List.of(ex.getMessage()))

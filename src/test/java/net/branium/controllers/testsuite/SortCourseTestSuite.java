@@ -10,7 +10,7 @@ import org.junit.platform.suite.api.Suite;
         "net.branium"
 })
 @IncludeTags({
-        "sort-course-by-keyword"
+        "sort-course"
 })
 public class SortCourseTestSuite {
 }
