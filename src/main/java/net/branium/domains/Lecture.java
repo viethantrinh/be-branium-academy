@@ -35,7 +35,7 @@ public class Lecture {
     @Column(name = "type", nullable = false)
     private LectureType type;
 
-    @Column(name = "resource")
+    @Column(name = "resources")
     private String resource;
 
     @CreatedDate

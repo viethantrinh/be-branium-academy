@@ -6,7 +6,7 @@ spring:
   application:
     name: ${SPRING_APPLICATION_NAME:be-branium-academy}
   datasource:
-    url: ${DATASOURCE_URL:jdbc:oracle:thin:@//localhost:1521/orclpdb}
+    url: ${DATASOURCE_URL:jdbc:oracle:thin:@//localhost:1521/ORCLPDB1}
     username: ${DATASOURCE_USERNAME:han_branium_academy}
     password: ${DATASOURCE_PASSWORD:Sohappy212}
   jpa:
@@ -15,7 +15,7 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
         format_sql: true
         dialect: org.hibernate.dialect.OracleDialect
     defer-datasource-initialization: true
@@ -26,7 +26,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: hntrnn12@gmail.com
-    password: nfzsrfbrqhmtcayu
+    password: lorhzfhafcgoalnz
     properties:
       mail:
         smtp:
