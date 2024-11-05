@@ -86,6 +86,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Order> orders = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<UserAnswer> userAnswers = new HashSet<>();
+
 
     @Override
     public boolean equals(Object o) {

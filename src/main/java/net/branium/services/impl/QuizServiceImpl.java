@@ -144,11 +144,4 @@ public class QuizServiceImpl implements QuizService {
             userAnswerRepository.save(userAnswer);
         }
     }
-
-    private double calculateTotalScore(List<QuestionSubmitRequest> requestAnswers, Quiz quiz) {
-
-        return 0f;
-    }
-
-
 }
