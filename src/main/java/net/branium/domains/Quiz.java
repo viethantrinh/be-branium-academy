@@ -19,9 +19,6 @@ public class Quiz {
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @Column(name = "description", nullable = false)
-    private String description;
-
     @OneToOne
     @JoinColumn(name = "id")
     @MapsId("id")
