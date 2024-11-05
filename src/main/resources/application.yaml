@@ -7,7 +7,7 @@ spring:
     name: ${SPRING_APPLICATION_NAME:be-branium-academy}
   datasource:
     url: ${DATASOURCE_URL:jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0}
-    username: ${DATASOURCE_USERNAME:postgres.vofzighecqfnrmdsiwap}
+    username: ${DATASOURCE_USERNAME:postgres.asmedixoyxrwsfrvubky}
     password: ${DATASOURCE_PASSWORD:Sohappy2122003@}
   jpa:
     database: postgresql
@@ -17,6 +17,11 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+
+#    defer-datasource-initialization: true
+#  sql:
+#    init:
+#      mode: always
   mail:
     host: smtp.gmail.com
     port: 587
