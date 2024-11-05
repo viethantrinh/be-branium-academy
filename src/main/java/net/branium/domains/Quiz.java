@@ -46,4 +46,14 @@ public class Quiz {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
+    @Override
+    public String toString() {
+        return "Quiz{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", lecture=" + lecture +
+                ", questions=" + questions +
+                '}';
+    }
 }
