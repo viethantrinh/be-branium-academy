@@ -19,6 +19,9 @@ public class Quiz {
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
+    @Column(name = "description", nullable = false)
+    private String description;
+
     @OneToOne
     @JoinColumn(name = "id")
     @MapsId("id")
@@ -42,5 +45,15 @@ public class Quiz {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Quiz{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", lecture=" + lecture +
+                ", questions=" + questions +
+                '}';
     }
 }
