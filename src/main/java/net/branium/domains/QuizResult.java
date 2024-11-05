@@ -16,7 +16,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "`quiz_result`")
-@EntityListeners({AuditingEntityListener.class})
 public class QuizResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,15 +23,10 @@ public class QuizResult {
     private Integer id;
 
     @Column(name = "score", nullable = false)
-    private int score;
+    private double score;
 
-    @CreatedDate
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at", insertable = false)
-    private LocalDateTime updatedAt;
+    @Column(name = "submitted_at")
+    private LocalDateTime submittedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

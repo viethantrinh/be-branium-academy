@@ -16,7 +16,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "`user_answer`")
-@EntityListeners({AuditingEntityListener.class})
 public class UserAnswer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +28,7 @@ public class UserAnswer {
     @Column(name = "is_correct", nullable = false)
     private boolean isCorrect;
 
-    @CreatedDate
-    @Column(name = "answer_at", updatable = false)
+    @Column(name = "answer_at")
     private LocalDateTime answeredAt;
 
     @ManyToOne
