@@ -33,10 +33,10 @@ INSERT INTO "role" (NAME)
 VALUES ('STUDENT');
 
 -- Inserting data into USER_ROLE table
-INSERT INTO "user_role" (USER_ID, ROLE_NAME)
+INSERT INTO USER_ROLE (USER_ID, ROLE_NAME)
 VALUES ('fa211ceb-be09-4370-9a98-a55ea8fed578', 'ADMIN');
 
-INSERT INTO "user_role" (USER_ID, ROLE_NAME)
+INSERT INTO USER_ROLE (USER_ID, ROLE_NAME)
 VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 'STUDENT');
 
 -- Inserting data into CATEGORY table
@@ -706,36 +706,139 @@ VALUES ('Bài kiểm tra cuối chương 5', 20, 6, 'QUIZ', NULL, TO_TIMESTAMP('
 
 
 -- Inserting data into ENROLLMENT table
-INSERT INTO "enrollment" (enrolled_at, user_id, course_id) VALUES (TO_TIMESTAMP('2024-09-12 07:08:18', 'YYYY-MM-DD HH24:MI:SS'), '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 1);
-INSERT INTO "enrollment" (enrolled_at, user_id, course_id) VALUES (TO_TIMESTAMP('2024-09-12 07:08:18', 'YYYY-MM-DD HH24:MI:SS'), '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 2);
-INSERT INTO "enrollment" (enrolled_at, user_id, course_id) VALUES (TO_TIMESTAMP('2024-09-12 07:08:18', 'YYYY-MM-DD HH24:MI:SS'), '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 3);
+INSERT INTO "enrollment" (enrolled_at, user_id, course_id)
+VALUES (TO_TIMESTAMP('2024-09-12 07:08:18', 'YYYY-MM-DD HH24:MI:SS'), '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 1);
+INSERT INTO "enrollment" (enrolled_at, user_id, course_id)
+VALUES (TO_TIMESTAMP('2024-09-12 07:08:18', 'YYYY-MM-DD HH24:MI:SS'), '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 2);
+INSERT INTO "enrollment" (enrolled_at, user_id, course_id)
+VALUES (TO_TIMESTAMP('2024-09-12 07:08:18', 'YYYY-MM-DD HH24:MI:SS'), '4a39e0fe-27a0-4789-8ba2-b7e49677db34', 3);
 
 -- Inserting data into CART table
-INSERT INTO "cart" (id) VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34');
+INSERT INTO "cart" (id)
+VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34');
 
 -- Inserting data into CART_ITEM table
-INSERT INTO "cart_item" (cart_id, course_id) VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 5);
-INSERT INTO "cart_item" (cart_id, course_id) VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 6);
-INSERT INTO "cart_item" (cart_id, course_id) VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 7);
-INSERT INTO "cart_item" (cart_id, course_id) VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 8);
-INSERT INTO "cart_item" (cart_id, course_id) VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 9);
+INSERT INTO "cart_item" (cart_id, course_id)
+VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 5);
+INSERT INTO "cart_item" (cart_id, course_id)
+VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 6);
+INSERT INTO "cart_item" (cart_id, course_id)
+VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 7);
+INSERT INTO "cart_item" (cart_id, course_id)
+VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 8);
+INSERT INTO "cart_item" (cart_id, course_id)
+VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 9);
 
 -- Inserting data into WISH_LIST table
-INSERT INTO "wish_list" (id) VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34');
+INSERT INTO "wish_list" (id)
+VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34');
 
 -- Inserting data into WISH_LIST_ITEM table
-INSERT INTO "wish_list_item" (wish_list_id, course_id) VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 10);
-INSERT INTO "wish_list_item" (wish_list_id, course_id) VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 11);
+INSERT INTO "wish_list_item" (wish_list_id, course_id)
+VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 10);
+INSERT INTO "wish_list_item" (wish_list_id, course_id)
+VALUES ('4a39e0fe-27a0-4789-8ba2-b7e49677db34', 11);
 
 -- Inserting data into ORDER table
 INSERT INTO "order" (order_status, total_price, total_discount_price, stripe_payment_intent_id, created_at, user_id)
-VALUES ('SUCCEEDED', 3798556, 3798556, '234', TO_TIMESTAMP('2024-09-12 07:08:18', 'YYYY-MM-DD HH24:MI:SS'), '4a39e0fe-27a0-4789-8ba2-b7e49677db34');
+VALUES ('SUCCEEDED', 3798556, 3798556, '234', TO_TIMESTAMP('2024-09-12 07:08:18', 'YYYY-MM-DD HH24:MI:SS'),
+        '4a39e0fe-27a0-4789-8ba2-b7e49677db34');
 
 -- Inserting data into ORDER_DETAIL table
-INSERT INTO "order_detail" (order_id, course_id) VALUES (1, 1);
-INSERT INTO "order_detail" (order_id, course_id) VALUES (1, 2);
-INSERT INTO "order_detail" (order_id, course_id) VALUES (1, 3);
-INSERT INTO "order_detail" (order_id, course_id) VALUES (1, 4);
+INSERT INTO "order_detail" (order_id, course_id)
+VALUES (1, 1);
+INSERT INTO "order_detail" (order_id, course_id)
+VALUES (1, 2);
+INSERT INTO "order_detail" (order_id, course_id)
+VALUES (1, 3);
+INSERT INTO "order_detail" (order_id, course_id)
+VALUES (1, 4);
+
+
+-- Inserting data into QUIZ table
+INSERT INTO "quiz" (id, description)
+VALUES (21,
+        'Đây là bài quiz kiểm tra kiến thức đã học của chương 2 thuộc khóa học Flutter Pro. Chương này bao gồm các câu hỏi trắc nghiệm cơ bản về ngôn ngữ lập trình Dart.');
+
+-- Inserting data into QUESTION table
+-- 1. Question 1
+INSERT INTO "question" (title, answer_1, is_correct_1, answer_2, is_correct_2, answer_3, is_correct_3, created_at,
+                        updated_at, quiz_id)
+VALUES ('Dart là ngôn ngữ lập trình được phát triển bởi công ty nào?',
+        'Microsoft', 0, 'Google', 1, 'Facebook', 0,
+        TO_TIMESTAMP('2024-09-12 07:08:18', 'YYYY-MM-DD HH24:MI:SS'), NULL, 21);
+
+-- 2. Question 2
+INSERT INTO "question" (title, answer_1, is_correct_1, answer_2, is_correct_2, answer_3, is_correct_3, created_at,
+                        updated_at, quiz_id)
+VALUES ('Kiểu dữ liệu nào sau đây được sử dụng để khai báo một biến có thể chứa giá trị số nguyên trong Dart?',
+        'String', 0, 'int', 1, 'double', 0,
+        TO_TIMESTAMP('2024-09-12 07:10:18', 'YYYY-MM-DD HH24:MI:SS'), NULL, 21);
+
+-- 3. Question 3
+INSERT INTO "question" (title, answer_1, is_correct_1, answer_2, is_correct_2, answer_3, is_correct_3, created_at,
+                        updated_at, quiz_id)
+VALUES ('Phương thức nào sau đây được sử dụng để in dữ liệu ra màn hình trong Dart?',
+        'echo()', 0, 'print()', 1, 'console.log()', 0,
+        TO_TIMESTAMP('2024-09-12 07:12:18', 'YYYY-MM-DD HH24:MI:SS'), NULL, 21);
+
+-- 4. Question 4
+INSERT INTO "question" (title, answer_1, is_correct_1, answer_2, is_correct_2, answer_3, is_correct_3, created_at,
+                        updated_at, quiz_id)
+VALUES ('Biến trong Dart có thể thay đổi kiểu dữ liệu không khi được khai báo bằng từ khóa nào?',
+        'final', 0, 'const', 0, 'var', 1,
+        TO_TIMESTAMP('2024-09-12 07:14:18', 'YYYY-MM-DD HH24:MI:SS'), NULL, 21);
+
+-- 5. Question 5
+INSERT INTO "question" (title, answer_1, is_correct_1, answer_2, is_correct_2, answer_3, is_correct_3, created_at,
+                        updated_at, quiz_id)
+VALUES ('Đâu là cách khai báo một hằng số trong Dart?',
+        'var constantValue = 10;', 0, 'const constantValue = 10;', 1, 'final constantValue = 10;', 0,
+        TO_TIMESTAMP('2024-09-12 07:16:18', 'YYYY-MM-DD HH24:MI:SS'), NULL, 21);
+
+-- 6. Question 6
+INSERT INTO "question" (title, answer_1, is_correct_1, answer_2, is_correct_2, answer_3, is_correct_3, created_at,
+                        updated_at, quiz_id)
+VALUES ('Phát biểu nào sau đây về từ khóa async là đúng?',
+        'Dùng để tạo một hàm bất đồng bộ.', 1, 'Dùng để tạo một biến bất đồng bộ.', 0,
+        'Dùng để khai báo một lớp bất đồng bộ.', 0,
+        TO_TIMESTAMP('2024-09-12 07:18:18', 'YYYY-MM-DD HH24:MI:SS'), NULL, 21);
+
+-- 7. Question 7
+INSERT INTO "question" (title, answer_1, is_correct_1, answer_2, is_correct_2, answer_3, is_correct_3, created_at,
+                        updated_at, quiz_id)
+VALUES ('Đối tượng Future trong Dart dùng để xử lý gì?',
+        'Xử lý giao diện người dùng.', 0, 'Xử lý các tác vụ không đồng bộ.', 1, 'Xử lý chuỗi ký tự.', 0,
+        TO_TIMESTAMP('2024-09-12 07:20:18', 'YYYY-MM-DD HH24:MI:SS'), NULL, 21);
+
+-- 8. Question 8
+INSERT INTO "question" (title, answer_1, is_correct_1, answer_2, is_correct_2, answer_3, is_correct_3, created_at,
+                        updated_at, quiz_id)
+VALUES ('Đâu là cách đúng để khai báo một danh sách (list) rỗng trong Dart?',
+        'var myList = {};', 0, 'var myList = [];', 1, 'var myList = ();', 0,
+        TO_TIMESTAMP('2024-09-12 07:22:18', 'YYYY-MM-DD HH24:MI:SS'), NULL, 21);
+
+-- 9. Question 9
+INSERT INTO "question" (title, answer_1, is_correct_1, answer_2, is_correct_2, answer_3, is_correct_3, created_at,
+                        updated_at, quiz_id)
+VALUES ('Phát biểu nào về từ khóa final và const là chính xác?',
+        'final là một hằng số có thể được khởi tạo lại.', 0,
+        'const là hằng số chỉ được xác định tại thời gian biên dịch.', 1,
+        'final và const là từ khóa có thể thay đổi giá trị sau khi khởi tạo.', 0,
+        TO_TIMESTAMP('2024-09-12 07:24:18', 'YYYY-MM-DD HH24:MI:SS'), NULL, 21);
+
+-- 10. Question 10
+INSERT INTO "question" (title, answer_1, is_correct_1, answer_2, is_correct_2, answer_3, is_correct_3, created_at,
+                        updated_at, quiz_id)
+VALUES ('Hàm main() trong Dart có vai trò gì?',
+        'Là điểm bắt đầu thực thi của chương trình.', 1, 'Được dùng để xử lý lỗi trong chương trình.', 0,
+        'Được dùng để khai báo lớp.', 0,
+        TO_TIMESTAMP('2024-09-12 07:26:18', 'YYYY-MM-DD HH24:MI:SS'), NULL, 21);
+
+
+
+
+
 
 
 
