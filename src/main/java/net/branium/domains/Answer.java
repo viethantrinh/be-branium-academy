@@ -15,27 +15,28 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "`user_answer`")
+@Table(name = "`answer`")
 @EntityListeners({AuditingEntityListener.class})
-public class UserAnswer {
+public class Answer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @Column(name = "selected_option", nullable = false)
-    private int selectedOption;
+    @Column(name = "title", nullable = false, unique = true, length = 128)
+    private String title;
 
-    @Column(name = "is_correct", nullable = false)
-    private boolean isCorrect;
+    @Column(name = "correct", nullable = false)
+    private boolean correct;
 
     @CreatedDate
-    @Column(name = "answer_at", updatable = false)
-    private LocalDateTime answeredAt;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @LastModifiedDate
+    @Column(name = "updated_at", insertable = false)
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "question_id")
@@ -46,8 +47,8 @@ public class UserAnswer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserAnswer that = (UserAnswer) o;
-        return Objects.equals(id, that.id);
+        Answer answer = (Answer) o;
+        return Objects.equals(id, answer.id);
     }
 
     @Override
