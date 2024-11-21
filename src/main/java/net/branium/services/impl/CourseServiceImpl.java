@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.branium.constants.ApplicationConstants;
 import net.branium.controllers.CourseController;
 import net.branium.domains.*;
+import net.branium.dtos.course.CourseCreateRequest;
 import net.branium.dtos.course.CourseDetailResponse;
 import net.branium.dtos.course.CourseResponse;
 import net.branium.exceptions.ApplicationException;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
 @RequiredArgsConstructor
@@ -281,5 +284,29 @@ public class CourseServiceImpl implements CourseService {
         course.setStudyCount(course.getBuyCount() + 1);
         Course savedCourse = courseRepo.save(course);
         return savedCourse.getStudyCount();
+    }
+
+//    @PreAuthorize("hasRole('ADMIN')")
+    @Override
+    public CourseResponse createCourse(CourseCreateRequest request) {
+        Course course = Course.builder()
+                .title(request.getTitle())
+                .shortDescription(request.getTitle())
+                .fullDescription(request.getFullDescription())
+                .price(request.getPrice())
+                .discountPrice(request.getDiscountPrice())
+                .buyCount(request.getBuyCount())
+                .studyCount(request.getStudyCount())
+                .build();
+
+        Course savedCourse = courseRepo.save(course);
+
+        return CourseResponse.builder()
+                .id(savedCourse.getId())
+                .title(savedCourse.getTitle())
+                .image(savedCourse.getImage())
+                .price(savedCourse.getPrice())
+                .discountPrice(savedCourse.getDiscountPrice())
+                .build();
     }
 }

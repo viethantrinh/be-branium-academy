@@ -1,6 +1,6 @@
 package net.branium.services;
 
-import net.branium.dtos.category.CategoryResponse;
+import net.branium.dtos.course.CourseCreateRequest;
 import net.branium.dtos.course.CourseDetailResponse;
 import net.branium.dtos.course.CourseResponse;
 import org.springframework.hateoas.CollectionModel;
@@ -18,4 +18,5 @@ public interface CourseService {
     boolean enrollInCourse(int courseId);
     int increaseStudyCount(int courseId);
     int increaseBuyCount(int courseId);
+    CourseResponse createCourse(CourseCreateRequest request);
 }
